@@ -1,0 +1,114 @@
+/* Fixed sidenav, full height */
+
+
+body {
+    height: 100%;
+    margin: 0;
+}
+html {
+    height: 100%;
+	background-color: #c0c0c0;
+}
+
+.button {
+  background-color: #c0c0c0;
+  color: black;
+  padding: 5px 5px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-family: 'Roboto', sans-serif;
+  font-size: 15px;
+  margin: 4px 2px;
+  -webkit-transition-duration: 0.4s; /* Safari */
+  transition-duration: 0.4s;
+  cursor: pointer;
+  border: 2px solid #555555;
+}
+
+.button:hover {
+  background-color: #555555;
+  color: white;
+}
+
+
+.sidelist-container {
+	margin-top: 50px;
+	height: 100%;
+	width: 250px;
+	position: absolute;
+	z-index: 1;
+	top: 0;
+	left: 0;
+	background-color: #3c3f45;
+}
+
+.sidelist-fragments {
+	height: 60%;
+	background-color: #3c3f45;
+	overflow-x: scroll;
+}
+
+.sidelist-templates {
+	height: 40%;
+	background-color: #3c3f45;
+	overflow-x: scroll;
+}
+
+/* Style the sidenav links and the dropdown button */
+.sidelist-fragments a, .sidelist-templates a {
+  padding: 2px 0px 0px 0px;
+  text-decoration: none;
+  font-size: 15px;
+  font-family: 'Roboto', sans-serif;
+  color: #c6c6d0;
+  display: block;
+  border-style: none none solid none;
+  border-width: 1px;
+  background: #3c3f45;
+  width:100%;
+  cursor: pointer;
+
+  /* outline: none; */
+}
+
+/* On mouse-over */
+.sidelist sidelist-fragment:hover, .dropdown-btn:hover {
+  color: #f1f1f1;
+}
+
+.sidelist-fragment:hover {
+  color: #f1f1f1;
+}
+
+/* Main content */
+.main {
+  margin-left: 250px; /* Same as the width of the sidenav */
+  font-size: 16px; /* Increased text to enable scrolling */
+}
+
+/* Add an active class to the active dropdown button */
+.active {
+  background-color: green;
+  color: white;
+}
+
+.editor-textbox {
+	width: 100%;
+	height: 70%;
+	float: right;
+}
+
+.editor-save {
+	font-size: 30px;
+	width: 95px;
+	height: 35px;
+	top: 15px;
+	float: right;
+}
+
+.editor-frament-info{
+	width: 200px;
+	float: left;
+	font-size: 13px;
+}

@@ -1,0 +1,25 @@
+{
+  "name": "pushy-buttons",
+  "version": "1.0.0",
+  "description": "![Pushy Buttons](readme-bg.png) > A small CSS Pressable Buttons library.",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/iRaul/pushy-buttons.git"
+  },
+  "keywords": [
+    "buttons",
+    "css",
+    "scss",
+    "3D effect",
+    "stylesheets"
+  ],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/iRaul/pushy-buttons/issues"
+  },
+  "homepage": "https://github.com/iRaul/pushy-buttons#readme"
+}
