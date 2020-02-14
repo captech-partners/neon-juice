@@ -46,10 +46,13 @@ $ python3 assembler/assembler.py start assembler/fragments/ -p <port>
 In your browser, enter the following address:
 
 `
-http://localhost:<port>/back-to-school/lb1
+http://localhost:<port>/back-to-school
 `
 
 #### Stopping deployment
 To stop the local task press Control+C ( Ctrl-C )
 
 Exit Virtual Environment: deactivate
+
+# API
+https://app.swaggerhub.com/apis/simonl07/neon-juice/1.0.0
