@@ -1,0 +1,335 @@
+{
+	"info": {
+		"_postman_id": "da0a3cd6-be1f-4b44-a31b-89239c89cd01",
+		"name": "Neon-juice",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Activate a template",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/assembler/templates/tp1/activate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"assembler",
+						"templates",
+						"tp1",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Activate a page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/assembler/pages/back-to-school/activate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"assembler",
+						"pages",
+						"back-to-school",
+						"activate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deactivate a template",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/assembler/templates/tp1/deactivate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"assembler",
+						"templates",
+						"tp1",
+						"deactivate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Deactivate a page",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/assembler/pages/back-to-school/deactivate",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"assembler",
+						"pages",
+						"back-to-school",
+						"deactivate"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all pages",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/assembler/pages",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"assembler",
+						"pages"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all templates",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/assembler/templates",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"assembler",
+						"templates"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Statistics",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/assembler/statistics",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"assembler",
+						"statistics"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "List all fragments with query",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/fragments?",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"fragments"
+					],
+					"query": [
+						{
+							"key": "id",
+							"value": "1,0,-1",
+							"disabled": true
+						},
+						{
+							"key": "labels",
+							"value": "lb1,lb2",
+							"disabled": true
+						},
+						{
+							"key": "pages",
+							"value": "back-to-school",
+							"disabled": true
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get fragment by id",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "http://localhost:5000/fragments/21",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"fragments",
+						"21"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit a new fragment",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"html\": \"<div class=\\\"special-item-test\\\" data-label=\\\"lb1\\\" data-page=\\\"back-to-school, long-live-the-summer\\\" data-template=\\\"tp1, tp2\\\"><p>to test 1</p></div>\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/fragments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"fragments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Submit a new fragment - template",
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"html\": \"<div class=\\\"special-item-template-test\\\" data-label=\\\"lb3\\\" data-page=\\\"back-to-school, long-live-the-summer\\\"><p>to test template</p></div>\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/fragments",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"fragments"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update a fragment with new HTML",
+			"request": {
+				"method": "PUT",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n  \"html\": \"<div class=\\\"special-item-test\\\" data-label=\\\"lb2\\\" data-page=\\\"back-to-school, long-live-the-summer\\\" data-template=\\\"tp1, tp2\\\"><p>to test yyy</div>\"\n}"
+				},
+				"url": {
+					"raw": "http://localhost:5000/fragments/22",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"fragments",
+						"22"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete a fragment",
+			"request": {
+				"method": "DELETE",
+				"header": [
+					{
+						"key": "Content-Type",
+						"name": "Content-Type",
+						"type": "text",
+						"value": "application/json"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": ""
+				},
+				"url": {
+					"raw": "http://localhost:5000/fragments/21",
+					"protocol": "http",
+					"host": [
+						"localhost"
+					],
+					"port": "5000",
+					"path": [
+						"fragments",
+						"21"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
