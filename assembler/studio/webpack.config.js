@@ -6,14 +6,14 @@ var HTMLWebpackPluginConfig = new HTMLWebpackPlugin({
 });
 
 
-modules.exports = {
+module.exports = {
   entry: __dirname + '/app/index.js',
   module: {
-    loaders: [
+    rules: [
       {
         test: /\.js$/,
         exclude: /node_modules/,
-        loader: 'babel-loader'
+        use: 'babel-loader'
       }
     ]
   },

@@ -1,7 +1,8 @@
-// import React from 'react';
+import React from 'react';
+import ReactDOM from 'react-dom';
 // import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
-var React = require('react');
-var ReactDOM = require('react-dom');
+// var React = require('react');
+// var ReactDOM = require('react-dom');
 
 
 
@@ -17,4 +18,4 @@ const App = () => {
   );
 };
 
-modules.exports = App;
+module.exports = App;
