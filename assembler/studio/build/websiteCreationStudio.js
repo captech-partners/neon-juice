@@ -94,7 +94,7 @@
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\n// import React from 'react';\n// import ReactDOM from 'react-dom';\n// import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';\nvar React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n/**\n * Renders a react-router enabled app with a wrapper to facilitate shared styles\n * and markup; add new routes for pages here.\n */\n\n\nvar App = function App() {\n  return /*#__PURE__*/React.createElement(\"div\", {\n    className: \"home-page\"\n  }, /*#__PURE__*/React.createElement(\"h1\", null, \"Website Creation Studio\"));\n};\n\nmodule.exports = App;\n\n//# sourceURL=webpack:///./app/components/App.js?");
+eval("\n\nvar React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n/**\n * Entry point for all components.\n */\n\n\nvar App = function App() {\n  return /*#__PURE__*/React.createElement(\"div\", {\n    className: \"home-page\"\n  }, /*#__PURE__*/React.createElement(\"h1\", null, \"Website Creation Studio\"));\n};\n\nmodule.exports = App;\n\n//# sourceURL=webpack:///./app/components/App.js?");
 
 /***/ }),
 
@@ -106,7 +106,7 @@ eval("\n\n// import React from 'react';\n// import ReactDOM from 'react-dom';\n/
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\n// import React from 'react';\n// import ReactDOM from 'react-dom';\n// import App from './Components/App';\nvar React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nvar App = __webpack_require__(/*! ./components/App */ \"./app/components/App.js\");\n\nReactDOM.render( /*#__PURE__*/React.createElement(App, null), document.getElementById('root'));\n\n//# sourceURL=webpack:///./app/index.js?");
+eval("\n\nvar React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nvar App = __webpack_require__(/*! ./components/App */ \"./app/components/App.js\");\n\nReactDOM.render( /*#__PURE__*/React.createElement(App, null), document.getElementById('root'));\n\n//# sourceURL=webpack:///./app/index.js?");
 
 /***/ }),
 

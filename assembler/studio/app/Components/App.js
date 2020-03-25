@@ -1,14 +1,9 @@
-// import React from 'react';
-// import ReactDOM from 'react-dom';
-// import { BrowserRouter as Router, Redirect, Route, Switch } from 'react-router-dom';
 var React = require('react');
 var ReactDOM = require('react-dom');
 
 
-
 /**
- * Renders a react-router enabled app with a wrapper to facilitate shared styles
- * and markup; add new routes for pages here.
+ * Entry point for all components.
  */
 const App = () => {
   return (
