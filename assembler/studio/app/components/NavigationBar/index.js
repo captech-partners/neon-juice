@@ -10,11 +10,16 @@ import StartPage from '../../pages/StartPage';
 import Studio from '../../pages/Studio';
 import Information from '../../pages/Information';
 
-const Styling = styled.nav`
+const Title = styled.p`
+  font-size: 2em;
+  font-weight: bold;
+`;
+
+const Nav = styled.nav`
   background-color: #FEF5F3;
-  font-size: 30px;
-  border-radius: 3px;
-  border: 2px solid;
+  padding-top: 3px;
+  font-size: 2em;
+  padding-bottom: 10px;
 `;
 
 const List = styled.ul`
@@ -26,51 +31,52 @@ const ListElem = styled.li`
 
 const LeftLink = styled(Link)`
     float: left;
-    padding: 5px;
 `;
 
 const RightLink = styled(Link)`
     float: right;
-    color: palevioletred;
-    padding: 2px;
 `;
+
+const Button = styled.button`
+  background: #E5C1EE;
+  border-radius: 3px;
+  border: solid #DBB7E4;
+  color: #33153A;
+  font-size: .5em;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+`
 
 const NavigationBar = () => {
   return (
     <Router>
-      <div className="home-page">
-        <h1>Website Creation Studio</h1>
-      </div>
 
-      <div>
+      <Title>Website Creation Studio</Title>
 
-        <Styling>
-          <List>
-            <ListElem>
-              <LeftLink to="/global-settings">Global Settings</LeftLink>
-            </ListElem>
-            <ListElem>
-              <LeftLink to="/studio">Studio</LeftLink>
-            </ListElem>
-            <ListElem>
-              <LeftLink to="/page-view">Page View</LeftLink>
-            </ListElem>
+      <Nav>
+        <List>
+          <ListElem>
+            <LeftLink to="/global-settings"><Button>Global Settings</Button></LeftLink>
+          </ListElem>
+          <ListElem>
+            <LeftLink to="/studio"><Button>Studio</Button></LeftLink>
+          </ListElem>
+          <ListElem>
+            <LeftLink to="/page-view"><Button>Page View</Button></LeftLink>
+          </ListElem>
 
-            <ListElem>
-              <RightLink to="/information">Information</RightLink>
-            </ListElem>
-          </List>
+          <ListElem>
+            <RightLink to="/information"><i className="far fa-question-circle"></i></RightLink>
+          </ListElem>
+        </List>
+      </Nav>
 
-        </Styling>
-
-        <Switch>
-          <Route exact path="/global-settings" component={GlobalSettings} />
-          <Route exact path="/studio" component={Studio} />
-          <Route exact path="/page-view" component={PageView} />
-          <Route exact path="/information" component={Information} />
-        </Switch>
-
-      </div>
+      <Switch>
+        <Route exact path="/global-settings" component={GlobalSettings} />
+        <Route exact path="/studio" component={Studio} />
+        <Route exact path="/page-view" component={PageView} />
+        <Route exact path="/information" component={Information} />
+      </Switch>
 
     </Router>
   );
