@@ -9,5 +9,6 @@
         "useBuiltIns": "usage",
       }
     ]
-  ]
+  ],
+  "plugins": ["babel-plugin-styled-components"]
 }
