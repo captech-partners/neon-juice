@@ -72,6 +72,19 @@ function onload(){
 		success: function(result){
 			var page_options = document.getElementById("pages");
 			let pages = Object.keys(result);
+
+			console.log(`page_options: ${page_options}`);
+
+			// Clear previous pages:
+			while (page_options.firstChild) {
+				page_options.removeChild(page_options.lastChild);
+  			}
+
+			console.log(`page_options: ${page_options}`);
+
+			console.log(`pages: ${pages}`);
+
+			// Append Pages
 			for(let i = 0; i < pages.length; i++){
 				const option = document.createElement("option");
 				option.textContent = pages[i];
