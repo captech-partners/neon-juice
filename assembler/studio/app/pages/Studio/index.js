@@ -11,16 +11,6 @@ import EditTemplate from '../../components/EditTemplate';
 import NewFragment from '../../components/NewFragment';
 import NewTemplate from '../../components/NewTemplate';
 
-const ContainerAll = styled.div`
-  width: 100%;
-`;
-const ContainerLeft = styled.div`
-  width: 250px;
-`;
-const ContainerRight = styled.div`
-  width: 100% - 300px;
-`;
-
 const Button = styled.button`
   background: #E5C1EE;
   border-radius: 3px;
@@ -31,18 +21,17 @@ const Button = styled.button`
   padding: 0.25em 1em;
 `
 
+const Container = styled.div`
+  margin: .5em;
+  padding-left: .5em;
+`
 
 const Studio = () => {
 
   return (
 
-    <ContainerAll>
-
-      <ContainerLeft>
-        <FragmentTemplateList />
-      </ContainerLeft>
-
-      <ContainerRight>
+    <div>
+      <Container>
         <Router>
 
           <h1>Studio</h1>
@@ -52,6 +41,8 @@ const Studio = () => {
           <Link to="/new-fragment"><Button>New Fragment</Button></Link>
           <Link to="/new-template"><Button>Edit Fragment</Button></Link>
 
+          <FragmentTemplateList />
+
           <Switch>
             <Route exact path="/edit-fragment" component={EditFragment} />
             <Route exact path="/edit-template" component={EditTemplate} />
@@ -60,9 +51,8 @@ const Studio = () => {
           </Switch>
 
         </Router>
-      </ContainerRight>
-
-    </ContainerAll>
+      </Container>
+    </div>
   );
 };
 

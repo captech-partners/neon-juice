@@ -2,7 +2,6 @@ var React = require('react');
 var ReactDOM = require('react-dom');
 
 import NavigationBar from './components/NavigationBar';
-
 import Footer from './components/Footer';
 
 /**
