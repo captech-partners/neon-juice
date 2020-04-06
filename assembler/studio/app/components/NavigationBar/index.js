@@ -10,13 +10,8 @@ import StartPage from '../../pages/StartPage';
 import Studio from '../../pages/Studio';
 import Information from '../../pages/Information';
 
-const Title = styled.p`
-  font-size: 2em;
-  font-weight: bold;
-`;
-
 const Nav = styled.nav`
-  background-color: #FEF5F3;
+  background-color: #f1ebf2;
   padding-top: 3px;
   font-size: 2em;
   padding-bottom: 10px;
@@ -35,6 +30,7 @@ const LeftLink = styled(Link)`
 
 const RightLink = styled(Link)`
     float: right;
+    padding: 0.25em;
 `;
 
 const Button = styled.button`
@@ -49,10 +45,8 @@ const Button = styled.button`
 
 const NavigationBar = () => {
   return (
+
     <Router>
-
-      <Title>Website Creation Studio</Title>
-
       <Nav>
         <List>
           <ListElem>
@@ -77,8 +71,8 @@ const NavigationBar = () => {
         <Route exact path="/page-view" component={PageView} />
         <Route exact path="/information" component={Information} />
       </Switch>
-
     </Router>
+
   );
 };
 

@@ -98,6 +98,42 @@ eval("\n\nvar _NavigationBar = _interopRequireDefault(__webpack_require__(/*! ./
 
 /***/ }),
 
+/***/ "./app/components/EditFragment/index.js":
+/*!**********************************************!*\
+  !*** ./app/components/EditFragment/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar EditFragment = function EditFragment() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"edit-fragment\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"EditFragment\"));\n};\n\nvar _default = EditFragment;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/EditFragment/index.js?");
+
+/***/ }),
+
+/***/ "./app/components/EditTemplate/index.js":
+/*!**********************************************!*\
+  !*** ./app/components/EditTemplate/index.js ***!
+  \**********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar EditTemplate = function EditTemplate() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"edit-template\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"EditTemplate\"));\n};\n\nvar _default = EditTemplate;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/EditTemplate/index.js?");
+
+/***/ }),
+
+/***/ "./app/components/FragmentTemplateList/index.js":
+/*!******************************************************!*\
+  !*** ./app/components/FragmentTemplateList/index.js ***!
+  \******************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar FragmentTemplateList = function FragmentTemplateList() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"new-template\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"NewTemplate\"));\n};\n\nvar _default = FragmentTemplateList;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/FragmentTemplateList/index.js?");
+
+/***/ }),
+
 /***/ "./app/components/NavigationBar/index.js":
 /*!***********************************************!*\
   !*** ./app/components/NavigationBar/index.js ***!
@@ -106,7 +142,43 @@ eval("\n\nvar _NavigationBar = _interopRequireDefault(__webpack_require__(/*! ./
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = exports.Styling = void 0;\n\nvar _reactRouterDom = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/esm/react-router-dom.js\");\n\nvar _styledComponents = _interopRequireDefault(__webpack_require__(/*! styled-components */ \"./node_modules/styled-components/dist/styled-components.browser.esm.js\"));\n\nvar _GlobalSettings = _interopRequireDefault(__webpack_require__(/*! ../../pages/GlobalSettings */ \"./app/pages/GlobalSettings/index.js\"));\n\nvar _PageView = _interopRequireDefault(__webpack_require__(/*! ../../pages/PageView */ \"./app/pages/PageView/index.js\"));\n\nvar _StartPage = _interopRequireDefault(__webpack_require__(/*! ../../pages/StartPage */ \"./app/pages/StartPage/index.js\"));\n\nvar _Studio = _interopRequireDefault(__webpack_require__(/*! ../../pages/Studio */ \"./app/pages/Studio/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nvar Styling = _styledComponents[\"default\"].div.withConfig({\n  displayName: \"NavigationBar__Styling\",\n  componentId: \"sc-1p7v36e-0\"\n})([\"background-color:#FEF5F3;font-size:30px;border-radius:3px;border:2px solid;\"]);\n\nexports.Styling = Styling;\n\nvar NavigationBar = function NavigationBar() {\n  return /*#__PURE__*/React.createElement(Styling, null, /*#__PURE__*/React.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/React.createElement(\"div\", {\n    className: \"home-page\"\n  }, /*#__PURE__*/React.createElement(\"h1\", null, \"Website Creation Studio\")), /*#__PURE__*/React.createElement(\"div\", null, /*#__PURE__*/React.createElement(\"nav\", null, /*#__PURE__*/React.createElement(_reactRouterDom.Link, {\n    to: \"/global-settings\"\n  }, \"Global Settings\"), /*#__PURE__*/React.createElement(_reactRouterDom.Link, {\n    to: \"/studio\"\n  }, \"Studio\"), /*#__PURE__*/React.createElement(_reactRouterDom.Link, {\n    to: \"/page-view\"\n  }, \"Page View\")), /*#__PURE__*/React.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/React.createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/global-settings\",\n    component: _GlobalSettings[\"default\"]\n  }), /*#__PURE__*/React.createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/studio\",\n    component: _Studio[\"default\"]\n  }), /*#__PURE__*/React.createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/page-view\",\n    component: _PageView[\"default\"]\n  })))));\n};\n\nvar _default = NavigationBar;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/NavigationBar/index.js?");
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _reactRouterDom = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/esm/react-router-dom.js\");\n\nvar _styledComponents = _interopRequireDefault(__webpack_require__(/*! styled-components */ \"./node_modules/styled-components/dist/styled-components.browser.esm.js\"));\n\nvar _GlobalSettings = _interopRequireDefault(__webpack_require__(/*! ../../pages/GlobalSettings */ \"./app/pages/GlobalSettings/index.js\"));\n\nvar _PageView = _interopRequireDefault(__webpack_require__(/*! ../../pages/PageView */ \"./app/pages/PageView/index.js\"));\n\nvar _StartPage = _interopRequireDefault(__webpack_require__(/*! ../../pages/StartPage */ \"./app/pages/StartPage/index.js\"));\n\nvar _Studio = _interopRequireDefault(__webpack_require__(/*! ../../pages/Studio */ \"./app/pages/Studio/index.js\"));\n\nvar _Information = _interopRequireDefault(__webpack_require__(/*! ../../pages/Information */ \"./app/pages/Information/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar React = __webpack_require__(/*! react */ \"./node_modules/react/index.js\");\n\nvar ReactDOM = __webpack_require__(/*! react-dom */ \"./node_modules/react-dom/index.js\");\n\nvar Title = _styledComponents[\"default\"].p.withConfig({\n  displayName: \"NavigationBar__Title\",\n  componentId: \"sc-1p7v36e-0\"\n})([\"font-size:2em;font-weight:bold;\"]);\n\nvar Nav = _styledComponents[\"default\"].nav.withConfig({\n  displayName: \"NavigationBar__Nav\",\n  componentId: \"sc-1p7v36e-1\"\n})([\"background-color:#FEF5F3;padding-top:3px;font-size:2em;padding-bottom:10px;\"]);\n\nvar List = _styledComponents[\"default\"].ul.withConfig({\n  displayName: \"NavigationBar__List\",\n  componentId: \"sc-1p7v36e-2\"\n})([\"display:inline;\"]);\n\nvar ListElem = _styledComponents[\"default\"].li.withConfig({\n  displayName: \"NavigationBar__ListElem\",\n  componentId: \"sc-1p7v36e-3\"\n})([\"display:inline;\"]);\n\nvar LeftLink = (0, _styledComponents[\"default\"])(_reactRouterDom.Link).withConfig({\n  displayName: \"NavigationBar__LeftLink\",\n  componentId: \"sc-1p7v36e-4\"\n})([\"float:left;\"]);\nvar RightLink = (0, _styledComponents[\"default\"])(_reactRouterDom.Link).withConfig({\n  displayName: \"NavigationBar__RightLink\",\n  componentId: \"sc-1p7v36e-5\"\n})([\"float:right;\"]);\n\nvar Button = _styledComponents[\"default\"].button.withConfig({\n  displayName: \"NavigationBar__Button\",\n  componentId: \"sc-1p7v36e-6\"\n})([\"background:#E5C1EE;border-radius:3px;border:solid #DBB7E4;color:#33153A;font-size:.5em;margin:0 1em;padding:0.25em 1em;\"]);\n\nvar NavigationBar = function NavigationBar() {\n  return /*#__PURE__*/React.createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/React.createElement(Title, null, \"Website Creation Studio\"), /*#__PURE__*/React.createElement(Nav, null, /*#__PURE__*/React.createElement(List, null, /*#__PURE__*/React.createElement(ListElem, null, /*#__PURE__*/React.createElement(LeftLink, {\n    to: \"/global-settings\"\n  }, /*#__PURE__*/React.createElement(Button, null, \"Global Settings\"))), /*#__PURE__*/React.createElement(ListElem, null, /*#__PURE__*/React.createElement(LeftLink, {\n    to: \"/studio\"\n  }, /*#__PURE__*/React.createElement(Button, null, \"Studio\"))), /*#__PURE__*/React.createElement(ListElem, null, /*#__PURE__*/React.createElement(LeftLink, {\n    to: \"/page-view\"\n  }, /*#__PURE__*/React.createElement(Button, null, \"Page View\"))), /*#__PURE__*/React.createElement(ListElem, null, /*#__PURE__*/React.createElement(RightLink, {\n    to: \"/information\"\n  }, /*#__PURE__*/React.createElement(\"i\", {\n    className: \"far fa-question-circle\"\n  }))))), /*#__PURE__*/React.createElement(_reactRouterDom.Switch, null, /*#__PURE__*/React.createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/global-settings\",\n    component: _GlobalSettings[\"default\"]\n  }), /*#__PURE__*/React.createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/studio\",\n    component: _Studio[\"default\"]\n  }), /*#__PURE__*/React.createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/page-view\",\n    component: _PageView[\"default\"]\n  }), /*#__PURE__*/React.createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/information\",\n    component: _Information[\"default\"]\n  })));\n};\n\nvar _default = NavigationBar;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/NavigationBar/index.js?");
+
+/***/ }),
+
+/***/ "./app/components/NewFragment/index.js":
+/*!*********************************************!*\
+  !*** ./app/components/NewFragment/index.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar NewFragment = function NewFragment() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"new-fragment\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"NewFragment\"));\n};\n\nvar _default = NewFragment;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/NewFragment/index.js?");
+
+/***/ }),
+
+/***/ "./app/components/NewSelector/index.js":
+/*!*********************************************!*\
+  !*** ./app/components/NewSelector/index.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar NewSelector = function NewSelector() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"new-template\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"NewTemplate\"));\n};\n\nvar _default = NewSelector;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/NewSelector/index.js?");
+
+/***/ }),
+
+/***/ "./app/components/NewTemplate/index.js":
+/*!*********************************************!*\
+  !*** ./app/components/NewTemplate/index.js ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar NewTemplate = function NewTemplate() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"new-template\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"NewTemplate\"));\n};\n\nvar _default = NewTemplate;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/NewTemplate/index.js?");
 
 /***/ }),
 
@@ -131,6 +203,18 @@ eval("\n\nvar React = __webpack_require__(/*! react */ \"./node_modules/react/in
 
 "use strict";
 eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar GlobalSettings = function GlobalSettings() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"global-settings\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"Global Settings\"));\n};\n\nvar _default = GlobalSettings;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/pages/GlobalSettings/index.js?");
+
+/***/ }),
+
+/***/ "./app/pages/Information/index.js":
+/*!****************************************!*\
+  !*** ./app/pages/Information/index.js ***!
+  \****************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar Information = function Information() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"information\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"Information\"));\n};\n\nvar _default = Information;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/pages/Information/index.js?");
 
 /***/ }),
 
@@ -166,7 +250,7 @@ eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ 
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
-eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar Studio = function Studio() {\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"studio\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"Studio\"));\n};\n\nvar _default = Studio;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/pages/Studio/index.js?");
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nvar _reactRouterDom = __webpack_require__(/*! react-router-dom */ \"./node_modules/react-router-dom/esm/react-router-dom.js\");\n\nvar _styledComponents = _interopRequireDefault(__webpack_require__(/*! styled-components */ \"./node_modules/styled-components/dist/styled-components.browser.esm.js\"));\n\nvar _FragmentTemplateList = _interopRequireDefault(__webpack_require__(/*! ../../components/FragmentTemplateList */ \"./app/components/FragmentTemplateList/index.js\"));\n\nvar _NewSelector = _interopRequireDefault(__webpack_require__(/*! ../../components/NewSelector */ \"./app/components/NewSelector/index.js\"));\n\nvar _EditFragment = _interopRequireDefault(__webpack_require__(/*! ../../components/EditFragment */ \"./app/components/EditFragment/index.js\"));\n\nvar _EditTemplate = _interopRequireDefault(__webpack_require__(/*! ../../components/EditTemplate */ \"./app/components/EditTemplate/index.js\"));\n\nvar _NewFragment = _interopRequireDefault(__webpack_require__(/*! ../../components/NewFragment */ \"./app/components/NewFragment/index.js\"));\n\nvar _NewTemplate = _interopRequireDefault(__webpack_require__(/*! ../../components/NewTemplate */ \"./app/components/NewTemplate/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar Studio = function Studio() {\n  return /*#__PURE__*/_react[\"default\"].createElement(_reactRouterDom.BrowserRouter, null, /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"studio\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"Studio\")), /*#__PURE__*/_react[\"default\"].createElement(_reactRouterDom.Switch, null, /*#__PURE__*/_react[\"default\"].createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/edit-fragment\",\n    component: _EditFragment[\"default\"]\n  }), /*#__PURE__*/_react[\"default\"].createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/edit-template\",\n    component: _EditTemplate[\"default\"]\n  }), /*#__PURE__*/_react[\"default\"].createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/new-fragment\",\n    component: _NewFragment[\"default\"]\n  }), /*#__PURE__*/_react[\"default\"].createElement(_reactRouterDom.Route, {\n    exact: true,\n    path: \"/new-template\",\n    component: _NewTemplate[\"default\"]\n  })));\n};\n\nvar _default = Studio;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/pages/Studio/index.js?");
 
 /***/ }),
 

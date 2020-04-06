@@ -3,13 +3,19 @@ var ReactDOM = require('react-dom');
 
 import NavigationBar from './components/NavigationBar';
 
+import Footer from './components/Footer';
+
 /**
  * Entry point for all components.
  * react-router enabled.
  */
-const App = () => {
+const App = (props) => {
   return (
-    <NavigationBar />
+    <div>
+      <NavigationBar />
+      {props.children}
+      <Footer />
+    </div>
   );
 };
 
