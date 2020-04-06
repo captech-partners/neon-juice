@@ -41,6 +41,7 @@ const Studio = () => {
           <Link to="/new-fragment"><Button>New Fragment</Button></Link>
           <Link to="/new-template"><Button>Edit Fragment</Button></Link>
 
+
           <FragmentTemplateList />
 
           <Switch>

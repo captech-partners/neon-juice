@@ -15,66 +15,97 @@ const Sidebar = styled.div`
   padding-left: 1em;
 `;
 
-const FragmentTemplateList = () => {
-  return (
-    <Sidebar>
-      <p>Fragments</p>
-      <div id="sidebar-fragments"></div>
-
-      <p>Templates</p>
-      <div id="sidebar-templates"></div>
-    </Sidebar>
-  );
-};
-
-
-
-
+// const FragmentTemplateList = () => {
+//   return (
+//     <Sidebar>
+//       <p>Fragments</p>
+//       <div id="sidebar-fragments"></div>
 //
-// class FragmentTemplateList extends Component {
-//
-//   constuctor () {
-//     this.state = {
-//       fragments: [],
-//       templates: []
-//     };
-//   }
-//
-//   componentDidMount() {
-//     axios.get(`http://localhost:5000/fragments`)
-//       .then(result => {
-//
-//         result.sort(function(a, b) {
-//   				return a.id - b.id  ||  a.class_attr.localeCompare(b.class_attr);
-//   			});
-//
-//         const fragList = result.map(obj => obj.data);
-//         this.setState({ fragments: fragList });
-//       })
-//   }
-//
-//   render() {
-//     return (
-//       <Sidebar>
-//         <p>Fragments</p>
-//         <ul>
-//             {this.state.fragments.map(frag =>
-//               <li><p> { frag.id }: { frag.file_name } </p></li>
-//             )}
-//         </ul>
-//       </Sidebar>
-//     );
-//   }
+//       <p>Templates</p>
+//       <div id="sidebar-templates"></div>
+//     </Sidebar>
+//   );
 // };
 
-// <p>Templates</p>
-// <div id="sidelist-templates">
-//   <ul>
-//     {this.state.posts.map(post =>
-//       <li key={post.id}>{post.title}</li>
-//     )}
-//   </ul>
-// </div>
+//export default FragmentTemplateList;
+
+
+class FragmentTemplateList extends React.Component {
+
+  constructor (props) {
+    super(props);
+    this.state = {
+      fragments: [],
+      templates: []
+    };
+  }
+
+  componentDidMount() {
+    axios.get(`http://localhost:5000/fragments`)
+      .then(result => {
+
+        result.data.sort(function(a, b) {
+  				return a.id - b.id  ||  a.class_attr.localeCompare(b.class_attr);
+  			});
+
+        // const fragList = [];
+        // const tempList = [];
+        //
+        // result.data.forEach((obj, i) => {
+        //   if(i.id > 0){
+        //     fragList.push(i);
+        //   }else{
+        //     tempList.push(i);
+        //   }
+        // });
+
+        // const fragList = result.data.map((list, elem) => {
+        //   if(elem.id >= 0) {
+        //     console.log(elem);
+        //     return elem;
+        //   };
+        // });
+        //
+        // const tempList = result.data.map(obj => {
+        //   if(obj.id < 0) {
+        //     return obj;
+        //   };
+        // });
+        //
+        // this.setState({ fragments: fragList });
+        // //this.setState({ templates: tempList })
+
+        const fragList = result.data.map(obj => obj);
+        this.setState({ fragments: fragList });
+
+      })
+  }
+
+  render() {
+    return (
+      <Sidebar>
+        <p>Fragments</p>
+        <ul>
+            {this.state.fragments.map(frag =>
+              <li key={frag.id}>
+                <p>{frag.id}: {frag.class_attr}</p>
+              </li>
+            )}
+        </ul>
+
+        <p>Templates</p>
+        <ul>
+            {this.state.templates.map(temp =>
+              <li key={temp.id}>
+                <p>{temp.id}: {temp.class_attr}</p>
+              </li>
+            )}
+        </ul>
+      </Sidebar>
+    );
+  }
+};
+
 
 
 export default FragmentTemplateList;
