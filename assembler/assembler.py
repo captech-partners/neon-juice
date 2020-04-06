@@ -30,11 +30,19 @@ from werkzeug.utils import secure_filename
 
 ALLOWED_EXTENSIONS = {'zip'}
 
-app = Flask(__name__, static_url_path='/resources')
+app = Flask(__name__, static_url_path='/static', static_folder='static/')
 mode = 'local'
 
 collection = FragmentCollection()
 path = ''
+
+@app.route('/builder/')
+def builder():
+	return render_template('builder.html')
+
+@app.route('/dashboard/')
+def dashboard():
+    return render_template('dashboard.html')
 
 # @app.route("/assembler")
 # def home():

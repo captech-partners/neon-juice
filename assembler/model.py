@@ -200,7 +200,7 @@ class FragmentCollection(object):
 		except ETree.ParseError:
 			created = False
 		else:
-			self.build_fragment(et_root, self.root_dir + 'assets.html')
+			self.build_fragment(et_root, self.root_dir + '/assets.html')
 			created = True
 		return created
 

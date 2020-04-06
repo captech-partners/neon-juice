@@ -1,0 +1,32 @@
+# Ignore fragments working directory
+/assembler/fragments
+
+# Environments
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Byte-compiled / optimized / DLL files
+__pycache__
+
+# Neon-juice temporary packaged fragments (for download)
+package.zip
+
+# From Flask tutorial gitignore (flask.palletsprojects.com/en/1.1.x/tutorial/layout/)
+*.pyc
+
+.pytest_cache
+.coverage
+htmlcov
+dist/
+build/
+*.egg-info/
+
+# Ignore Pycharm config files
+.idea/
+
+.DS_Store

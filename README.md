@@ -22,32 +22,50 @@ $ git clone https://github.com/captech-partners/neon-juice.git
 ## Running the app on your local computer
 Step into project folder:
 ```
-$ cd neon-juice
+$ cd neon-juice/assembler
 ```
 ### Setup virtal environment
 ```
 $ virtualenv -p python3 env
 $ source env/bin/activate
-$pip install -r assembler/requirements.txt
+$ pip install -r requirements.txt
 ```
 
-### Start the application
+### Start the sample application
+
+Quick Note:
+
+The builder interface behaves as an IDE, this means that the `fragments` directory behaves as a working source folder for the builder interface (builder will write files inside `fragments` at runtime)
+
+Currently the fragments defined in `fragments` are copied from the sample/backup directory `fragments_samples`. So __DO NOT modify `fragments_samples`, or launching the application using `fragments_samples`__
+
+.gitignore is ignoring `fragments`. Your changes to `fragments` during local debugging will/should not be tracked.
+
+
 #### Full application: API, Builder interface and Admin Dashboard
 ```
-$ python3 assembler/assembler.py start assembler/fragments/ -p <port> --local
+$ python assembler.py start fragments/ -p 5000 --local
 ```
 
 #### Remote application: API, and Admin Dashboard
 ```
-$ python3 assembler/assembler.py start assembler/fragments/ -p <port>
+$ python assembler.py start fragments/ -p 5000
 ```
 
-#### Testing local deployment
-In your browser, enter the following address:
+> Note: Frontend builder interfaces are currently hard-coded for port 5000. This will be removed to dynamic later to support any port.
 
-`
-http://localhost:<port>/back-to-school
-`
+
+#### Testing local deployment
+
+In your browser, render `back-to-school` page by visiting the following address:
+http://localhost:5000/back-to-school
+
+Visit the builder interface
+http://localhost:5000/builder
+
+Visit the admin dashboard interface
+http://localhost:5000/dashboard
+
 
 #### Stopping deployment
 To stop the local task press Control+C ( Ctrl-C )

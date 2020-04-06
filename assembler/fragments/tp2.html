@@ -1,5 +1,5 @@
 <html>
-	<html data-label="confused" data-page="back-to-school, long-live-the-summer" lang="en" data-id="-1">
+	<html data-id="-1" data-label="confused" data-page="back-to-school, long-live-the-summer" lang="en">
 		<head>
 			<meta charset="UTF-8" />
 			<title>Neon_Juice</title>
@@ -57,7 +57,7 @@
 		.logo {
 			width: 200px;
 			height: 34px;
-			background: url('images/logo-2.png')no-repeat;
+			background: url('/static/images/logo-2.png')no-repeat;
 			background-repeat: no-repeat;
 			background-size: contain;
 			background-position: center;
@@ -277,9 +277,9 @@
     </style>
 		</head>
 		<body>
-			<a class="button" href="http://localhost:5000/back-to-school?label=business">Business</a>
-			<a class="button" href="http://localhost:5000/back-to-school?label=technology">Technology</a>
-			<a class="button" href="http://localhost:5000/back-to-school?label=business,christmas">Christmas</a>
+			<a class="button" href="/back-to-school?label=business">Business</a>
+			<a class="button" href="/back-to-school?label=technology">Technology</a>
+			<a class="button" href="/back-to-school?label=business,christmas">Christmas</a>
 			<div class="sidenav" id="mySidenav">
 				<a class="closebtn" href="javascript:void(0)" onclick="closeNav()">close</a>
 				<a href="#">Product</a>
