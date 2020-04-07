@@ -9,12 +9,19 @@ const Title = styled.p`
 
 const Bar = styled.div`
   background-color: #7e7580;
-  padding: 1.5em;
-  position: absolute;
-  bottom: 0;
   width: 100%;
+  float:left;
+  margin-left: 0;
+  display: block;
+
+  padding: 1.5em;
   height: 2em;
 `;
+
+// padding: 1.5em;
+// position: fixed;
+// bottom: 0;
+// height: 2em;
 
 const Footer = () => {
   return (
