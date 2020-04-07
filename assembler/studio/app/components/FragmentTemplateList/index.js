@@ -48,40 +48,28 @@ class FragmentTemplateList extends React.Component {
   				return a.id - b.id  ||  a.class_attr.localeCompare(b.class_attr);
   			});
 
-        // const fragList = [];
-        // const tempList = [];
-        //
-        // result.data.forEach((obj, i) => {
-        //   if(i.id > 0){
-        //     fragList.push(i);
-        //   }else{
-        //     tempList.push(i);
-        //   }
-        // });
+        const fragList = result.data.filter(obj => (obj.id >= 0)).map(obj => obj);
+        const tempList = result.data.filter(obj => (obj.id < 0)).map(obj => obj);
 
-        // const fragList = result.data.map((list, elem) => {
-        //   if(elem.id >= 0) {
-        //     console.log(elem);
-        //     return elem;
-        //   };
-        // });
-        //
-        // const tempList = result.data.map(obj => {
-        //   if(obj.id < 0) {
-        //     return obj;
-        //   };
-        // });
-        //
-        // this.setState({ fragments: fragList });
-        // //this.setState({ templates: tempList })
-
-        const fragList = result.data.map(obj => obj);
         this.setState({ fragments: fragList });
-
+        this.setState({ templates: tempList });
       })
   }
 
   render() {
+
+    this.state.fragments.forEach(frag => {
+      if(frag.class_attr == null){
+        frag.class_attr = "null";
+      }
+    });
+
+    this.state.templates.forEach(temp => {
+      if(temp.class_attr == null){
+        temp.class_attr = "null";
+      }
+    });
+
     return (
       <Sidebar>
         <p>Fragments</p>
