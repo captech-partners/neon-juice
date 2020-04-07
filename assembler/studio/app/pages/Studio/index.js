@@ -39,7 +39,7 @@ const Studio = () => {
           <Link to="/edit-fragment"><Button>Edit Fragment</Button></Link>
           <Link to="/edit-template"><Button>Edit Template</Button></Link>
           <Link to="/new-fragment"><Button>New Fragment</Button></Link>
-          <Link to="/new-template"><Button>Edit Fragment</Button></Link>
+          <Link to="/new-template"><Button>New Template</Button></Link>
 
 
           <FragmentTemplateList />
