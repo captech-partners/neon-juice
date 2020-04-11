@@ -1,18 +1,35 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
 
-const NewTemplate = () => {
+//const NewTemplate = () => {
+class NewTemplate extends React.Component {
 
-    state = {
-        dataLabel: "",
-        dataPage: "",
-        template: "",
-        content: "",
-    };
+    //this.change = this.change.bind(this);
+    //this.onSubmit = this.onSubmit.bind(this);
+    //this.state = {"", "", "", ""};
+    constructor (props) {
+        super(props);
+        this.state = {
+            dataLabel: " ",
+            dataPage: " ",
+            template: " ",
+            content: " "
+        };
+        //this.change = this.change.bind(this);
+        //this.onSubmit = this.onSubmit.bind(this);
+    }
+
+    // state = {
+    //     dataLabel: " ",
+    //     dataPage: " ",
+    //     template: " ",
+    //     content: " "
+    // };
 
     change = e => {
         this.setState({
             [e.target.name]: e.target.value
-        })
+        });
     };
 
     onSubmit = e => {
@@ -23,34 +40,35 @@ const NewTemplate = () => {
     render() {
         return (
             <form>
-                <input 
+                <input
                     name="dataLabel"
-                    placeholder="Data Label" 
-                    value={this.state.dataLabel} 
+                    placeholder="Data Label"
+                    value={this.state.dataLabel}
                     onChange={e => this.change(e)}
                 />
-                <input 
+                <input
                     name="dataPage"
-                    placeholder="Data Page" 
-                    value={this.state.dataPage} 
+                    placeholder="Data Page"
+                    value={this.state.dataPage}
                     onChange={e => this.change(e)}
                 />
-                <input 
+                <input
                     name="template"
-                    placeholder="Template" 
-                    value={this.state.template} 
+                    placeholder="Template"
+                    value={this.state.template}
                     onChange={e => this.change(e)}
                 />
                 <input 
                     name="content"
-                    placeholder="Content" 
-                    value={this.state.content} 
+                    placeholder="Content"
+                    value={this.state.content}
                     onChange={e => this.change(e)}
                 />
                 <button onClick={e => this.onSubmit(e)}>Submit</button>
             </form>
         );
     }
-};
+//};
+}
 
 export default NewTemplate;
