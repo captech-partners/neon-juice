@@ -6,10 +6,11 @@ class NewTemplate extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            dataLabel: " ",
-            dataPage: " ",
-            template: " ",
-            content: " "
+            templateName: "",
+            content: "",
+            dataChild: "",
+            dataPage: "",
+            dataID: ""
         };
     }
 
@@ -27,11 +28,30 @@ class NewTemplate extends React.Component {
     render() {
         return (
             <form>
-                <p>Data Label:
+                <h1 align="center">New Template</h1>
+                <p>Template Name:
                     <input
-                        name="dataLabel"
-                        placeholder="Data Label"
-                        value={this.state.dataLabel}
+                        size="40"
+                        name="templateName"
+                        placeholder="Template Name"
+                        value={this.state.templateName}
+                        onChange={e => this.change(e)}
+                    />
+                </p>
+                <p>Content:
+                    <input
+                        name="content"
+                        placeholder="Content"
+                        value={this.state.content}
+                        onChange={e => this.change(e)}
+                    />
+                </p>
+                <h2>Fragment Slot</h2>
+                <p>Data Child:
+                    <input
+                        name="dataChild"
+                        placeholder="Data Child"
+                        value={this.state.dataChild}
                         onChange={e => this.change(e)}
                     />
                 </p>
@@ -43,19 +63,11 @@ class NewTemplate extends React.Component {
                         onChange={e => this.change(e)}
                     />
                 </p>
-                <p>Template:
+                <p>Data ID:
                     <input
-                        name="template"
-                        placeholder="Template"
-                        value={this.state.template}
-                        onChange={e => this.change(e)}
-                    />
-                </p>
-                <p>Content:
-                    <input 
-                        name="content"
-                        placeholder="Content"
-                        value={this.state.content}
+                        name="dataID"
+                        placeholder="Data ID"
+                        value={this.state.dataID}
                         onChange={e => this.change(e)}
                     />
                 </p>
