@@ -23,6 +23,13 @@ class NewTemplate extends React.Component {
     onSubmit = e => {
         e.preventDefault();
         console.log(this.state);
+        this.setState({
+            templateName: "",
+            content: "",
+            dataChild: "",
+            dataPage: "",
+            dataID: ""
+        });
     };
 
     render() {
