@@ -22,6 +22,12 @@ class NewFragment extends React.Component {
     onSubmit = e => {
         e.preventDefault();
         console.log(this.state);
+        this.setState({
+            dataLabel: "",
+            dataPage: "",
+            template: "",
+            content: ""
+        });
     };
 
     render() {
