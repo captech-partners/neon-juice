@@ -146,6 +146,18 @@ eval("\n\n__webpack_require__(/*! core-js/modules/web.dom.iterable */ \"./node_m
 
 /***/ }),
 
+/***/ "./app/components/HTMLEditor/index.js":
+/*!********************************************!*\
+  !*** ./app/components/HTMLEditor/index.js ***!
+  \********************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+eval("\n\n__webpack_require__(/*! core-js/modules/es6.object.define-property */ \"./node_modules/core-js/modules/es6.object.define-property.js\");\n\nObject.defineProperty(exports, \"__esModule\", {\n  value: true\n});\nexports[\"default\"] = void 0;\n\nvar _react = _interopRequireDefault(__webpack_require__(/*! react */ \"./node_modules/react/index.js\"));\n\nfunction _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { \"default\": obj }; }\n\nvar HTMLEditor = function HTMLEditor() {\n  // var editor = CodeMirror.fromTextArea(document.getElementById(\"editor-textbox\"), {\n  // \tlineNumbers: true,\n  // \tmode: \"htmlmixed\",\n  // \ttheme: \"nord\",\n  // });\n  //\n  // editor.setSize(900, 400);\n  return /*#__PURE__*/_react[\"default\"].createElement(\"div\", {\n    className: \"html-editor\"\n  }, /*#__PURE__*/_react[\"default\"].createElement(\"h1\", null, \"HTML Editor\"), /*#__PURE__*/_react[\"default\"].createElement(\"textarea\", {\n    id: \"editor-textbox\",\n    className: \"editor-textbox\",\n    rows: \"30\",\n    cols: \"80\"\n  }));\n};\n\nvar _default = HTMLEditor;\nexports[\"default\"] = _default;\n\n//# sourceURL=webpack:///./app/components/HTMLEditor/index.js?");
+
+/***/ }),
+
 /***/ "./app/components/NavigationBar/index.js":
 /*!***********************************************!*\
   !*** ./app/components/NavigationBar/index.js ***!
