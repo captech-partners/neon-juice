@@ -93,8 +93,10 @@ class NewFragment extends React.Component {
 
         return (
           <div>
+
+            <h1>New Fragment</h1>
+
             <InputFields>
-                <h1 align="center">New Fragment</h1>
                 <p>Fragment Name:
                     <input
                         name="class"

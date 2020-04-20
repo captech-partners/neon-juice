@@ -2,6 +2,11 @@ import React, { Component } from 'react';
 var ReactDOM = require('react-dom');
 import axios from 'axios';
 
+import { BrowserRouter as Router, Redirect, Route, Link, Switch } from 'react-router-dom';
+
+import EditFragment from '../../components/EditFragment';
+import EditTemplate from '../../components/EditTemplate';
+
 import styled from 'styled-components';
 
 const Sidebar = styled.div`
@@ -59,27 +64,67 @@ class FragmentTemplateList extends React.Component {
 
     return (
       <Sidebar>
-        <p>Fragments</p>
-        <ul>
-            {this.state.fragments.map(frag =>
-              <li key={frag.id}>
-                <p>{frag.id}: {frag.class_attr}</p>
-              </li>
-            )}
-        </ul>
 
-        <p>Templates</p>
-        <ul>
-            {this.state.templates.map(temp =>
-              <li key={temp.id}>
-                <p>{temp.id}: {temp.class_attr}</p>
-              </li>
-            )}
-        </ul>
+        <Router>
+          <p>Fragments</p>
+          <ul>
+              {this.state.fragments.map(frag =>
+                <li key={frag.id}>
+
+                  <Link to={{
+                    pathname: "/edit-fragment",
+                    state: {dataID: frag.id}
+                  }}>
+                    <p>{frag.id}: {frag.class_attr}</p>
+                  </Link>
+
+                </li>
+              )}
+          </ul>
+
+          <p>Templates</p>
+          <ul>
+              {this.state.templates.map(temp =>
+                <li key={temp.id}>
+
+                  <Link to={{
+                    pathname: "/edit-template",
+                    state: {dataID: temp.id}
+                  }}>
+                    <p>{temp.id}: {temp.class_attr}</p>
+                  </Link>
+
+                </li>
+              )}
+          </ul>
+        </Router>
+
+        <Switch>
+          <Route exact path="/edit-fragment" component={EditFragment} />
+          <Route exact path="/edit-template" component={EditTemplate} />
+        </Switch>
+
       </Sidebar>
     );
   }
 };
+
+//
+// <Route
+//   state={this.state}
+//   path='/edit-fragment'
+//   render={(props) => <EditFragment {...props} state={this.state} />}
+// />
+// <Route
+//   state={this.state}
+//   path='/edit-template'
+//   render={(props) => <EditTemplate {...props}  />}
+// />
+  // <Route exact path="/edit-fragment" component={EditFragment} />
+  // <Route exact path="/edit-template" component={EditTemplate} />
+
+
+
 
 
 

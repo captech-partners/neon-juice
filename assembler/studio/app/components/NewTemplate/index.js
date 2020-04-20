@@ -101,8 +101,9 @@ class NewTemplate extends React.Component {
 
         return (
           <div>
+            <h1>New Template</h1>
+
             <InputFields>
-                <h1>New Template</h1>
                 <p>Template Name:
                     <input
                         size="30"

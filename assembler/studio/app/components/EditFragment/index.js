@@ -60,6 +60,8 @@ class EditFragment extends React.Component {
 
     var current = this;
 
+    var dataID = this.props.location.state.dataID;
+
     const url = "http://localhost:5000/fragments/" + this.state.dataID;
 
     axios.get(url)
@@ -70,7 +72,7 @@ class EditFragment extends React.Component {
           code: response.data.html,
           dataPage: response.data.pages,
           dataLabel: response.data.labels,
-          dataID: response.data.id,
+          dataID: dataID,
           template: response.data.templates,
         })
 
@@ -120,8 +122,9 @@ class EditFragment extends React.Component {
 
       return (
         <div>
+          <h1>Edit Fragment: {this.state.class}</h1>
+
           <InputFields>
-              <h1 align="center">New Fragment</h1>
               <p>Fragment Name:
                   <input
                       name="class"

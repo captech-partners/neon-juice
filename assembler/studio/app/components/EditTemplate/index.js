@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-ocean.css';
-import {UnControlled as CodeMirror} from 'react-codemirror2';
+import {Controlled as CodeMirror} from 'react-codemirror2';
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 
@@ -44,7 +44,7 @@ class EditTemplate extends React.Component {
             dataChild: "",
             dataPage: "",
             dataLabel: "",
-            dataID: "-1",
+            dataID: "",
 
             dataChildClass: "",
             dataChildLimit: "",
@@ -60,19 +60,20 @@ class EditTemplate extends React.Component {
 
       var current = this;
 
+      this.setState({dataID: this.props.location.state.dataID});
+
       const url = "http://localhost:5000/fragments/" + this.state.dataID;
 
       axios.get(url)
         .then(function (response) {
 
           current.setState({
-            templateName: response.data.class_attr,
+            templateName: (response.data.class_attr != "null") ? response.data.class_attr : "",
             code: response.data.html,
             dataPage: response.data.pages,
             dataLabel: response.data.labels,
             dataID: response.data.id
           })
-
         })
         .catch(function (error) {
           console.log(error);
@@ -124,8 +125,9 @@ class EditTemplate extends React.Component {
 
         return (
           <div>
+            <h1>Edit Template: {this.state.templateName}</h1>
+
             <InputFields>
-                <h1>New Template</h1>
                 <p>Template Name:
                     <input
                         size="30"
