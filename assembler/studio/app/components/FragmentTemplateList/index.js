@@ -4,7 +4,6 @@ import axios from 'axios';
 
 import styled from 'styled-components';
 
-
 const Sidebar = styled.div`
   width: 250px;
   top: 0;
@@ -13,21 +12,9 @@ const Sidebar = styled.div`
   float: left;
   margin-right: 1em;
   padding-left: 1em;
+  bottom: 0;
+  margin-bottom: 1em;
 `;
-
-// const FragmentTemplateList = () => {
-//   return (
-//     <Sidebar>
-//       <p>Fragments</p>
-//       <div id="sidebar-fragments"></div>
-//
-//       <p>Templates</p>
-//       <div id="sidebar-templates"></div>
-//     </Sidebar>
-//   );
-// };
-
-//export default FragmentTemplateList;
 
 
 class FragmentTemplateList extends React.Component {
