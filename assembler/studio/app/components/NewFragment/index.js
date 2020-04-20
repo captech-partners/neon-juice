@@ -20,8 +20,18 @@ const Editor = styled.div`
   margin-top: 1em;
   margin-right: 1em;
   float: right;
-  width: 50%;
+  width: 45%;
 `;
+
+const Button = styled.button`
+  background: #E5C1EE;
+  border-radius: 3px;
+  border: solid #DBB7E4;
+  color: #33153A;
+  font-size: .5em;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+`
 
 
 class NewFragment extends React.Component {
@@ -29,12 +39,15 @@ class NewFragment extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
+            class: "",
+            dataChildLimit: "",
+            dataChildType: "",
             dataLabel: "",
             dataPage: "",
             template: "",
             content: "",
 
-            code: "",
+            code: ""
         };
 
         this.updateCode = this.updateCode.bind(this);
@@ -57,7 +70,7 @@ class NewFragment extends React.Component {
           url: 'http://localhost:5000/fragments',
           dataType: "json",
     			contentType:"application/json",
-    			data: JSON.stringify(code),
+    			data: JSON.stringify({html: code}),
         });
     };
 
@@ -69,7 +82,6 @@ class NewFragment extends React.Component {
     };
 
 
-
     render() {
 
       var options = {
@@ -79,11 +91,35 @@ class NewFragment extends React.Component {
             mode: 'xml',
         };
 
-
         return (
           <div>
             <InputFields>
                 <h1 align="center">New Fragment</h1>
+                <p>Fragment Name:
+                    <input
+                        name="class"
+                        placeholder="Fragment Name"
+                        value={this.state.class}
+                        onChange={e => this.change(e)}
+                    />
+                </p>
+                <p>Data Child Limit:
+                    <input
+                        name="dataChildLimit"
+                        placeholder="Data Child Limit"
+                        value={this.state.dataChildLimit}
+                        onChange={e => this.change(e)}
+                    />
+                </p>
+                <p>Data Child Type:
+                    <input
+                        name="dataChildType"
+                        placeholder="Data Child Type"
+                        value={this.state.dataChildType}
+                        onChange={e => this.change(e)}
+                    />
+                </p>
+
                 <p>Data Label:
                     <input
                         name="dataLabel"
@@ -118,11 +154,14 @@ class NewFragment extends React.Component {
                         ref="content"
                     />
                 </p>
-                <button onClick={e => this.onSubmit(e)}>Create Fragment</button>
+                <Button onClick={e => this.onSubmit(e)}>Create Fragment</Button>
             </InputFields>
 
             <Editor>
-              <CodeMirror value={"<div class=\"\" data-child-limit=\"\" data-child-type=\"\" data-id=\"\" data-label=\"" + this.state.dataLabel + "\" data-page=\"" + this.state.dataPage + "\" data-template=\"" + this.state.template + "\">" + this.state.content + "</div>"}
+              <CodeMirror value={"<div class=\"" + this.state.class + "\" data-child-limit=\"" + this.state.dataChildLimit
+              + "\" data-child-type=\"" +
+              this.state.dataChildType + "\" data-id=\"\" data-label=\"" + this.state.dataLabel + "\" data-page=\""
+              + this.state.dataPage + "\" data-template=\"" + this.state.template + "\">" + this.state.content + "</div>"}
               onChange={this.updateCode} options={options}/>
             </Editor>
           </div>
