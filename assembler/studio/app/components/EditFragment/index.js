@@ -43,7 +43,7 @@ class EditFragment extends React.Component {
 
           dataChildLimit: "",
           dataChildType: "",
-          dataID: "8",
+          dataID: 8,
           dataLabel: "",
           dataPage: "",
 
@@ -60,7 +60,8 @@ class EditFragment extends React.Component {
 
     var current = this;
 
-    var dataID = this.props.location.state.dataID;
+    const { givenDataID } = this.props.location.state;
+    this.setState({dataID: givenDataID});
 
     const url = "http://localhost:5000/fragments/" + this.state.dataID;
 
@@ -72,7 +73,6 @@ class EditFragment extends React.Component {
           code: response.data.html,
           dataPage: response.data.pages,
           dataLabel: response.data.labels,
-          dataID: dataID,
           template: response.data.templates,
         })
 
@@ -80,6 +80,33 @@ class EditFragment extends React.Component {
       .catch(function (error) {
         console.log(error);
       });
+  }
+
+  componentDidUpdate() {
+    var current = this;
+
+    if(this.props.location.state.givenDataID !== this.state.dataID){
+      const { givenDataID } = this.props.location.state;
+      this.setState({dataID: givenDataID});
+
+      const url = "http://localhost:5000/fragments/" + this.state.dataID;
+
+      axios.get(url)
+        .then(function (response) {
+
+          current.setState({
+            class: response.data.class_attr,
+            code: response.data.html,
+            dataPage: response.data.pages,
+            dataLabel: response.data.labels,
+            template: response.data.templates,
+          })
+
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+    }
   }
 
   change = e => {

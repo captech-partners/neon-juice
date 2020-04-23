@@ -5,7 +5,7 @@ import axios from 'axios';
 
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-ocean.css';
-import {Controlled as CodeMirror} from 'react-codemirror2';
+import {UnControlled as CodeMirror} from 'react-codemirror2';
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 
@@ -44,7 +44,7 @@ class EditTemplate extends React.Component {
             dataChild: "",
             dataPage: "",
             dataLabel: "",
-            dataID: "",
+            dataID: -1,
 
             dataChildClass: "",
             dataChildLimit: "",
@@ -60,7 +60,8 @@ class EditTemplate extends React.Component {
 
       var current = this;
 
-      this.setState({dataID: this.props.location.state.dataID});
+      const { givenDataID } = this.props.location.state;
+      this.setState({dataID: givenDataID});
 
       const url = "http://localhost:5000/fragments/" + this.state.dataID;
 
@@ -72,7 +73,7 @@ class EditTemplate extends React.Component {
             code: response.data.html,
             dataPage: response.data.pages,
             dataLabel: response.data.labels,
-            dataID: response.data.id
+            // dataID: response.data.id
           })
         })
         .catch(function (error) {

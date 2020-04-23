@@ -7,6 +7,9 @@ import { BrowserRouter as Router, Redirect, Route, Link, Switch } from 'react-ro
 import EditFragment from '../../components/EditFragment';
 import EditTemplate from '../../components/EditTemplate';
 
+import NewFragment from '../../components/NewFragment';
+import NewTemplate from '../../components/NewTemplate';
+
 import styled from 'styled-components';
 
 const Sidebar = styled.div`
@@ -20,6 +23,21 @@ const Sidebar = styled.div`
   bottom: 0;
   margin-bottom: 1em;
 `;
+
+const Main = styled.div`
+  margin: .5em;
+  padding-left: .5em;
+`
+
+const Button = styled.button`
+  background: #E5C1EE;
+  border-radius: 3px;
+  border: solid #DBB7E4;
+  color: #33153A;
+  font-size: .5em;
+  margin: 0 1em;
+  padding: 0.25em 1em;
+`
 
 
 class FragmentTemplateList extends React.Component {
@@ -63,52 +81,72 @@ class FragmentTemplateList extends React.Component {
     });
 
     return (
-      <Sidebar>
+      <Router>
 
-        <Router>
+        <Link to="/new-fragment"><Button>New Fragment</Button></Link>
+        <Link to="/new-template"><Button>New Template</Button></Link>
+
+        <Sidebar>
           <p>Fragments</p>
           <ul>
-              {this.state.fragments.map(frag =>
-                <li key={frag.id}>
-
-                  <Link to={{
-                    pathname: "/edit-fragment",
-                    state: {dataID: frag.id}
-                  }}>
-                    <p>{frag.id}: {frag.class_attr}</p>
-                  </Link>
-
-                </li>
-              )}
+            {this.state.fragments.map(frag =>
+              <li key={frag.id}>
+                <Link to={{
+                  pathname: `/edit-fragment/${frag.id}`,
+                  state: {
+                    givenDataID: frag.id
+                  }
+                }}>
+                  <p>{frag.id}: {frag.class_attr}</p>
+                </Link>
+              </li>
+            )}
           </ul>
 
           <p>Templates</p>
           <ul>
-              {this.state.templates.map(temp =>
-                <li key={temp.id}>
-
-                  <Link to={{
-                    pathname: "/edit-template",
-                    state: {dataID: temp.id}
-                  }}>
-                    <p>{temp.id}: {temp.class_attr}</p>
-                  </Link>
-
-                </li>
-              )}
+            {this.state.templates.map(temp =>
+              <li key={temp.id}>
+                <Link to={{
+                  pathname: `/edit-template/${temp.id}`,
+                  state: {
+                    givenDataID: temp.id
+                  }
+                }}>
+                  <p>{temp.id}: {temp.class_attr}</p>
+                </Link>
+              </li>
+            )}
           </ul>
-        </Router>
+        </Sidebar>
 
-        <Switch>
-          <Route exact path="/edit-fragment" component={EditFragment} />
-          <Route exact path="/edit-template" component={EditTemplate} />
-        </Switch>
-
-      </Sidebar>
+        <Main>
+          <Switch>
+            <Route path="/edit-fragment" component={EditFragment} />
+            <Route path="/edit-template" component={EditTemplate} />
+            <Route exact path="/new-fragment" component={NewFragment} />
+            <Route exact path="/new-template" component={NewTemplate} />
+          </Switch>
+        </Main>
+      </Router>
     );
   }
 };
 
+
+
+//
+//
+// <Route
+//   state={this.state}
+//   path='/edit-fragment'
+//   render={(props) => <EditFragment {...props} dataID={this.state.dataID} />}
+// />
+// <Route
+//   state={this.state}
+//   path='/edit-template'
+//   render={(props) => <EditTemplate {...props} dataID={this.state.dataID} />}
+// />
 //
 // <Route
 //   state={this.state}
@@ -120,8 +158,7 @@ class FragmentTemplateList extends React.Component {
 //   path='/edit-template'
 //   render={(props) => <EditTemplate {...props}  />}
 // />
-  // <Route exact path="/edit-fragment" component={EditFragment} />
-  // <Route exact path="/edit-template" component={EditTemplate} />
+  //
 
 
 
