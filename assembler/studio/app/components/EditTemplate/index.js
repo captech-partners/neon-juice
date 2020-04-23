@@ -81,6 +81,32 @@ class EditTemplate extends React.Component {
         });
     }
 
+    componentDidUpdate() {
+      var current = this;
+
+      if(this.props.location.state.givenDataID !== this.state.dataID){
+        const { givenDataID } = this.props.location.state;
+        this.setState({dataID: givenDataID});
+
+        const url = "http://localhost:5000/fragments/" + this.state.dataID;
+
+        axios.get(url)
+          .then(function (response) {
+
+            current.setState({
+              templateName: (response.data.class_attr != "null") ? response.data.class_attr : "",
+              code: response.data.html,
+              dataPage: response.data.pages,
+              dataLabel: response.data.labels,
+              // dataID: response.data.id
+            })
+          })
+          .catch(function (error) {
+            console.log(error);
+          });
+      }
+    }
+
     change = e => {
         this.setState({
             [e.target.name]: e.target.value
