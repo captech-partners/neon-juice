@@ -3,6 +3,8 @@ import ReactDOM from 'react-dom';
 
 import axios from 'axios';
 
+import { BrowserRouter as Router, Redirect, Route, Link, Switch, withRouter } from 'react-router-dom';
+
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-ocean.css';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
@@ -47,7 +49,9 @@ class NewFragment extends React.Component {
             template: "",
             content: "",
 
-            code: ""
+            code: "",
+
+            toEdit: false,
         };
 
         this.updateCode = this.updateCode.bind(this);
@@ -70,19 +74,42 @@ class NewFragment extends React.Component {
           url: 'http://localhost:5000/fragments',
           dataType: "json",
     			contentType:"application/json",
-    			data: JSON.stringify({html: code}),
+    			// data: JSON.stringify({html: code}),
+          data: "html: " + code
+        })
+        .then(function() {
+          this.setState({toEdit: true});
+        })
+        .catch(function (error) {
+          console.log(error);
         });
     };
 
 
     updateCode(event) {
-        this.setState({
-            code: this.refs.content.value,
-        });
+      this.setState({
+          code: "<div class=\"" +
+          this.state.class + "\" data-id=\"" +
+          this.state.dataID + "\" data-label=\"" +
+          this.state.dataLabel + "\" data-page=\"" +
+          this.state.dataPage + "\" data-template=\"" +
+          this.state.template + "\">\n\t" +
+          this.state.content + "\n</div>\n\t"
+      });
     };
 
 
     render() {
+
+      if(this.state.toEdit === true) {
+        return <Redirect to={{
+            pathname: `/edit-fragment/${this.state.dataID}`,
+            state: {
+              givenDataID: this.state.dataID
+            }
+          }}
+        />
+      }
 
       var options = {
             lineNumbers: true,
@@ -171,4 +198,4 @@ class NewFragment extends React.Component {
     }
 };
 
-export default NewFragment;
+export default withRouter(NewFragment);

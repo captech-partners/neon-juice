@@ -133,36 +133,4 @@ class FragmentTemplateList extends React.Component {
   }
 };
 
-
-
-//
-//
-// <Route
-//   state={this.state}
-//   path='/edit-fragment'
-//   render={(props) => <EditFragment {...props} dataID={this.state.dataID} />}
-// />
-// <Route
-//   state={this.state}
-//   path='/edit-template'
-//   render={(props) => <EditTemplate {...props} dataID={this.state.dataID} />}
-// />
-//
-// <Route
-//   state={this.state}
-//   path='/edit-fragment'
-//   render={(props) => <EditFragment {...props} state={this.state} />}
-// />
-// <Route
-//   state={this.state}
-//   path='/edit-template'
-//   render={(props) => <EditTemplate {...props}  />}
-// />
-  //
-
-
-
-
-
-
 export default FragmentTemplateList;

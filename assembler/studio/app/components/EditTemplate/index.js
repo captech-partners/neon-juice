@@ -190,7 +190,7 @@ class EditTemplate extends React.Component {
                         ref="content"
                     />
                 </p>
-                <Button onClick={e => this.onSubmit(e)}>Create Template</Button>
+                <Button onClick={e => this.onSubmit(e)}>Save Template</Button>
             </InputFields>
 
 
