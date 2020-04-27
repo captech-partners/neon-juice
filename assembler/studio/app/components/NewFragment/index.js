@@ -70,8 +70,6 @@ class NewFragment extends React.Component {
 
         var current = this;
 
-        var code = this.state.code;
-
         let data = JSON.stringify({
           html: this.state.editorText
         });

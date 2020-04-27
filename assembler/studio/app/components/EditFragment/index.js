@@ -16,6 +16,9 @@ import 'react-quill/dist/quill.bubble.css';
 
 
 
+import Iframe from 'react-iframe'
+
+
 
 import styled from 'styled-components';
 
@@ -57,12 +60,13 @@ class EditFragment extends React.Component {
           template: "",
           content: "",
 
-          code: ""
+          code: "",
+          editorText: ""
       };
 
       this.updateCode = this.updateCode.bind(this);
 
-      this.handleSubmit = this.handleSubmit.bind(this);
+
       this.inputDataChildLimit = React.createRef();
       this.inputDataChildType = React.createRef();
   }
@@ -88,7 +92,7 @@ class EditFragment extends React.Component {
               dataPage: response.data.pages,
               dataLabel: response.data.labels,
               template: response.data.templates,
-              content: parsedContent
+              content: parsedContent,
             })
 
           })
@@ -96,9 +100,6 @@ class EditFragment extends React.Component {
             console.log(error);
           });
       });
-
-
-
   }
 
   componentDidUpdate() {
@@ -138,14 +139,47 @@ class EditFragment extends React.Component {
       e.preventDefault();
       console.log(this.state);
 
-      var code = this.state.code;
+      // var code = this.state.code;
+      //
+      //
+      //
+      //
+      // axios({
+      //   method: 'put',
+      //   url: url,
+      //   dataType: "json",
+      //   contentType:"application/json",
+      //   data: JSON.stringify({html: code}),
+      // });
+      //
+      //
+      //
+      //
+      // var code = this.state.code;
 
-      axios({
-        method: 'post',
-        url: 'http://localhost:5000/fragments',
-        dataType: "json",
-        contentType:"application/json",
-        data: JSON.stringify({html: code}),
+      let data = JSON.stringify({
+        html: this.state.editorText
+      });
+
+      console.log("content: " + data);
+
+
+      const url = "http://localhost:5000/fragments/" + this.state.dataID;
+        console.log("url: " + url);
+
+      let axiosConfig = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      axios.put(url, data, axiosConfig)
+      .then(function (response) {
+        // current.setState({toEdit: true});
+        console.log("sucess");
+      })
+      .catch(function (error) {
+        console.log(error);
       });
   };
 
@@ -153,34 +187,27 @@ class EditFragment extends React.Component {
   updateCode(event) {
       this.setState({
           code: "<div class=\"" +
-          this.state.class + "\" data-id=\"" +
+          this.state.class + "\" data-child-limit=\"" +
+          this.state.dataChildLimit + "\" data-child-type=\"" +
+          this.state.dataChildType + "\" data-id=\"" +
           this.state.dataID + "\" data-label=\"" +
           this.state.dataLabel + "\" data-page=\"" +
           this.state.dataPage + "\" data-template=\"" +
-          this.state.template + "\">\n\t" +
-          this.state.content + "\n</div>\n\t"
+          this.state.template + "\">" +
+          this.state.content + "</div>"
       });
   };
 
 
   onAddSlot = e => {
+    e.preventDefault();
 
-    let fragmentCode = ""
-
-    this.setState((state, props) => ({
-      code: state.code.substring(0, state.code.indexOf("</div>")) + e.target.value + "</div>"
-    }));
-
-  };
-
-  handleSubmit(event) {
     this.setState({
       dataChildLimit: this.inputDataChildLimit.current.value,
-      dataChildType: this.inputDataChildType
+      dataChildType: this.inputDataChildType.current.value
     });
+  };
 
-    event.preventDefault();
-  }
 
 
   render() {
@@ -240,9 +267,9 @@ class EditFragment extends React.Component {
                       ref="content"
                   />
               </p>
+              <Button onClick={e => this.onSubmit(e)}>Save Fragment</Button>
             </form>
 
-            <Button onClick={e => this.onSubmit(e)}>Save Fragment</Button>
 
 
             <h2>Fragment Slot:</h2>
@@ -263,12 +290,8 @@ class EditFragment extends React.Component {
                       ref={this.iinputDataChildType}
                   />
               </p>
-
-              <input type="submit" value="Add Fragment Slot" />
-
-              <Button onClick={e => this.onAddSlot(e)}></Button>
+              <Button onClick={e => this.onAddSlot(e)}>Add Fragment Slot</Button>
             </form>
-
 
           </InputFields>
 
@@ -276,17 +299,27 @@ class EditFragment extends React.Component {
 
           <Editor>
             <CodeMirror value={"<div class=\"" +
-            this.state.class + "\" data-id=\"" +
-            this.state.dataID + "\" data-child-limit=\"" +
+            this.state.class + "\" data-child-limit=\"" +
             this.state.dataChildLimit + "\" data-child-type=\"" +
-            this.state.dataChildType + "\" data-label=\"" +
+            this.state.dataChildType + "\" data-id=\"" +
+            this.state.dataID + "\" data-label=\"" +
             this.state.dataLabel + "\" data-page=\"" +
             this.state.dataPage + "\" data-template=\"" +
-            this.state.template + "\">\n\t" +
-            this.state.content + "\n</div>\n\t"}
-
-            onChange={this.updateCode} options={options}/>
+            this.state.template + "\">" +
+            this.state.content + "</div>"}
+            onChange={(editor, data, value) => {
+                this.setState({
+                  editorText: value,
+                }, this.updateCode)
+              }} options={options}/>
           </Editor>
+
+          <Iframe
+            srcdoc={this.state.editorText}
+            width="450px"
+            height="450px"
+            className="preview"
+            display="initial"/>
         </div>
       );
   }
