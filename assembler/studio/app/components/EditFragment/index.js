@@ -12,8 +12,6 @@ require('codemirror/mode/javascript/javascript');
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import 'react-quill/dist/quill.bubble.css';
-
 
 
 import Iframe from 'react-iframe'
@@ -41,6 +39,7 @@ const Button = styled.button`
   font-size: .5em;
   margin: 0 1em;
   padding: 0.25em 1em;
+  margin-top: 1em;
 `
 
 
@@ -93,7 +92,7 @@ class EditFragment extends React.Component {
               dataLabel: response.data.labels,
               template: response.data.templates,
               content: parsedContent,
-              // dataID: response.data.id
+              dataID: response.data.id
             })
 
           })
@@ -123,7 +122,7 @@ class EditFragment extends React.Component {
                 dataPage: response.data.pages,
                 dataLabel: response.data.labels,
                 template: response.data.templates,
-                // dataID: response.data.id
+                dataID: response.data.id
               })
 
             })
@@ -243,20 +242,15 @@ class EditFragment extends React.Component {
                       onChange={e => this.change(e)}
                   />
               </p>
-              <p>Content:
-                  <input
-                      name="content"
-                      placeholder="Content"
-                      value={this.state.content}
-                      onChange={e => this.change(e)}
-
-                      ref="content"
-                  />
-              </p>
-              <Button onClick={e => this.onSubmit(e)}>Save Fragment</Button>
             </form>
 
+            <ReactQuill theme="snow" value={this.state.content} onChange={(content, delta, source, editor) => {
+                this.setState({
+                  content: content,
+                })
+              }} ref="content"/>
 
+            <Button onClick={e => this.onSubmit(e)}>Save Fragment</Button>
 
             <h2>Fragment Slot:</h2>
             <form>
@@ -307,6 +301,18 @@ class EditFragment extends React.Component {
 
 
 
+// <p>Content:
+//     <input
+//         name="content"
+//         placeholder="Content"
+//         value={this.state.content}
+//         onChange={e => this.change(e)}
+//
+//         ref="content"
+//     />
+// </p>
+
+
 // <Iframe
 //   srcdoc={this.state.editorText}
 //   width="450px"
@@ -315,6 +321,6 @@ class EditFragment extends React.Component {
 //   display="initial"
 // />
 
-// <ReactQuill theme="snow" value={this.state.content} onChange={e => this.change(e)} ref="content"/>
+
 
 export default EditFragment;

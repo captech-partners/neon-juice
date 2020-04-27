@@ -12,9 +12,14 @@ require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 
 
+
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+
 import styled from 'styled-components';
 
-const InputFields = styled.form`
+const InputFields = styled.div`
   float: left;
 `;
 
@@ -33,6 +38,7 @@ const Button = styled.button`
   font-size: .5em;
   margin: 0 1em;
   padding: 0.25em 1em;
+  margin-top: 1em;
 `
 
 
@@ -56,6 +62,9 @@ class NewFragment extends React.Component {
         };
 
         this.updateCode = this.updateCode.bind(this);
+
+        this.inputDataChildLimit = React.createRef();
+        this.inputDataChildType = React.createRef();
     }
 
     change = e => {
@@ -101,6 +110,15 @@ class NewFragment extends React.Component {
       });
     };
 
+    onAddSlot = e => {
+      e.preventDefault();
+
+      this.setState({
+        dataChildLimit: this.inputDataChildLimit.current.value,
+        dataChildType: this.inputDataChildType.current.value
+      });
+    };
+
 
     render() {
 
@@ -123,10 +141,10 @@ class NewFragment extends React.Component {
 
         return (
           <div>
-
             <h1>New Fragment</h1>
 
             <InputFields>
+              <form>
                 <p>Fragment Name:
                     <input
                         name="class"
@@ -135,8 +153,6 @@ class NewFragment extends React.Component {
                         onChange={e => this.change(e)}
                     />
                 </p>
-
-
                 <p>Data Label:
                     <input
                         name="dataLabel"
@@ -161,22 +177,49 @@ class NewFragment extends React.Component {
                         onChange={e => this.change(e)}
                     />
                 </p>
-                <p>Content:
-                    <input
-                        name="content"
-                        placeholder="Content"
-                        value={this.state.content}
-                        onChange={e => this.change(e)}
+              </form>
 
-                        ref="content"
-                    />
-                </p>
-                <Button onClick={e => this.onSubmit(e)}>Create Fragment</Button>
+              <ReactQuill theme="snow" value={this.state.content} onChange={(content, delta, source, editor) => {
+                  this.setState({
+                    content: content,
+                  })
+                }} ref="content"/>
+
+              <Button onClick={e => this.onSubmit(e)}>Create Fragment</Button>
+
+              <h2>Fragment Slot:</h2>
+              <form>
+                  <p>Data Child Limit:
+                      <input
+                          name="dataChildLimit"
+                          placeholder="Data Child Limit"
+                          defaultValue={this.state.dataChildLimit}
+                          ref={this.inputDataChildLimit}
+                      />
+                  </p>
+                  <p>Data Child Type:
+                      <input
+                          name="dataChildType"
+                          placeholder="Data Child Type"
+                          defaultValue={this.state.dataChildType}
+                          ref={this.inputDataChildType}
+                      />
+                  </p>
+                  <Button onClick={e => this.onAddSlot(e)}>Add Fragment Slot</Button>
+                </form>
             </InputFields>
 
             <Editor>
-              <CodeMirror value={"<div class=\"" + this.state.class + "\" data-label=\"" + this.state.dataLabel + "\" data-page=\""
-              + this.state.dataPage + "\" data-template=\"" + this.state.template + "\">" + this.state.content + "</div>"}
+              <CodeMirror value={"<div class=\"" +
+              this.state.class + "\" data-child-limit=\"" +
+              this.state.dataChildLimit + "\" data-child-type=\"" +
+              this.state.dataChildType + "\" data-id=\"" +
+              this.state.dataID + "\" data-label=\"" +
+              this.state.dataLabel + "\" data-page=\"" +
+              this.state.dataPage + "\" data-template=\"" +
+              this.state.template + "\">" +
+              this.state.content + "</div>"}
+
               onChange={(editor, data, value) => {
                   this.setState({
                     editorText: value,
@@ -190,25 +233,19 @@ class NewFragment extends React.Component {
 
 
 
+// <p>Content:
+//     <input
+//         name="content"
+//         placeholder="Content"
+//         value={this.state.content}
+//         onChange={e => this.change(e)}
+//
+//         ref="content"
+//     />
+// </p>
+
 // data-child-limit=\"" + this.state.dataChildLimit
 // + "\" data-child-type=\"" +
 // this.state.dataChildType + "\" data-id=\"\"
-
-// <p>Data Child Limit:
-//     <input
-//         name="dataChildLimit"
-//         placeholder="Data Child Limit"
-//         value={this.state.dataChildLimit}
-//         onChange={e => this.change(e)}
-//     />
-// </p>
-// <p>Data Child Type:
-//     <input
-//         name="dataChildType"
-//         placeholder="Data Child Type"
-//         value={this.state.dataChildType}
-//         onChange={e => this.change(e)}
-//     />
-// </p>
 
 export default withRouter(NewFragment);

@@ -13,7 +13,7 @@ import NewTemplate from '../../components/NewTemplate';
 import styled from 'styled-components';
 
 const Sidebar = styled.div`
-  width: 250px;
+  width: 200px;
   top: 0;
   left: 0;
   background-color: #f1ebf2;
@@ -65,7 +65,7 @@ class FragmentTemplateList extends React.Component {
         this.setState({ templates: tempList });
       })
   }
-  // 
+  //
   // componentDidUpdate() {
   //   axios.get(`http://localhost:5000/fragments`)
   //     .then(result => {

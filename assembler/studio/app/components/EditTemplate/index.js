@@ -10,6 +10,10 @@ require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 
 
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
+
+
 import styled from 'styled-components';
 
 const InputFields = styled.div`
@@ -31,6 +35,7 @@ const Button = styled.button`
   font-size: .5em;
   margin: 0 1em;
   padding: 0.25em 1em;
+  margin-top: 1em;
 `
 
 class EditTemplate extends React.Component {
@@ -215,49 +220,44 @@ class EditTemplate extends React.Component {
                         onChange={e => this.change(e)}
                     />
                 </p>
-                <p>Content:
-                    <input
-                        name="content"
-                        placeholder="Content"
-                        value={this.state.content}
-                        onChange={e => this.change(e)}
-
-                        ref="content"
-                    />
-                </p>
-                <Button onClick={e => this.onSubmit(e)}>Save Template</Button>
               </form>
 
+              <ReactQuill theme="snow" value={this.state.content} onChange={(content, delta, source, editor) => {
+                  this.setState({
+                    content: content,
+                  })
+                }} ref="content"/>
 
+              <Button onClick={e => this.onSubmit(e)}>Save Template</Button>
 
-                <h2>Fragment Slot:</h2>
-                <form>
-                  <p>Class:
-                      <input
-                          name="class"
-                          placeholder="Class"
-                          defaultValue={this.state.class}
-                          ref={this.inputDataChildClass}
-                      />
-                  </p>
-                  <p>Data Child Limit:
-                      <input
-                          name="dataChildLimit"
-                          placeholder="Data Child Limit"
-                          defaultValue={this.state.dataChildLimit}
-                          ref={this.inputDataChildLimit}
-                      />
-                  </p>
-                  <p>Data Child Type:
-                      <input
-                          name="dataChildType"
-                          placeholder="Data Child Type"
-                          defaultValue={this.state.dataChildType}
-                          ref={this.inputDataChildType}
-                      />
-                  </p>
-                  <Button onClick={e => this.onAddSlot(e)}>Add Template Slot</Button>
-                </form>
+              <h2>Fragment Slot:</h2>
+              <form>
+                <p>Class:
+                    <input
+                        name="class"
+                        placeholder="Class"
+                        defaultValue={this.state.class}
+                        ref={this.inputDataChildClass}
+                    />
+                </p>
+                <p>Data Child Limit:
+                    <input
+                        name="dataChildLimit"
+                        placeholder="Data Child Limit"
+                        defaultValue={this.state.dataChildLimit}
+                        ref={this.inputDataChildLimit}
+                    />
+                </p>
+                <p>Data Child Type:
+                    <input
+                        name="dataChildType"
+                        placeholder="Data Child Type"
+                        defaultValue={this.state.dataChildType}
+                        ref={this.inputDataChildType}
+                    />
+                </p>
+                <Button onClick={e => this.onAddSlot(e)}>Add Template Slot</Button>
+              </form>
             </InputFields>
 
 
@@ -284,29 +284,13 @@ class EditTemplate extends React.Component {
 
 export default EditTemplate;
 
-
-// <h2>Fragment Slot</h2>
-// <p>Data Child Class:
+// <p>Content:
 //     <input
-//         name="dataChildClass"
-//         placeholder="Data Child Class"
-//         value={this.state.dataChildClass}
+//         name="content"
+//         placeholder="Content"
+//         value={this.state.content}
 //         onChange={e => this.change(e)}
-//     />
-// </p>
-// <p>Data Child Limit:
-//     <input
-//         name="dataChildLimit"
-//         placeholder="Data Child Limit"
-//         value={this.state.dataChildLimit}
-//         onChange={e => this.change(e)}
-//     />
-// </p>
-// <p>Data Child Type:
-//     <input
-//         name="dataChildType"
-//         placeholder="Data Child Type"
-//         value={this.state.dataChildType}
-//         onChange={e => this.change(e)}
+//
+//         ref="content"
 //     />
 // </p>
