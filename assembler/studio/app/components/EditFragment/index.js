@@ -53,7 +53,7 @@ class EditFragment extends React.Component {
 
           dataChildLimit: "",
           dataChildType: "",
-          dataID: 8,
+          dataID: "",
           dataLabel: "",
           dataPage: "",
 
@@ -84,7 +84,7 @@ class EditFragment extends React.Component {
         axios.get(url)
           .then(function (response) {
 
-            let parsedContent = response.data.html.substring(response.data.html.indexOf(">") + 1, response.data.html.lastIndexOf("</div>"));
+            let parsedContent = response.data.html.substring(response.data.html.indexOf(">\n\t") + 1, response.data.html.lastIndexOf("</div>"));
 
             current.setState({
               class: response.data.class_attr,
@@ -93,6 +93,7 @@ class EditFragment extends React.Component {
               dataLabel: response.data.labels,
               template: response.data.templates,
               content: parsedContent,
+              // dataID: response.data.id
             })
 
           })
@@ -106,25 +107,29 @@ class EditFragment extends React.Component {
     var current = this;
 
     if(this.props.location.state.givenDataID !== this.state.dataID){
+
       const { givenDataID } = this.props.location.state;
-      this.setState({dataID: givenDataID});
+      this.setState({dataID: givenDataID},
 
-      const url = "http://localhost:5000/fragments/" + this.state.dataID;
+        function () {
+          const url = "http://localhost:5000/fragments/" + this.state.dataID;
 
-      axios.get(url)
-        .then(function (response) {
+          axios.get(url)
+            .then(function (response) {
 
-          current.setState({
-            class: response.data.class_attr,
-            code: response.data.html,
-            dataPage: response.data.pages,
-            dataLabel: response.data.labels,
-            template: response.data.templates,
-          })
+              current.setState({
+                class: response.data.class_attr,
+                code: response.data.html,
+                dataPage: response.data.pages,
+                dataLabel: response.data.labels,
+                template: response.data.templates,
+                // dataID: response.data.id
+              })
 
-        })
-        .catch(function (error) {
-          console.log(error);
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         });
     }
   }
@@ -138,24 +143,6 @@ class EditFragment extends React.Component {
   onSubmit = e => {
       e.preventDefault();
       console.log(this.state);
-
-      // var code = this.state.code;
-      //
-      //
-      //
-      //
-      // axios({
-      //   method: 'put',
-      //   url: url,
-      //   dataType: "json",
-      //   contentType:"application/json",
-      //   data: JSON.stringify({html: code}),
-      // });
-      //
-      //
-      //
-      //
-      // var code = this.state.code;
 
       let data = JSON.stringify({
         html: this.state.editorText
@@ -175,8 +162,7 @@ class EditFragment extends React.Component {
 
       axios.put(url, data, axiosConfig)
       .then(function (response) {
-        // current.setState({toEdit: true});
-        console.log("sucess");
+        console.log("success");
       })
       .catch(function (error) {
         console.log(error);
@@ -229,7 +215,7 @@ class EditFragment extends React.Component {
                   <input
                       name="class"
                       placeholder="Fragment Name"
-                      value={this.state.class}
+                      value={this.state.class ? this.state.class : "null"}
                       onChange={e => this.change(e)}
                   />
               </p>
@@ -287,7 +273,7 @@ class EditFragment extends React.Component {
                       name="dataChildType"
                       placeholder="Data Child Type"
                       defaultValue={this.state.dataChildType}
-                      ref={this.iinputDataChildType}
+                      ref={this.inputDataChildType}
                   />
               </p>
               <Button onClick={e => this.onAddSlot(e)}>Add Fragment Slot</Button>
@@ -314,17 +300,20 @@ class EditFragment extends React.Component {
               }} options={options}/>
           </Editor>
 
-          <Iframe
-            srcdoc={this.state.editorText}
-            width="450px"
-            height="450px"
-            className="preview"
-            display="initial"/>
         </div>
       );
   }
 };
 
+
+
+// <Iframe
+//   srcdoc={this.state.editorText}
+//   width="450px"
+//   height="450px"
+//   className="preview"
+//   display="initial"
+// />
 
 // <ReactQuill theme="snow" value={this.state.content} onChange={e => this.change(e)} ref="content"/>
 

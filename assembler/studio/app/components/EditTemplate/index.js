@@ -12,7 +12,7 @@ require('codemirror/mode/javascript/javascript');
 
 import styled from 'styled-components';
 
-const InputFields = styled.form`
+const InputFields = styled.div`
   float: left;
 `;
 
@@ -38,22 +38,28 @@ class EditTemplate extends React.Component {
     constructor (props) {
         super(props);
         this.state = {
-            templateName: "",
+            class: "",
             content: "",
 
             dataChild: "",
             dataPage: "",
             dataLabel: "",
-            dataID: -1,
+            dataID: "",
 
             dataChildClass: "",
             dataChildLimit: "",
             dataChildType: "",
 
-            code: ""
+            code: "",
+            editorText: ""
         };
 
         this.updateCode = this.updateCode.bind(this);
+
+
+        this.inputDataChildClass = React.createRef();
+        this.inputDataChildLimit = React.createRef();
+        this.inputDataChildType = React.createRef();
     }
 
     componentDidMount() {
@@ -61,23 +67,25 @@ class EditTemplate extends React.Component {
       var current = this;
 
       const { givenDataID } = this.props.location.state;
-      this.setState({dataID: givenDataID});
+      this.setState({dataID: givenDataID},
 
-      const url = "http://localhost:5000/fragments/" + this.state.dataID;
+        function () {
+          const url = "http://localhost:5000/fragments/" + this.state.dataID;
 
-      axios.get(url)
-        .then(function (response) {
+          axios.get(url)
+            .then(function (response) {
 
-          current.setState({
-            templateName: (response.data.class_attr != "null") ? response.data.class_attr : "",
-            code: response.data.html,
-            dataPage: response.data.pages,
-            dataLabel: response.data.labels,
-            // dataID: response.data.id
-          })
-        })
-        .catch(function (error) {
-          console.log(error);
+              current.setState({
+                class: (response.data.class_attr != "null") ? response.data.class_attr : "",
+                code: response.data.html,
+                dataPage: response.data.pages,
+                dataLabel: response.data.labels,
+                dataID: response.data.id
+              })
+            })
+            .catch(function (error) {
+              console.log(error);
+            });
         });
     }
 
@@ -86,23 +94,25 @@ class EditTemplate extends React.Component {
 
       if(this.props.location.state.givenDataID !== this.state.dataID){
         const { givenDataID } = this.props.location.state;
-        this.setState({dataID: givenDataID});
+        this.setState({dataID: givenDataID},
 
-        const url = "http://localhost:5000/fragments/" + this.state.dataID;
+          function () {
+            const url = "http://localhost:5000/fragments/" + this.state.dataID;
 
-        axios.get(url)
-          .then(function (response) {
+            axios.get(url)
+              .then(function (response) {
 
-            current.setState({
-              templateName: (response.data.class_attr != "null") ? response.data.class_attr : "",
-              code: response.data.html,
-              dataPage: response.data.pages,
-              dataLabel: response.data.labels,
-              // dataID: response.data.id
-            })
-          })
-          .catch(function (error) {
-            console.log(error);
+                current.setState({
+                  class: (response.data.class_attr != "null") ? response.data.class_attr : "",
+                  code: response.data.html,
+                  dataPage: response.data.pages,
+                  dataLabel: response.data.labels,
+                  dataID: response.data.id
+                })
+              })
+              .catch(function (error) {
+                console.log(error);
+              });
           });
       }
     }
@@ -114,31 +124,55 @@ class EditTemplate extends React.Component {
     };
 
     onSubmit = e => {
-        e.preventDefault();
-        console.log(this.state);
+      e.preventDefault();
+      console.log(this.state);
 
-        var code = this.state.code;
-        const url = "http://localhost:5000/fragments/" + this.state.dataID;
+      let data = JSON.stringify({
+        html: this.state.editorText
+      });
 
-        axios({
-          method: 'put',
-          url: url,
-          dataType: "json",
-          contentType:"application/json",
-          data: JSON.stringify({html: code}),
-          success: function(result){
-    				console.log('success');
-    			},
-    			error: function(result){
-    				console.log(result);
-    			},
-        });
+      console.log("content: " + data);
+
+
+      const url = "http://localhost:5000/fragments/" + this.state.dataID;
+        console.log("url: " + url);
+
+      let axiosConfig = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      axios.put(url, data, axiosConfig)
+      .then(function (response) {
+        // current.setState({toEdit: true});
+        console.log("success");
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     };
 
     updateCode(event) {
         this.setState({
             code: this.refs.content.value,
         });
+    };
+
+
+
+    onAddSlot = e => {
+      e.preventDefault();
+
+      this.setState((state, props) => ({
+        dataChildClass: this.inputDataChildClass.current.value,
+        dataChildLimit: this.inputDataChildLimit.current.value,
+        dataChildType: this.inputDataChildType.current.value,
+
+        content: state.content + "<div class=\"" + this.inputDataChildClass.current.value +
+          "\" data-child-limit=\"" + this.inputDataChildLimit.current.value +
+          "\" data-child-type=\"" + this.inputDataChildType.current.value + "\"></div>"
+      }));
     };
 
     render() {
@@ -152,15 +186,16 @@ class EditTemplate extends React.Component {
 
         return (
           <div>
-            <h1>Edit Template: {this.state.templateName}</h1>
+            <h1>Edit Template: {this.state.class}</h1>
 
             <InputFields>
+              <form>
                 <p>Template Name:
                     <input
                         size="30"
-                        name="templateName"
+                        name="class"
                         placeholder="Template Name"
-                        value={this.state.templateName}
+                        value={this.state.class ? this.state.class : "null"}
                         onChange={e => this.change(e)}
                     />
                 </p>
@@ -191,6 +226,38 @@ class EditTemplate extends React.Component {
                     />
                 </p>
                 <Button onClick={e => this.onSubmit(e)}>Save Template</Button>
+              </form>
+
+
+
+                <h2>Fragment Slot:</h2>
+                <form>
+                  <p>Class:
+                      <input
+                          name="class"
+                          placeholder="Class"
+                          defaultValue={this.state.class}
+                          ref={this.inputDataChildClass}
+                      />
+                  </p>
+                  <p>Data Child Limit:
+                      <input
+                          name="dataChildLimit"
+                          placeholder="Data Child Limit"
+                          defaultValue={this.state.dataChildLimit}
+                          ref={this.inputDataChildLimit}
+                      />
+                  </p>
+                  <p>Data Child Type:
+                      <input
+                          name="dataChildType"
+                          placeholder="Data Child Type"
+                          defaultValue={this.state.dataChildType}
+                          ref={this.inputDataChildType}
+                      />
+                  </p>
+                  <Button onClick={e => this.onAddSlot(e)}>Add Template Slot</Button>
+                </form>
             </InputFields>
 
 
@@ -204,7 +271,11 @@ class EditTemplate extends React.Component {
                   + this.state.content +
                   "</body></html>"
                 }
-              onChange={this.updateCode} options={options}/>
+              onChange={(editor, data, value) => {
+                  this.setState({
+                    editorText: value,
+                  }, this.updateCode)
+                }} options={options}/>
             </Editor>
           </div>
         );
