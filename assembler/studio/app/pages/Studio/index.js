@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Redirect, Route, Link, Switch } from 'react-ro
 import styled from 'styled-components';
 
 import FragmentTemplateList from '../../components/FragmentTemplateList';
-import NewSelector from '../../components/NewSelector';
 
 import EditFragment from '../../components/EditFragment';
 import EditTemplate from '../../components/EditTemplate';

@@ -65,6 +65,22 @@ class FragmentTemplateList extends React.Component {
         this.setState({ templates: tempList });
       })
   }
+  // 
+  // componentDidUpdate() {
+  //   axios.get(`http://localhost:5000/fragments`)
+  //     .then(result => {
+  //
+  //       result.data.sort(function(a, b) {
+  // 				return a.id - b.id  ||  a.class_attr.localeCompare(b.class_attr);
+  // 			});
+  //
+  //       const fragList = result.data.filter(obj => (obj.id >= 0)).map(obj => obj);
+  //       const tempList = result.data.filter(obj => (obj.id < 0)).map(obj => obj);
+  //
+  //       this.setState({ fragments: fragList });
+  //       this.setState({ templates: tempList });
+  //     })
+  // }
 
   render() {
 

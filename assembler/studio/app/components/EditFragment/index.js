@@ -61,6 +61,10 @@ class EditFragment extends React.Component {
       };
 
       this.updateCode = this.updateCode.bind(this);
+
+      this.handleSubmit = this.handleSubmit.bind(this);
+      this.inputDataChildLimit = React.createRef();
+      this.inputDataChildType = React.createRef();
   }
 
   componentDidMount() {
@@ -76,7 +80,7 @@ class EditFragment extends React.Component {
         axios.get(url)
           .then(function (response) {
 
-            let parsedContent = response.data.html.substring(response.data.html.indexOf(">\n\t") + 1, response.data.html.lastIndexOf("</div>\n\t"));
+            let parsedContent = response.data.html.substring(response.data.html.indexOf(">") + 1, response.data.html.lastIndexOf("</div>"));
 
             current.setState({
               class: response.data.class_attr,
@@ -161,11 +165,22 @@ class EditFragment extends React.Component {
 
   onAddSlot = e => {
 
-    // this.setState((state, props) => ({
-    //   code: state.code.substring(0, state.code.indexOf("</div>\n\t") - 1) + state.
-    // }));
+    let fragmentCode = ""
+
+    this.setState((state, props) => ({
+      code: state.code.substring(0, state.code.indexOf("</div>")) + e.target.value + "</div>"
+    }));
 
   };
+
+  handleSubmit(event) {
+    this.setState({
+      dataChildLimit: this.inputDataChildLimit.current.value,
+      dataChildType: this.inputDataChildType
+    });
+
+    event.preventDefault();
+  }
 
 
   render() {
@@ -225,37 +240,46 @@ class EditFragment extends React.Component {
                       ref="content"
                   />
               </p>
-              <Button onClick={e => this.onSubmit(e)}>Save Fragment</Button>
             </form>
 
+            <Button onClick={e => this.onSubmit(e)}>Save Fragment</Button>
 
 
-
+            <h2>Fragment Slot:</h2>
             <form>
               <p>Data Child Limit:
                   <input
                       name="dataChildLimit"
                       placeholder="Data Child Limit"
-                      value={this.state.dataChildLimit}
-                      onChange={e => this.change(e)}
+                      defaultValue={this.state.dataChildLimit}
+                      ref={this.inputDataChildLimit}
                   />
               </p>
               <p>Data Child Type:
                   <input
                       name="dataChildType"
                       placeholder="Data Child Type"
-                      value={this.state.dataChildType}
-                      onChange={e => this.change(e)}
+                      defaultValue={this.state.dataChildType}
+                      ref={this.iinputDataChildType}
                   />
               </p>
-              <Button onClick={e => this.onAddSlot(e)}>Add Fragment Slot</Button>
+
+              <input type="submit" value="Add Fragment Slot" />
+
+              <Button onClick={e => this.onAddSlot(e)}></Button>
             </form>
+
+
           </InputFields>
+
+
 
           <Editor>
             <CodeMirror value={"<div class=\"" +
             this.state.class + "\" data-id=\"" +
-            this.state.dataID + "\" data-label=\"" +
+            this.state.dataID + "\" data-child-limit=\"" +
+            this.state.dataChildLimit + "\" data-child-type=\"" +
+            this.state.dataChildType + "\" data-label=\"" +
             this.state.dataLabel + "\" data-page=\"" +
             this.state.dataPage + "\" data-template=\"" +
             this.state.template + "\">\n\t" +

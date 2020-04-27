@@ -1,7 +1,7 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
 
-import axios from 'axios';
+const axios = require('axios').default;
 
 import { BrowserRouter as Router, Redirect, Route, Link, Switch, withRouter } from 'react-router-dom';
 
@@ -50,6 +50,7 @@ class NewFragment extends React.Component {
             content: "",
 
             code: "",
+            editorText: "",
 
             toEdit: false,
         };
@@ -67,18 +68,23 @@ class NewFragment extends React.Component {
         e.preventDefault();
         console.log(this.state);
 
+        var current = this;
+
         var code = this.state.code;
 
-        axios({
-          method: 'post',
-          url: 'http://localhost:5000/fragments',
-          dataType: "json",
-    			contentType:"application/json",
-    			// data: JSON.stringify({html: code}),
-          data: "html: " + code
-        })
-        .then(function() {
-          this.setState({toEdit: true});
+        let data = JSON.stringify({
+          html: this.state.editorText
+        });
+
+        let axiosConfig = {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        };
+
+        axios.post("http://localhost:5000/fragments", data, axiosConfig)
+        .then(function (response) {
+          current.setState({toEdit: true});
         })
         .catch(function (error) {
           console.log(error);
@@ -88,13 +94,12 @@ class NewFragment extends React.Component {
 
     updateCode(event) {
       this.setState({
-          code: "<div class=\"" +
-          this.state.class + "\" data-id=\"" +
-          this.state.dataID + "\" data-label=\"" +
+          code: "\"<div class=\"" +
+          this.state.class + "\" data-id=\"\" data-label=\"" +
           this.state.dataLabel + "\" data-page=\"" +
           this.state.dataPage + "\" data-template=\"" +
-          this.state.template + "\">\n\t" +
-          this.state.content + "\n</div>\n\t"
+          this.state.template + "\">" +
+          this.state.content + "</div>\""
       });
     };
 
@@ -132,22 +137,7 @@ class NewFragment extends React.Component {
                         onChange={e => this.change(e)}
                     />
                 </p>
-                <p>Data Child Limit:
-                    <input
-                        name="dataChildLimit"
-                        placeholder="Data Child Limit"
-                        value={this.state.dataChildLimit}
-                        onChange={e => this.change(e)}
-                    />
-                </p>
-                <p>Data Child Type:
-                    <input
-                        name="dataChildType"
-                        placeholder="Data Child Type"
-                        value={this.state.dataChildType}
-                        onChange={e => this.change(e)}
-                    />
-                </p>
+
 
                 <p>Data Label:
                     <input
@@ -187,15 +177,40 @@ class NewFragment extends React.Component {
             </InputFields>
 
             <Editor>
-              <CodeMirror value={"<div class=\"" + this.state.class + "\" data-child-limit=\"" + this.state.dataChildLimit
-              + "\" data-child-type=\"" +
-              this.state.dataChildType + "\" data-id=\"\" data-label=\"" + this.state.dataLabel + "\" data-page=\""
+              <CodeMirror value={"<div class=\"" + this.state.class + "\" data-label=\"" + this.state.dataLabel + "\" data-page=\""
               + this.state.dataPage + "\" data-template=\"" + this.state.template + "\">" + this.state.content + "</div>"}
-              onChange={this.updateCode} options={options}/>
+              onChange={(editor, data, value) => {
+                  this.setState({
+                    editorText: value,
+                  }, this.updateCode)
+                }} options={options}/>
             </Editor>
           </div>
         );
     }
 };
+
+
+
+// data-child-limit=\"" + this.state.dataChildLimit
+// + "\" data-child-type=\"" +
+// this.state.dataChildType + "\" data-id=\"\"
+
+// <p>Data Child Limit:
+//     <input
+//         name="dataChildLimit"
+//         placeholder="Data Child Limit"
+//         value={this.state.dataChildLimit}
+//         onChange={e => this.change(e)}
+//     />
+// </p>
+// <p>Data Child Type:
+//     <input
+//         name="dataChildType"
+//         placeholder="Data Child Type"
+//         value={this.state.dataChildType}
+//         onChange={e => this.change(e)}
+//     />
+// </p>
 
 export default withRouter(NewFragment);

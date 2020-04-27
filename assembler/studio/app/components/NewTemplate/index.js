@@ -51,7 +51,10 @@ class NewTemplate extends React.Component {
             dataChildLimit: "",
             dataChildType: "",
 
-            code: ""
+            code: "",
+            editorText: "",
+
+            toEdit: false,
         };
 
         this.updateCode = this.updateCode.bind(this);
@@ -64,33 +67,55 @@ class NewTemplate extends React.Component {
     };
 
     onSubmit = e => {
-        e.preventDefault();
-        console.log(this.state);
+      e.preventDefault();
+      console.log(this.state);
 
-        var code = this.state.code;
+      var current = this;
 
-        axios({
-          method: 'post',
-          url: 'http://localhost:5000/fragments',
-          dataType: "json",
-          contentType:"application/json",
-          data: JSON.stringify({html: code}),
-          success: function(result){
-    				console.log('success');
-    			},
-    			error: function(result){
-    				console.log(result);
-    			},
-        });
+      var code = this.state.code;
+
+      let data = JSON.stringify({
+        html: this.state.editorText
+      });
+
+      let axiosConfig = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
+
+      axios.post("http://localhost:5000/fragments", data, axiosConfig)
+      .then(function (response) {
+        current.setState({toEdit: true});
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     };
 
     updateCode(event) {
-        this.setState({
-            code: this.refs.content.value,
-        });
+      this.setState({
+        code: "<html data-id=\"\" data-label=\""
+        + this.state.dataLabel +
+        "\" data-page=\""
+        + this.state.dataPage +
+        "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
+          + this.state.content +
+          "</body></html>"
+      });
     };
 
     render() {
+
+      if(this.state.toEdit === true) {
+        return <Redirect to={{
+            pathname: `/edit-fragment/${this.state.dataID}`,
+            state: {
+              givenDataID: this.state.dataID
+            }
+          }}
+        />
+      }
 
       var options = {
             lineNumbers: true,
@@ -153,7 +178,11 @@ class NewTemplate extends React.Component {
                   + this.state.content +
                   "</body></html>"
                 }
-              onChange={this.updateCode} options={options}/>
+              onChange={(editor, data, value) => {
+                  this.setState({
+                    editorText: value,
+                  }, this.updateCode)
+                }} options={options}/>
             </Editor>
           </div>
         );
