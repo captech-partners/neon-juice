@@ -6,9 +6,19 @@
         "targets": {
         },
         "corejs": "2",
-        "useBuiltIns": "usage",
+        "useBuiltIns": "usage"
       }
     ]
   ],
-  "plugins": ["babel-plugin-styled-components"]
+  "plugins": [ 
+    [
+      "babel-plugin-styled-components"
+    ],
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
+  ]
 }

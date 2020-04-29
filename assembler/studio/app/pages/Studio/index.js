@@ -4,7 +4,6 @@ import { BrowserRouter as Router, Redirect, Route, Link, Switch } from 'react-ro
 import styled from 'styled-components';
 
 import FragmentTemplateList from '../../components/FragmentTemplateList';
-import NewSelector from '../../components/NewSelector';
 
 import EditFragment from '../../components/EditFragment';
 import EditTemplate from '../../components/EditTemplate';
@@ -29,31 +28,10 @@ const Container = styled.div`
 const Studio = () => {
 
   return (
-
-    <div>
-      <Container>
-        <Router>
-
-          <h1>Studio</h1>
-
-          <Link to="/edit-fragment"><Button>Edit Fragment</Button></Link>
-          <Link to="/edit-template"><Button>Edit Template</Button></Link>
-          <Link to="/new-fragment"><Button>New Fragment</Button></Link>
-          <Link to="/new-template"><Button>New Template</Button></Link>
-
-
-          <FragmentTemplateList />
-
-          <Switch>
-            <Route exact path="/edit-fragment" component={EditFragment} />
-            <Route exact path="/edit-template" component={EditTemplate} />
-            <Route exact path="/new-fragment" component={NewFragment} />
-            <Route exact path="/new-template" component={NewTemplate} />
-          </Switch>
-
-        </Router>
-      </Container>
-    </div>
+    <Container>
+      <h1>Studio</h1>
+      <FragmentTemplateList />
+    </Container>
   );
 };
 

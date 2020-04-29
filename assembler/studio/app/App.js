@@ -12,8 +12,9 @@ const Container = styled.div`
 `
 
 const Body = styled.div`
-  padding-bottom: 2em;
+  padding-bottom: 5em;
 `
+
 
 /**
  * Entry point for all components.
