@@ -24,7 +24,7 @@ const Editor = styled.div`
   margin-top: 1em;
   margin-right: 1em;
   float: right;
-  width: 45%;
+  width: 40%;
 `;
 
 const Button = styled.button`
@@ -52,7 +52,7 @@ class EditTemplate extends React.Component {
             dataID: "",
 
             dataChildClass: "",
-            dataChildLimit: "",
+            dataChildLimit: 0,
             dataChildType: "",
 
             code: "",
@@ -122,12 +122,16 @@ class EditTemplate extends React.Component {
       }
     }
 
+
+    /* Handle changes to the input boxes */
     change = e => {
         this.setState({
             [e.target.name]: e.target.value
         });
     };
 
+
+    /* Save Template */
     onSubmit = e => {
       e.preventDefault();
       console.log(this.state);
@@ -158,14 +162,21 @@ class EditTemplate extends React.Component {
       });
     };
 
+
+    /* Handle changes to the codemirror HTML editor */
     updateCode(event) {
-        this.setState({
-            code: this.refs.content.value,
-        });
+      this.setState({
+        code: "<html data-id=\"\" data-label=\""
+        + this.state.dataLabel +
+        "\" data-page=\""
+        + this.state.dataPage +
+        "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
+          + this.state.content +
+          "</body></html>"
+      });
     };
 
-
-
+    /* Handle submitting a fragment slot */
     onAddSlot = e => {
       e.preventDefault();
 
@@ -181,6 +192,24 @@ class EditTemplate extends React.Component {
     };
 
     render() {
+
+      /* React Quill editor options*/
+      var modules = {
+        toolbar: [
+          [{ 'header': [1, 2, false] }],
+          ['bold', 'italic', 'underline','strike', 'blockquote'],
+          [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+          ['link', 'image'],
+          ['clean']
+        ],
+      };
+
+      var formats = [
+        'header',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image'
+      ];
 
       var options = {
             lineNumbers: true,
@@ -222,7 +251,11 @@ class EditTemplate extends React.Component {
                 </p>
               </form>
 
-              <ReactQuill theme="snow" value={this.state.content} onChange={(content, delta, source, editor) => {
+              <ReactQuill theme="snow"
+                modules={modules}
+                formats={formats}
+                value={this.state.content}
+                onChange={(content, delta, source, editor) => {
                   this.setState({
                     content: content,
                   })
@@ -244,7 +277,8 @@ class EditTemplate extends React.Component {
                     <input
                         name="dataChildLimit"
                         placeholder="Data Child Limit"
-                        defaultValue={this.state.dataChildLimit}
+                        type="number"
+                        defaultValue=""
                         ref={this.inputDataChildLimit}
                     />
                 </p>
@@ -269,8 +303,7 @@ class EditTemplate extends React.Component {
                 + this.state.dataPage +
                 "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
                   + this.state.content +
-                  "</body></html>"
-                }
+                  "</body></html>"}
               onChange={(editor, data, value) => {
                   this.setState({
                     editorText: value,
@@ -283,14 +316,3 @@ class EditTemplate extends React.Component {
 };
 
 export default EditTemplate;
-
-// <p>Content:
-//     <input
-//         name="content"
-//         placeholder="Content"
-//         value={this.state.content}
-//         onChange={e => this.change(e)}
-//
-//         ref="content"
-//     />
-// </p>

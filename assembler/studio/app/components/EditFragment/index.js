@@ -28,7 +28,7 @@ const Editor = styled.div`
   margin-top: 1em;
   margin-right: 1em;
   float: right;
-  width: 45%;
+  width: 40%;
 `;
 
 const Button = styled.button`
@@ -50,7 +50,7 @@ class EditFragment extends React.Component {
       this.state = {
           class: "",
 
-          dataChildLimit: "",
+          dataChildLimit: 0,
           dataChildType: "",
           dataID: "",
           dataLabel: "",
@@ -133,12 +133,16 @@ class EditFragment extends React.Component {
     }
   }
 
+
+  /* Handle changes to the input boxes */
   change = e => {
       this.setState({
           [e.target.name]: e.target.value
       });
   };
 
+
+  /* Save Fragment */
   onSubmit = e => {
       e.preventDefault();
       console.log(this.state);
@@ -169,6 +173,7 @@ class EditFragment extends React.Component {
   };
 
 
+  /* Handle changes to the codemirror HTML editor */
   updateCode(event) {
       this.setState({
           code: "<div class=\"" +
@@ -184,6 +189,7 @@ class EditFragment extends React.Component {
   };
 
 
+  /* Handle submitting a fragment slot */
   onAddSlot = e => {
     e.preventDefault();
 
@@ -194,8 +200,26 @@ class EditFragment extends React.Component {
   };
 
 
-
   render() {
+
+    /* React Quill editor options*/
+    var modules = {
+      toolbar: [
+        [{ 'header': [1, 2, false] }],
+        ['bold', 'italic', 'underline','strike', 'blockquote'],
+        [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+        ['link', 'image'],
+        ['clean']
+      ],
+    };
+
+    var formats = [
+      'header',
+      'bold', 'italic', 'underline', 'strike', 'blockquote',
+      'list', 'bullet', 'indent',
+      'link', 'image'
+    ];
+
 
     var options = {
           lineNumbers: true,
@@ -244,11 +268,15 @@ class EditFragment extends React.Component {
               </p>
             </form>
 
-            <ReactQuill theme="snow" value={this.state.content} onChange={(content, delta, source, editor) => {
+            <ReactQuill theme="snow"
+              modules={modules}
+              formats={formats}
+              value={this.state.content}
+              onChange={(content, delta, source, editor) => {
                 this.setState({
                   content: content,
                 })
-              }} ref="content"/>
+               }} ref="content"/>
 
             <Button onClick={e => this.onSubmit(e)}>Save Fragment</Button>
 

@@ -27,7 +27,7 @@ const Editor = styled.div`
   margin-top: 1em;
   margin-right: 1em;
   float: right;
-  width: 45%;
+  width: 40%;
 `;
 
 const Button = styled.button`
@@ -48,7 +48,7 @@ class NewFragment extends React.Component {
         super(props);
         this.state = {
             class: "",
-            dataChildLimit: "",
+            dataChildLimit: 0,
             dataChildType: "",
             dataLabel: "",
             dataPage: "",
@@ -67,38 +67,46 @@ class NewFragment extends React.Component {
         this.inputDataChildType = React.createRef();
     }
 
+
+    /* Handle changes to the input boxes */
     change = e => {
         this.setState({
             [e.target.name]: e.target.value
         });
     };
 
+
+  /* Save Fragment and redirect to edit fragment page */
     onSubmit = e => {
-        e.preventDefault();
-        console.log(this.state);
+      e.preventDefault();
+      console.log(this.state);
 
-        var current = this;
+      var current = this;
 
-        let data = JSON.stringify({
-          html: this.state.editorText
-        });
+      let data = JSON.stringify({
+        html: this.state.editorText
+      });
 
-        let axiosConfig = {
-          headers: {
-            'Content-Type': 'application/json'
-          }
-        };
+      let axiosConfig = {
+        headers: {
+          'Content-Type': 'application/json'
+        }
+      };
 
-        axios.post("http://localhost:5000/fragments", data, axiosConfig)
-        .then(function (response) {
-          current.setState({toEdit: true});
-        })
-        .catch(function (error) {
-          console.log(error);
-        });
+      axios.post("http://localhost:5000/fragments", data, axiosConfig)
+      .then(function (response) {
+        // current.setState({toEdit: true});
+
+
+        console.log("Response: " + response.data);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
     };
 
 
+  /* Handle changes to the codemirror HTML editor */
     updateCode(event) {
       this.setState({
           code: "\"<div class=\"" +
@@ -110,6 +118,8 @@ class NewFragment extends React.Component {
       });
     };
 
+
+  /* Handle submitting a fragment slot */
     onAddSlot = e => {
       e.preventDefault();
 
@@ -121,7 +131,6 @@ class NewFragment extends React.Component {
 
 
     render() {
-
       if(this.state.toEdit === true) {
         return <Redirect to={{
             pathname: `/edit-fragment/${this.state.dataID}`,
@@ -130,7 +139,25 @@ class NewFragment extends React.Component {
             }
           }}
         />
-      }
+      };
+
+      /* React Quill editor options*/
+      var modules = {
+        toolbar: [
+          [{ 'header': [1, 2, false] }],
+          ['bold', 'italic', 'underline','strike', 'blockquote'],
+          [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+          ['link', 'image'],
+          ['clean']
+        ],
+      };
+
+      var formats = [
+        'header',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image'
+      ];
 
       var options = {
             lineNumbers: true,
@@ -179,7 +206,11 @@ class NewFragment extends React.Component {
                 </p>
               </form>
 
-              <ReactQuill theme="snow" value={this.state.content} onChange={(content, delta, source, editor) => {
+              <ReactQuill theme="snow"
+                modules={modules}
+                formats={formats}
+                value={this.state.content}
+                onChange={(content, delta, source, editor) => {
                   this.setState({
                     content: content,
                   })
@@ -192,8 +223,9 @@ class NewFragment extends React.Component {
                   <p>Data Child Limit:
                       <input
                           name="dataChildLimit"
+                          type="number"
                           placeholder="Data Child Limit"
-                          defaultValue={this.state.dataChildLimit}
+                          defaultValue=""
                           ref={this.inputDataChildLimit}
                       />
                   </p>
@@ -213,8 +245,7 @@ class NewFragment extends React.Component {
               <CodeMirror value={"<div class=\"" +
               this.state.class + "\" data-child-limit=\"" +
               this.state.dataChildLimit + "\" data-child-type=\"" +
-              this.state.dataChildType + "\" data-id=\"" +
-              this.state.dataID + "\" data-label=\"" +
+              this.state.dataChildType + "\" data-label=\"" +
               this.state.dataLabel + "\" data-page=\"" +
               this.state.dataPage + "\" data-template=\"" +
               this.state.template + "\">" +

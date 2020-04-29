@@ -25,7 +25,7 @@ const Editor = styled.div`
   margin-top: 1em;
   margin-right: 1em;
   float: right;
-  width: 45%;
+  width: 40%;
 `;
 
 const Button = styled.button`
@@ -54,7 +54,7 @@ class NewTemplate extends React.Component {
             dataID: "",
 
             dataChildClass: "",
-            dataChildLimit: "",
+            dataChildLimit: 0,
             dataChildType: "",
 
             code: "",
@@ -69,40 +69,46 @@ class NewTemplate extends React.Component {
         this.inputDataChildType = React.createRef();
     }
 
+
+    /* Handle changes to the input boxes */
     change = e => {
         this.setState({
             [e.target.name]: e.target.value
         });
     };
 
-    onSubmit = e => {
-      e.preventDefault();
-      console.log(this.state);
 
-      var current = this;
+  /* Save Template and redirect to edit template page */
+  onSubmit = e => {
+    e.preventDefault();
+    console.log(this.state);
 
-      var code = this.state.code;
+    var current = this;
 
-      let data = JSON.stringify({
-        html: this.state.editorText
-      });
+    var code = this.state.code;
 
-      let axiosConfig = {
-        headers: {
-          'Content-Type': 'application/json'
-        }
-      };
+    let data = JSON.stringify({
+      html: this.state.editorText
+    });
 
-      axios.post("http://localhost:5000/fragments", data, axiosConfig)
-      .then(function (response) {
-        current.setState({toEdit: true});
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    let axiosConfig = {
+      headers: {
+        'Content-Type': 'application/json'
+      }
     };
 
-    updateCode(event) {
+    axios.post("http://localhost:5000/fragments", data, axiosConfig)
+    .then(function (response) {
+      current.setState({toEdit: true});
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  };
+
+
+  /* Handle changes to the codemirror HTML editor */
+   updateCode(event) {
       this.setState({
         code: "<html data-id=\"\" data-label=\""
         + this.state.dataLabel +
@@ -114,6 +120,8 @@ class NewTemplate extends React.Component {
       });
     };
 
+
+  /* Handle submitting a fragment slot */
     onAddSlot = e => {
       e.preventDefault();
 
@@ -138,7 +146,25 @@ class NewTemplate extends React.Component {
             }
           }}
         />
-      }
+      };
+
+      /* React Quill editor options*/
+      var modules = {
+        toolbar: [
+          [{ 'header': [1, 2, false] }],
+          ['bold', 'italic', 'underline','strike', 'blockquote'],
+          [{'list': 'ordered'}, {'list': 'bullet'}, {'indent': '-1'}, {'indent': '+1'}],
+          ['link', 'image'],
+          ['clean']
+        ],
+      };
+
+      var formats = [
+        'header',
+        'bold', 'italic', 'underline', 'strike', 'blockquote',
+        'list', 'bullet', 'indent',
+        'link', 'image'
+      ];
 
       var options = {
             lineNumbers: true,
@@ -180,7 +206,11 @@ class NewTemplate extends React.Component {
                 </p>
               </form>
 
-              <ReactQuill theme="snow" value={this.state.content} onChange={(content, delta, source, editor) => {
+              <ReactQuill theme="snow"
+                modules={modules}
+                formats={formats}
+                value={this.state.content}
+                onChange={(content, delta, source, editor) => {
                   this.setState({
                     content: content,
                   })
@@ -201,8 +231,9 @@ class NewTemplate extends React.Component {
                   <p>Data Child Limit:
                       <input
                           name="dataChildLimit"
+                          type="number"
                           placeholder="Data Child Limit"
-                          defaultValue={this.state.dataChildLimit}
+                          defaultValue=""
                           ref={this.inputDataChildLimit}
                       />
                   </p>
