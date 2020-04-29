@@ -39,6 +39,12 @@ const Button = styled.button`
   margin-top: 1em;
 `
 
+const Preview = styled.div`
+  border: 0.25em solid black;
+  height: 400px;
+  width: 500px;
+`;
+
 
 class NewTemplate extends React.Component {
 
@@ -92,7 +98,7 @@ class NewTemplate extends React.Component {
     var code = this.state.code;
 
     let data = JSON.stringify({
-      html: this.state.editorText
+      html: this.state.code
     });
 
     let axiosConfig = {
@@ -224,7 +230,7 @@ class NewTemplate extends React.Component {
                 onChange={(content, delta, source, editor) => {
                   this.setState({
                     content: content,
-                  })
+                  }, this.updateCode)
                 }} ref="content"/>
 
               <Button onClick={e => this.onSubmit(e)}>Create Template</Button>
@@ -286,7 +292,7 @@ class NewTemplate extends React.Component {
               {!this.state.showEditor &&
                 <>
                   <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
-                  <Fragment><div dangerouslySetInnerHTML={{ __html: this.state.editorText }} /></Fragment>
+                  <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
                 </>
               }
             </Editor>

@@ -2,12 +2,9 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import styled from 'styled-components';
-
 import axios from 'axios';
 
 import Iframe from 'react-iframe';
-
-
 
 const Sidebar = styled.div`
   width: 30%;
@@ -111,9 +108,6 @@ class PageGenerator extends React.Component {
             </form>
             <Button onClick={e => this.onSubmit(e)}>Preview</Button>
           </InputFields>
-
-          
-
         </Sidebar>
 
         <Main>
@@ -128,9 +122,6 @@ class PageGenerator extends React.Component {
       </div>
     )
   }
-
-
-
 }
 
 export default PageGenerator;

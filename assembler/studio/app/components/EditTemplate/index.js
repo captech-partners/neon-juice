@@ -38,6 +38,12 @@ const Button = styled.button`
   margin-top: 1em;
 `
 
+const Preview = styled.div`
+  border: 0.25em solid black;
+  height: 400px;
+  width: 500px;
+`;
+
 class EditTemplate extends React.Component {
 
     constructor (props) {
@@ -139,7 +145,7 @@ class EditTemplate extends React.Component {
       console.log(this.state);
 
       let data = JSON.stringify({
-        html: this.state.editorText
+        html: this.state.code
       });
 
       console.log("content: " + data);
@@ -267,7 +273,7 @@ class EditTemplate extends React.Component {
                 onChange={(content, delta, source, editor) => {
                   this.setState({
                     content: content,
-                  })
+                  }, this.updateCode)
                 }} ref="content"/>
 
               <Button onClick={e => this.onSubmit(e)}>Save Template</Button>
@@ -328,7 +334,7 @@ class EditTemplate extends React.Component {
               {!this.state.showEditor &&
                 <>
                   <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
-                  <Fragment><div dangerouslySetInnerHTML={{ __html: this.state.editorText }} /></Fragment>
+                  <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
                 </>
               }
 

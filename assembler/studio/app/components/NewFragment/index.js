@@ -41,6 +41,13 @@ const Button = styled.button`
   margin-top: 1em;
 `
 
+const Preview = styled.div`
+  border: 0.25em solid black;
+  height: 400px;
+  width: 500px;
+`;
+
+
 
 class NewFragment extends React.Component {
 
@@ -112,12 +119,14 @@ class NewFragment extends React.Component {
   /* Handle changes to the codemirror HTML editor */
     updateCode(event) {
       this.setState({
-          code: "\"<div class=\"" +
-          this.state.class + "\" data-id=\"\" data-label=\"" +
+          code: "<div class=\"" +
+          this.state.class + "\" data-child-limit=\"" +
+          this.state.dataChildLimit + "\" data-child-type=\"" +
+          this.state.dataChildType + "\" data-label=\"" +
           this.state.dataLabel + "\" data-page=\"" +
           this.state.dataPage + "\" data-template=\"" +
           this.state.template + "\">" +
-          this.state.content + "</div>\""
+          this.state.content + "</div>"
       });
     };
 
@@ -223,7 +232,7 @@ class NewFragment extends React.Component {
                 onChange={(content, delta, source, editor) => {
                   this.setState({
                     content: content,
-                  })
+                  }, this.updateCode)
                 }} ref="content"/>
 
               <Button onClick={e => this.onSubmit(e)}>Create Fragment</Button>
@@ -276,7 +285,7 @@ class NewFragment extends React.Component {
               {!this.state.showEditor &&
                 <>
                   <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
-                  <Fragment><div dangerouslySetInnerHTML={{ __html: this.state.editorText }} /></Fragment>
+                  <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
                 </>
               }
             </Editor>
