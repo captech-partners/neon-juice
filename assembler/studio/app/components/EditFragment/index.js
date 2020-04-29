@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
 import axios from 'axios';
@@ -56,14 +56,16 @@ class EditFragment extends React.Component {
           content: "",
 
           code: "",
-          editorText: ""
+          editorText: "",
+          showEditor: true
       };
 
       this.updateCode = this.updateCode.bind(this);
 
-
       this.inputDataChildLimit = React.createRef();
       this.inputDataChildType = React.createRef();
+
+      this.toggleEditor = this.toggleEditor.bind(this);
   }
 
   componentDidMount() {
@@ -195,6 +197,13 @@ class EditFragment extends React.Component {
     });
   };
 
+  /* Switch between HTML editor or Preview */
+  toggleEditor(){
+    this.setState((state, props) => ({
+      showEditor: !state.showEditor,
+    }));
+  };
+
 
   render() {
 
@@ -299,52 +308,39 @@ class EditFragment extends React.Component {
 
           </InputFields>
 
-
-
           <Editor>
-            <CodeMirror value={"<div class=\"" +
-            this.state.class + "\" data-child-limit=\"" +
-            this.state.dataChildLimit + "\" data-child-type=\"" +
-            this.state.dataChildType + "\" data-id=\"" +
-            this.state.dataID + "\" data-label=\"" +
-            this.state.dataLabel + "\" data-page=\"" +
-            this.state.dataPage + "\" data-template=\"" +
-            this.state.template + "\">" +
-            this.state.content + "</div>"}
-            onChange={(editor, data, value) => {
-                this.setState({
-                  editorText: value,
-                }, this.updateCode)
-              }} options={options}/>
-          </Editor>
+            {this.state.showEditor &&
+              <>
+                <Button onClick={this.toggleEditor}>Show Preview</Button>
 
+                <CodeMirror value={"<div class=\"" +
+                this.state.class + "\" data-child-limit=\"" +
+                this.state.dataChildLimit + "\" data-child-type=\"" +
+                this.state.dataChildType + "\" data-id=\"" +
+                this.state.dataID + "\" data-label=\"" +
+                this.state.dataLabel + "\" data-page=\"" +
+                this.state.dataPage + "\" data-template=\"" +
+                this.state.template + "\">" +
+                this.state.content + "</div>"}
+                onChange={(editor, data, value) => {
+                    this.setState({
+                      editorText: value,
+                    }, this.updateCode)
+                  }} options={options}/>
+              </>
+            }
+
+            {!this.state.showEditor &&
+              <>
+                <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
+                <Fragment><div dangerouslySetInnerHTML={{ __html: this.state.editorText }} /></Fragment>
+              </>
+            }
+          </Editor>
         </div>
       );
-  }
+    }
 };
-
-
-
-// <p>Content:
-//     <input
-//         name="content"
-//         placeholder="Content"
-//         value={this.state.content}
-//         onChange={e => this.change(e)}
-//
-//         ref="content"
-//     />
-// </p>
-
-
-// <Iframe
-//   srcdoc={this.state.editorText}
-//   width="450px"
-//   height="450px"
-//   className="preview"
-//   display="initial"
-// />
-
 
 
 export default EditFragment;

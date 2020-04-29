@@ -109,10 +109,11 @@ class PageGenerator extends React.Component {
               </p>
 
             </form>
-
             <Button onClick={e => this.onSubmit(e)}>Preview</Button>
-
           </InputFields>
+
+          
+
         </Sidebar>
 
         <Main>
@@ -120,7 +121,9 @@ class PageGenerator extends React.Component {
             width="900px"
             height="600px"
             display="initial"
-            position="relative"/>
+            position="relative"
+            allowFullScreen
+          />
         </Main>
       </div>
     )

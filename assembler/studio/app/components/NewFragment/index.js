@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
 const axios = require('axios').default;
@@ -57,6 +57,7 @@ class NewFragment extends React.Component {
 
             code: "",
             editorText: "",
+            showEditor: true,
 
             toEdit: false,
         };
@@ -65,6 +66,8 @@ class NewFragment extends React.Component {
 
         this.inputDataChildLimit = React.createRef();
         this.inputDataChildType = React.createRef();
+
+        this.toggleEditor = this.toggleEditor.bind(this);
     }
 
 
@@ -127,6 +130,13 @@ class NewFragment extends React.Component {
         dataChildLimit: this.inputDataChildLimit.current.value,
         dataChildType: this.inputDataChildType.current.value
       });
+    };
+
+    /* Switch between HTML editor or Preview */
+    toggleEditor(){
+      this.setState((state, props) => ({
+        showEditor: !state.showEditor,
+      }));
     };
 
 
@@ -242,41 +252,37 @@ class NewFragment extends React.Component {
             </InputFields>
 
             <Editor>
-              <CodeMirror value={"<div class=\"" +
-              this.state.class + "\" data-child-limit=\"" +
-              this.state.dataChildLimit + "\" data-child-type=\"" +
-              this.state.dataChildType + "\" data-label=\"" +
-              this.state.dataLabel + "\" data-page=\"" +
-              this.state.dataPage + "\" data-template=\"" +
-              this.state.template + "\">" +
-              this.state.content + "</div>"}
+              {this.state.showEditor &&
+                <>
+                  <Button onClick={this.toggleEditor}>Show Preview</Button>
 
-              onChange={(editor, data, value) => {
-                  this.setState({
-                    editorText: value,
-                  }, this.updateCode)
-                }} options={options}/>
+                  <CodeMirror value={"<div class=\"" +
+                  this.state.class + "\" data-child-limit=\"" +
+                  this.state.dataChildLimit + "\" data-child-type=\"" +
+                  this.state.dataChildType + "\" data-label=\"" +
+                  this.state.dataLabel + "\" data-page=\"" +
+                  this.state.dataPage + "\" data-template=\"" +
+                  this.state.template + "\">" +
+                  this.state.content + "</div>"}
+
+                  onChange={(editor, data, value) => {
+                      this.setState({
+                        editorText: value,
+                      }, this.updateCode)
+                    }} options={options}/>
+                </>
+              }
+
+              {!this.state.showEditor &&
+                <>
+                  <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
+                  <Fragment><div dangerouslySetInnerHTML={{ __html: this.state.editorText }} /></Fragment>
+                </>
+              }
             </Editor>
           </div>
         );
     }
 };
-
-
-
-// <p>Content:
-//     <input
-//         name="content"
-//         placeholder="Content"
-//         value={this.state.content}
-//         onChange={e => this.change(e)}
-//
-//         ref="content"
-//     />
-// </p>
-
-// data-child-limit=\"" + this.state.dataChildLimit
-// + "\" data-child-type=\"" +
-// this.state.dataChildType + "\" data-id=\"\"
 
 export default withRouter(NewFragment);
