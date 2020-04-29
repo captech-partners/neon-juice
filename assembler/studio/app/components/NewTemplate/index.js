@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
 import axios from 'axios';
@@ -39,6 +39,12 @@ const Button = styled.button`
   margin-top: 1em;
 `
 
+const Preview = styled.div`
+  border: 0.25em solid black;
+  height: 400px;
+  width: 500px;
+`;
+
 
 class NewTemplate extends React.Component {
 
@@ -59,14 +65,18 @@ class NewTemplate extends React.Component {
 
             code: "",
             editorText: "",
+            showEditor: true,
 
             toEdit: false,
         };
 
         this.updateCode = this.updateCode.bind(this);
 
+        this.inputDataChildClass = React.createRef();
         this.inputDataChildLimit = React.createRef();
         this.inputDataChildType = React.createRef();
+
+        this.toggleEditor = this.toggleEditor.bind(this);
     }
 
 
@@ -88,7 +98,7 @@ class NewTemplate extends React.Component {
     var code = this.state.code;
 
     let data = JSON.stringify({
-      html: this.state.editorText
+      html: this.state.code
     });
 
     let axiosConfig = {
@@ -133,6 +143,13 @@ class NewTemplate extends React.Component {
         content: state.content + "<div class=\"" + this.inputDataChildClass.current.value +
           "\" data-child-limit=\"" + this.inputDataChildLimit.current.value +
           "\" data-child-type=\"" + this.inputDataChildType.current.value + "\"></div>"
+      }));
+    };
+
+    /* Switch between HTML editor or Preview */
+    toggleEditor(){
+      this.setState((state, props) => ({
+        showEditor: !state.showEditor,
       }));
     };
 
@@ -213,7 +230,7 @@ class NewTemplate extends React.Component {
                 onChange={(content, delta, source, editor) => {
                   this.setState({
                     content: content,
-                  })
+                  }, this.updateCode)
                 }} ref="content"/>
 
               <Button onClick={e => this.onSubmit(e)}>Create Template</Button>
@@ -250,39 +267,38 @@ class NewTemplate extends React.Component {
 
             </InputFields>
 
-
             <Editor>
-              <CodeMirror value={
-                "<html data-id=\"\" data-label=\""
-                + this.state.dataLabel +
-                "\" data-page=\""
-                + this.state.dataPage +
-                "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
-                  + this.state.content +
-                  "</body></html>"
-                }
-              onChange={(editor, data, value) => {
-                  this.setState({
-                    editorText: value,
-                  }, this.updateCode)
-                }} options={options}/>
+              {this.state.showEditor &&
+                <>
+                  <Button onClick={this.toggleEditor}>Show Preview</Button>
+
+                  <CodeMirror value={
+                    "<html data-id=\"\" data-label=\""
+                    + this.state.dataLabel +
+                    "\" data-page=\""
+                    + this.state.dataPage +
+                    "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
+                      + this.state.content +
+                      "</body></html>"
+                    }
+                  onChange={(editor, data, value) => {
+                      this.setState({
+                        editorText: value,
+                      }, this.updateCode)
+                    }} options={options}/>
+                </>
+              }
+
+              {!this.state.showEditor &&
+                <>
+                  <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
+                  <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
+                </>
+              }
             </Editor>
           </div>
         );
     }
 };
-
-
-// <p>Content:
-//     <input
-//         name="content"
-//         placeholder="Content"
-//         value={this.state.content}
-//         onChange={e => this.change(e)}
-//
-//         ref="content"
-//     />
-// </p>
-
 
 export default NewTemplate;

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
 import axios from 'axios';
@@ -12,10 +12,6 @@ require('codemirror/mode/javascript/javascript');
 
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-
-
-import Iframe from 'react-iframe'
-
 
 
 import styled from 'styled-components';
@@ -40,8 +36,13 @@ const Button = styled.button`
   margin: 0 1em;
   padding: 0.25em 1em;
   margin-top: 1em;
-`
+`;
 
+const Preview = styled.div`
+  border: 0.25em solid black;
+  height: 400px;
+  width: 500px;
+`;
 
 class EditFragment extends React.Component {
 
@@ -60,14 +61,16 @@ class EditFragment extends React.Component {
           content: "",
 
           code: "",
-          editorText: ""
+          editorText: "",
+          showEditor: true
       };
 
       this.updateCode = this.updateCode.bind(this);
 
-
       this.inputDataChildLimit = React.createRef();
       this.inputDataChildType = React.createRef();
+
+      this.toggleEditor = this.toggleEditor.bind(this);
   }
 
   componentDidMount() {
@@ -148,7 +151,7 @@ class EditFragment extends React.Component {
       console.log(this.state);
 
       let data = JSON.stringify({
-        html: this.state.editorText
+        html: this.state.code
       });
 
       console.log("content: " + data);
@@ -197,6 +200,13 @@ class EditFragment extends React.Component {
       dataChildLimit: this.inputDataChildLimit.current.value,
       dataChildType: this.inputDataChildType.current.value
     });
+  };
+
+  /* Switch between HTML editor or Preview */
+  toggleEditor(){
+    this.setState((state, props) => ({
+      showEditor: !state.showEditor,
+    }));
   };
 
 
@@ -275,7 +285,7 @@ class EditFragment extends React.Component {
               onChange={(content, delta, source, editor) => {
                 this.setState({
                   content: content,
-                })
+                }, this.updateCode)
                }} ref="content"/>
 
             <Button onClick={e => this.onSubmit(e)}>Save Fragment</Button>
@@ -303,52 +313,39 @@ class EditFragment extends React.Component {
 
           </InputFields>
 
-
-
           <Editor>
-            <CodeMirror value={"<div class=\"" +
-            this.state.class + "\" data-child-limit=\"" +
-            this.state.dataChildLimit + "\" data-child-type=\"" +
-            this.state.dataChildType + "\" data-id=\"" +
-            this.state.dataID + "\" data-label=\"" +
-            this.state.dataLabel + "\" data-page=\"" +
-            this.state.dataPage + "\" data-template=\"" +
-            this.state.template + "\">" +
-            this.state.content + "</div>"}
-            onChange={(editor, data, value) => {
-                this.setState({
-                  editorText: value,
-                }, this.updateCode)
-              }} options={options}/>
-          </Editor>
+            {this.state.showEditor &&
+              <>
+                <Button onClick={this.toggleEditor}>Show Preview</Button>
 
+                <CodeMirror value={"<div class=\"" +
+                this.state.class + "\" data-child-limit=\"" +
+                this.state.dataChildLimit + "\" data-child-type=\"" +
+                this.state.dataChildType + "\" data-id=\"" +
+                this.state.dataID + "\" data-label=\"" +
+                this.state.dataLabel + "\" data-page=\"" +
+                this.state.dataPage + "\" data-template=\"" +
+                this.state.template + "\">" +
+                this.state.content + "</div>"}
+                onChange={(editor, data, value) => {
+                    this.setState({
+                      editorText: value,
+                    }, this.updateCode)
+                  }} options={options}/>
+              </>
+            }
+
+            {!this.state.showEditor &&
+              <>
+                <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
+                <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
+              </>
+            }
+          </Editor>
         </div>
       );
-  }
+    }
 };
-
-
-
-// <p>Content:
-//     <input
-//         name="content"
-//         placeholder="Content"
-//         value={this.state.content}
-//         onChange={e => this.change(e)}
-//
-//         ref="content"
-//     />
-// </p>
-
-
-// <Iframe
-//   srcdoc={this.state.editorText}
-//   width="450px"
-//   height="450px"
-//   className="preview"
-//   display="initial"
-// />
-
 
 
 export default EditFragment;

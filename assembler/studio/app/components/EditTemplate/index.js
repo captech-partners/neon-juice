@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import ReactDOM from 'react-dom';
 
 import axios from 'axios';
@@ -38,6 +38,12 @@ const Button = styled.button`
   margin-top: 1em;
 `
 
+const Preview = styled.div`
+  border: 0.25em solid black;
+  height: 400px;
+  width: 500px;
+`;
+
 class EditTemplate extends React.Component {
 
     constructor (props) {
@@ -56,15 +62,17 @@ class EditTemplate extends React.Component {
             dataChildType: "",
 
             code: "",
-            editorText: ""
+            editorText: "",
+            showEditor: true
         };
 
         this.updateCode = this.updateCode.bind(this);
 
-
         this.inputDataChildClass = React.createRef();
         this.inputDataChildLimit = React.createRef();
         this.inputDataChildType = React.createRef();
+
+        this.toggleEditor = this.toggleEditor.bind(this);
     }
 
     componentDidMount() {
@@ -137,7 +145,7 @@ class EditTemplate extends React.Component {
       console.log(this.state);
 
       let data = JSON.stringify({
-        html: this.state.editorText
+        html: this.state.code
       });
 
       console.log("content: " + data);
@@ -188,6 +196,13 @@ class EditTemplate extends React.Component {
         content: state.content + "<div class=\"" + this.inputDataChildClass.current.value +
           "\" data-child-limit=\"" + this.inputDataChildLimit.current.value +
           "\" data-child-type=\"" + this.inputDataChildType.current.value + "\"></div>"
+      }));
+    };
+
+    /* Switch between HTML editor or Preview */
+    toggleEditor(){
+      this.setState((state, props) => ({
+        showEditor: !state.showEditor,
       }));
     };
 
@@ -258,7 +273,7 @@ class EditTemplate extends React.Component {
                 onChange={(content, delta, source, editor) => {
                   this.setState({
                     content: content,
-                  })
+                  }, this.updateCode)
                 }} ref="content"/>
 
               <Button onClick={e => this.onSubmit(e)}>Save Template</Button>
@@ -294,21 +309,35 @@ class EditTemplate extends React.Component {
               </form>
             </InputFields>
 
-
             <Editor>
-              <CodeMirror value={
-                "<html data-id=\"\" data-label=\""
-                + this.state.dataLabel +
-                "\" data-page=\""
-                + this.state.dataPage +
-                "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
-                  + this.state.content +
-                  "</body></html>"}
-              onChange={(editor, data, value) => {
-                  this.setState({
-                    editorText: value,
-                  }, this.updateCode)
-                }} options={options}/>
+              {this.state.showEditor &&
+                <>
+                  <Button onClick={this.toggleEditor}>Show Preview</Button>
+
+                  <CodeMirror value={
+                    "<html data-id=\"\" data-label=\""
+                    + this.state.dataLabel +
+                    "\" data-page=\""
+                    + this.state.dataPage +
+                    "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
+                      + this.state.content +
+                      "</body></html>"}
+                  onChange={(editor, data, value) => {
+                      this.setState({
+                        editorText: value,
+                      }, this.updateCode)
+                    }} options={options}/>
+                </>
+              }
+
+
+              {!this.state.showEditor &&
+                <>
+                  <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
+                  <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
+                </>
+              }
+
             </Editor>
           </div>
         );

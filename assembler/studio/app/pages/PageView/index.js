@@ -1,11 +1,20 @@
 import React from 'react';
+import styled from 'styled-components';
+
+import PageGenerator from '../../components/PageGenerator';
+
+const Container = styled.div`
+  margin: .5em;
+  padding-left: .5em;
+`
 
 const PageView = () => {
 
   return (
-    <div className="page-view">
+    <Container>
       <h1>Page View</h1>
-    </div>
+      <PageGenerator/>
+    </Container>
   );
 };
 
