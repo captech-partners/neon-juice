@@ -11,15 +11,17 @@ import NewFragment from '../../components/NewFragment';
 import NewTemplate from '../../components/NewTemplate';
 
 import styled from 'styled-components';
+import { Container, Row, Col, Dropdown, DropdownButton } from 'react-bootstrap';
 
 const Sidebar = styled.div`
-  width: 200px;
+  width: 18%;
   top: 0;
   left: 0;
   background-color: #f1ebf2;
   float: left;
   margin-right: 1em;
   padding-left: 1em;
+  margin-top: 1em;
   bottom: 0;
   margin-bottom: 1em;
 `;
@@ -65,21 +67,24 @@ class FragmentTemplateList extends React.Component {
         this.setState({ templates: tempList });
       })
   }
+
+  // componentDidUpdate(prevState) {
   //
-  // componentDidUpdate() {
-  //   axios.get(`http://localhost:5000/fragments`)
-  //     .then(result => {
+  //   if((this.state !== prevState)) {
+  //     axios.get(`http://localhost:5000/fragments`)
+  //       .then(result => {
   //
-  //       result.data.sort(function(a, b) {
-  // 				return a.id - b.id  ||  a.class_attr.localeCompare(b.class_attr);
-  // 			});
+  //         result.data.sort(function(a, b) {
+  //   				return a.id - b.id  ||  a.class_attr.localeCompare(b.class_attr);
+  //   			});
   //
-  //       const fragList = result.data.filter(obj => (obj.id >= 0)).map(obj => obj);
-  //       const tempList = result.data.filter(obj => (obj.id < 0)).map(obj => obj);
+  //         const fragList = result.data.filter(obj => (obj.id >= 0)).map(obj => obj);
+  //         const tempList = result.data.filter(obj => (obj.id < 0)).map(obj => obj);
   //
-  //       this.setState({ fragments: fragList });
-  //       this.setState({ templates: tempList });
-  //     })
+  //         this.setState({ fragments: fragList });
+  //         this.setState({ templates: tempList });
+  //       })
+  //   }
   // }
 
   render() {
@@ -99,8 +104,12 @@ class FragmentTemplateList extends React.Component {
     return (
       <Router>
 
-        <Link to="/new-fragment"><Button>New Fragment</Button></Link>
-        <Link to="/new-template"><Button>New Template</Button></Link>
+        <DropdownButton variant="outline-info" title="Create New">
+          <Dropdown.Item as={Link} to="/new-fragment">New Fragment</Dropdown.Item>
+          <Dropdown.Item as={Link} to="/new-template">New Template</Dropdown.Item>
+        </DropdownButton>
+
+
 
         <Sidebar>
           <p>Fragments</p>
@@ -150,3 +159,8 @@ class FragmentTemplateList extends React.Component {
 };
 
 export default FragmentTemplateList;
+
+
+//
+// <Link to="/new-fragment"><Button>New Fragment</Button></Link>
+// <Link to="/new-template"><Button>New Template</Button></Link>

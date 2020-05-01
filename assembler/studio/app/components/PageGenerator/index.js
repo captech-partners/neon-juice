@@ -2,11 +2,14 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import styled from 'styled-components';
+import { Button } from 'react-bootstrap';
+
 import axios from 'axios';
 
 import Iframe from 'react-iframe';
 
 const Sidebar = styled.div`
+  margin-top: 1em;
   width: 30%;
   float: left;
   margin-right: 1em;
@@ -14,19 +17,20 @@ const Sidebar = styled.div`
 `;
 
 const Main = styled.div`
+  margin-top: 1em;
   margin: .5em;
   padding-left: .5em;
 `
 
-const Button = styled.button`
-  background: #E5C1EE;
-  border-radius: 3px;
-  border: solid #DBB7E4;
-  color: #33153A;
-  font-size: .5em;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-`
+// const Button = styled.button`
+//   background: #E5C1EE;
+//   border-radius: 3px;
+//   border: solid #DBB7E4;
+//   color: #33153A;
+//   font-size: .5em;
+//   margin: 0 1em;
+//   padding: 0.25em 1em;
+// `
 
 const InputFields = styled.div`
   float: left;
@@ -106,7 +110,7 @@ class PageGenerator extends React.Component {
               </p>
 
             </form>
-            <Button onClick={e => this.onSubmit(e)}>Preview</Button>
+            <Button variant="primary" onClick={e => this.onSubmit(e)}>Preview</Button>
           </InputFields>
         </Sidebar>
 

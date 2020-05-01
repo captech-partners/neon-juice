@@ -14,6 +14,7 @@ const Bar = styled.div`
   float:left;
   display: block;
   height: 5em;
+  class: "d-flex bd-highlight";
 `;
 
 const Footer = () => {
