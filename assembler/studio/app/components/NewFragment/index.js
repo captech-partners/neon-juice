@@ -19,6 +19,7 @@ import { Button } from 'react-bootstrap';
 
 const InputFields = styled.div`
   float: left;
+  margin-top: 1em;
 `;
 
 const Editor = styled.div`
