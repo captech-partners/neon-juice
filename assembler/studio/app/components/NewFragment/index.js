@@ -100,16 +100,18 @@ class NewFragment extends React.Component {
 
    /* Handle changes to the codemirror HTML editor */
    updateCode(event) {
-      this.setState({
-          code: "<div class=\"" +
-          this.state.class + "\" data-child-limit=\"" +
-          this.state.dataChildLimit + "\" data-child-type=\"" +
-          this.state.dataChildType + "\" data-label=\"" +
-          this.state.dataLabel + "\" data-page=\"" +
-          this.state.dataPage + "\" data-template=\"" +
-          this.state.template + "\">" +
-          this.state.content + "</div>"
-      });
+     this.setState((state) => ({
+         code: state.editorText
+
+          // "<div class=\"" +
+          // this.state.class + "\" data-child-limit=\"" +
+          // this.state.dataChildLimit + "\" data-child-type=\"" +
+          // this.state.dataChildType + "\" data-label=\"" +
+          // this.state.dataLabel + "\" data-page=\"" +
+          // this.state.dataPage + "\" data-template=\"" +
+          // this.state.template + "\">" +
+          // this.state.content + "</div>"
+      }));
     };
 
     /* Handle submitting a fragment slot */

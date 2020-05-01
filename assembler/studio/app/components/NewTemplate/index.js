@@ -104,15 +104,17 @@ class NewTemplate extends React.Component {
 
   /* Handle changes to the codemirror HTML editor */
   updateCode(event) {
-    this.setState({
-      code: "<html data-id=\"\" data-label=\""
-      + this.state.dataLabel +
-      "\" data-page=\""
-      + this.state.dataPage +
-      "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
-        + this.state.content +
-        "</body></html>"
-      });
+    this.setState((state) => ({
+        code: state.editorText
+
+      // "<html data-id=\"\" data-label=\""
+      // + this.state.dataLabel +
+      // "\" data-page=\""
+      // + this.state.dataPage +
+      // "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
+      //   + this.state.content +
+      //   "</body></html>"
+      }));
    };
 
    /* Handle submitting a fragment slot */
