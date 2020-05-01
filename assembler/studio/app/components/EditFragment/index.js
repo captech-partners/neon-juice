@@ -17,6 +17,7 @@ import { Button } from 'react-bootstrap';
 
 const InputFields = styled.div`
   float: left;
+  margin-top: 1em;
 `;
 
 const Editor = styled.div`
@@ -25,17 +26,6 @@ const Editor = styled.div`
   float: right;
   width: 40%;
 `;
-
-// const Button = styled.button`
-//   background: #E5C1EE;
-//   border-radius: 3px;
-//   border: solid #DBB7E4;
-//   color: #33153A;
-//   font-size: .5em;
-//   margin: 0 1em;
-//   padding: 0.25em 1em;
-//   margin-top: 1em;
-// `;
 
 const Preview = styled.div`
   border: 0.25em solid black;
@@ -46,30 +36,30 @@ const Preview = styled.div`
 class EditFragment extends React.Component {
 
   constructor (props) {
-      super(props);
-      this.state = {
-          class: "",
+    super(props);
+    this.state = {
+        class: "",
 
-          dataChildLimit: 0,
-          dataChildType: "",
-          dataID: "",
-          dataLabel: "",
-          dataPage: "",
+        dataChildLimit: 0,
+        dataChildType: "",
+        dataID: "",
+        dataLabel: "",
+        dataPage: "",
 
-          template: "",
-          content: "",
+        template: "",
+        content: "",
 
-          code: "",
-          editorText: "",
-          showEditor: true
-      };
+        code: "",
+        editorText: "",
+        showEditor: true
+    };
 
-      this.updateCode = this.updateCode.bind(this);
+    this.updateCode = this.updateCode.bind(this);
 
-      this.inputDataChildLimit = React.createRef();
-      this.inputDataChildType = React.createRef();
+    this.inputDataChildLimit = React.createRef();
+    this.inputDataChildType = React.createRef();
 
-      this.toggleEditor = this.toggleEditor.bind(this);
+    this.toggleEditor = this.toggleEditor.bind(this);
   }
 
   componentDidMount() {
@@ -135,14 +125,12 @@ class EditFragment extends React.Component {
     }
   }
 
-
   /* Handle changes to the input boxes */
   change = e => {
       this.setState({
           [e.target.name]: e.target.value
       });
   };
-
 
   /* Save Fragment */
   onSubmit = e => {
@@ -174,7 +162,6 @@ class EditFragment extends React.Component {
       });
   };
 
-
   /* Handle changes to the codemirror HTML editor */
   updateCode(event) {
       this.setState({
@@ -189,7 +176,6 @@ class EditFragment extends React.Component {
           this.state.content + "</div>"
       });
   };
-
 
   /* Handle submitting a fragment slot */
   onAddSlot = e => {
@@ -229,7 +215,7 @@ class EditFragment extends React.Component {
       'link', 'image'
     ];
 
-
+    /* Codemirror options */
     var options = {
           lineNumbers: true,
           lineWrapping: true,
@@ -312,7 +298,6 @@ class EditFragment extends React.Component {
               </p>
               <Button variant="success" size="sm" onClick={e => this.onAddSlot(e)}>Add Fragment Slot</Button>
             </form>
-
           </InputFields>
 
           <Editor>

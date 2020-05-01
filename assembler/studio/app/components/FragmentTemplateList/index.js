@@ -17,30 +17,19 @@ const Sidebar = styled.div`
   width: 18%;
   top: 0;
   left: 0;
-  background-color: #f1ebf2;
-  float: left;
-  margin-right: 1em;
-  padding-left: 1em;
-  margin-top: 1em;
   bottom: 0;
+  float: left;
+  padding-left: 1em;
+  margin-right: 1em;
+  margin-top: 1em;
   margin-bottom: 1em;
+  background-color: #f7f8f9;
 `;
 
 const Main = styled.div`
   margin: .5em;
   padding-left: .5em;
 `
-
-const Button = styled.button`
-  background: #E5C1EE;
-  border-radius: 3px;
-  border: solid #DBB7E4;
-  color: #33153A;
-  font-size: .5em;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-`
-
 
 class FragmentTemplateList extends React.Component {
 
@@ -109,8 +98,6 @@ class FragmentTemplateList extends React.Component {
           <Dropdown.Item as={Link} to="/new-template">New Template</Dropdown.Item>
         </DropdownButton>
 
-
-
         <Sidebar>
           <p>Fragments</p>
           <ul>
@@ -159,8 +146,3 @@ class FragmentTemplateList extends React.Component {
 };
 
 export default FragmentTemplateList;
-
-
-//
-// <Link to="/new-fragment"><Button>New Fragment</Button></Link>
-// <Link to="/new-template"><Button>New Template</Button></Link>

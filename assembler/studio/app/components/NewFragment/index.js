@@ -17,7 +17,6 @@ import 'react-quill/dist/quill.snow.css';
 import styled from 'styled-components';
 import { Button } from 'react-bootstrap';
 
-
 const InputFields = styled.div`
   float: left;
 `;
@@ -34,8 +33,6 @@ const Preview = styled.div`
   height: 400px;
   width: 500px;
 `;
-
-
 
 class NewFragment extends React.Component {
 
@@ -65,7 +62,6 @@ class NewFragment extends React.Component {
         this.toggleEditor = this.toggleEditor.bind(this);
     }
 
-
     /* Handle changes to the input boxes */
     change = e => {
         this.setState({
@@ -73,8 +69,7 @@ class NewFragment extends React.Component {
         });
     };
 
-
-  /* Save Fragment and redirect to edit fragment page */
+    /* Save Fragment and redirect to edit fragment page */
     onSubmit = e => {
       e.preventDefault();
       console.log(this.state);
@@ -103,9 +98,8 @@ class NewFragment extends React.Component {
       });
     };
 
-
-  /* Handle changes to the codemirror HTML editor */
-    updateCode(event) {
+   /* Handle changes to the codemirror HTML editor */
+   updateCode(event) {
       this.setState({
           code: "<div class=\"" +
           this.state.class + "\" data-child-limit=\"" +
@@ -118,8 +112,7 @@ class NewFragment extends React.Component {
       });
     };
 
-
-  /* Handle submitting a fragment slot */
+    /* Handle submitting a fragment slot */
     onAddSlot = e => {
       e.preventDefault();
 
@@ -135,7 +128,6 @@ class NewFragment extends React.Component {
         showEditor: !state.showEditor,
       }));
     };
-
 
     render() {
       if(this.state.toEdit === true) {
@@ -166,6 +158,7 @@ class NewFragment extends React.Component {
         'link', 'image'
       ];
 
+      /* Codemirror options */
       var options = {
             lineNumbers: true,
             lineWrapping: true,
@@ -173,126 +166,125 @@ class NewFragment extends React.Component {
             mode: 'xml',
         };
 
-        return (
-          <div>
-            <h1>New Fragment</h1>
+      return (
+        <div>
+          <h1>New Fragment</h1>
 
-            <InputFields>
-              <form>
-                <p>Fragment Name:
-                    <input
-                        name="class"
-                        placeholder="Fragment Name"
-                        value={this.state.class}
-                        onChange={e => this.change(e)}
-                    />
-                </p>
-                <p>Data Label:
-                    <input
-                        name="dataLabel"
-                        placeholder="Data Label"
-                        value={this.state.dataLabel}
-                        onChange={e => this.change(e)}
-                    />
-                </p>
-                <p>Data Page:
-                    <input
-                        name="dataPage"
-                        placeholder="Data Page"
-                        value={this.state.dataPage}
-                        onChange={e => this.change(e)}
-                    />
-                </p>
-                <p>Template:
-                    <input
-                        name="template"
-                        placeholder="Template"
-                        value={this.state.template}
-                        onChange={e => this.change(e)}
-                    />
-                </p>
+          <InputFields>
+            <form>
+              <p>Fragment Name:
+                  <input
+                      name="class"
+                      placeholder="Fragment Name"
+                      value={this.state.class}
+                      onChange={e => this.change(e)}
+                  />
+              </p>
+              <p>Data Label:
+                  <input
+                      name="dataLabel"
+                      placeholder="Data Label"
+                      value={this.state.dataLabel}
+                      onChange={e => this.change(e)}
+                  />
+              </p>
+              <p>Data Page:
+                  <input
+                      name="dataPage"
+                      placeholder="Data Page"
+                      value={this.state.dataPage}
+                      onChange={e => this.change(e)}
+                  />
+              </p>
+              <p>Template:
+                  <input
+                      name="template"
+                      placeholder="Template"
+                      value={this.state.template}
+                      onChange={e => this.change(e)}
+                  />
+              </p>
 
-              <ReactQuill
-                theme="snow"
-                modules={modules}
-                formats={formats}
-                value={this.state.content}
-                onChange={(content, delta, source, editor) => {
-                  this.setState({
-                    content: content,
-                  }, this.updateCode)
-                }} ref="content"/>
+            <ReactQuill
+              theme="snow"
+              modules={modules}
+              formats={formats}
+              value={this.state.content}
+              onChange={(content, delta, source, editor) => {
+                this.setState({
+                  content: content,
+                }, this.updateCode)
+              }} ref="content"/>
+            </form>
+
+            <Button style={{marginBottom: "1em", marginTop:"1em"}}
+              variant="success"
+              size="sm"
+              onClick={e => this.onSubmit(e)}>Create Fragment
+            </Button>
+
+            <h2>Fragment Slot:</h2>
+            <form>
+                <p>Data Child Limit:
+                    <input
+                        name="dataChildLimit"
+                        type="number"
+                        placeholder="Data Child Limit"
+                        defaultValue=""
+                        ref={this.inputDataChildLimit}
+                    />
+                </p>
+                <p>Data Child Type:
+                    <input
+                        name="dataChildType"
+                        placeholder="Data Child Type"
+                        defaultValue={this.state.dataChildType}
+                        ref={this.inputDataChildType}
+                    />
+                </p>
+                <Button variant="success" size="sm" onClick={e => this.onAddSlot(e)}>Add Fragment Slot</Button>
               </form>
+          </InputFields>
 
-              <Button style={{marginBottom: "1em", marginTop:"1em"}}
-                variant="success"
-                size="sm"
-                onClick={e => this.onSubmit(e)}>Create Fragment
-              </Button>
+          <Editor>
+            {this.state.showEditor &&
+              <>
+                <Button style={{marginBottom: "1em"}}
+                  variant="outline-primary"
+                  size="sm"
+                  onClick={this.toggleEditor}>Show Preview
+                </Button>
 
+                <CodeMirror value={"<div class=\"" +
+                this.state.class + "\" data-child-limit=\"" +
+                this.state.dataChildLimit + "\" data-child-type=\"" +
+                this.state.dataChildType + "\" data-label=\"" +
+                this.state.dataLabel + "\" data-page=\"" +
+                this.state.dataPage + "\" data-template=\"" +
+                this.state.template + "\">" +
+                this.state.content + "</div>"}
 
-              <h2>Fragment Slot:</h2>
-              <form>
-                  <p>Data Child Limit:
-                      <input
-                          name="dataChildLimit"
-                          type="number"
-                          placeholder="Data Child Limit"
-                          defaultValue=""
-                          ref={this.inputDataChildLimit}
-                      />
-                  </p>
-                  <p>Data Child Type:
-                      <input
-                          name="dataChildType"
-                          placeholder="Data Child Type"
-                          defaultValue={this.state.dataChildType}
-                          ref={this.inputDataChildType}
-                      />
-                  </p>
-                  <Button variant="success" size="sm" onClick={e => this.onAddSlot(e)}>Add Fragment Slot</Button>
-                </form>
-            </InputFields>
+                onChange={(editor, data, value) => {
+                    this.setState({
+                      editorText: value,
+                    }, this.updateCode)
+                  }} options={options}/>
+              </>
+            }
 
-            <Editor>
-              {this.state.showEditor &&
-                <>
-                  <Button style={{marginBottom: "1em"}}
-                    variant="outline-primary"
-                    size="sm"
-                    onClick={this.toggleEditor}>Show Preview
-                  </Button>
-
-                  <CodeMirror value={"<div class=\"" +
-                  this.state.class + "\" data-child-limit=\"" +
-                  this.state.dataChildLimit + "\" data-child-type=\"" +
-                  this.state.dataChildType + "\" data-label=\"" +
-                  this.state.dataLabel + "\" data-page=\"" +
-                  this.state.dataPage + "\" data-template=\"" +
-                  this.state.template + "\">" +
-                  this.state.content + "</div>"}
-
-                  onChange={(editor, data, value) => {
-                      this.setState({
-                        editorText: value,
-                      }, this.updateCode)
-                    }} options={options}/>
-                </>
-              }
-
-              {!this.state.showEditor &&
-                <>
-                  <Button style={{marginBottom: "1em"}}
-                    variant="outline-primary"
-                    size="sm"
-                    onClick={this.toggleEditor}>Show HTML Editor
-                  </Button>
-                  <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
-                </>
-              }
-            </Editor>
-          </div>
-        );
+            {!this.state.showEditor &&
+              <>
+                <Button style={{marginBottom: "1em"}}
+                  variant="outline-primary"
+                  size="sm"
+                  onClick={this.toggleEditor}>Show HTML Editor
+                </Button>
+                <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
+              </>
+            }
+          </Editor>
+        </div>
+      );
     }
 };
 
