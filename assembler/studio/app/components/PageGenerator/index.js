@@ -2,49 +2,42 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 
 import styled from 'styled-components';
+import { Button } from 'react-bootstrap';
+
 import axios from 'axios';
 
 import Iframe from 'react-iframe';
 
-const Sidebar = styled.div`
-  width: 30%;
-  float: left;
-  margin-right: 1em;
-  padding-left: 1em;
-`;
-
 const Main = styled.div`
-  margin: .5em;
+  margin-top: 1em;
   padding-left: .5em;
 `
 
-const Button = styled.button`
-  background: #E5C1EE;
-  border-radius: 3px;
-  border: solid #DBB7E4;
-  color: #33153A;
-  font-size: .5em;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-`
-
 const InputFields = styled.div`
+  width: 30%;
+  height: 700px;
+  left: 0;
+  bottom: 0;
   float: left;
+  padding: 1em;
+  padding-top: 2em;
+  margin-right: 1em;
+  margin-bottom: 1em;
+  background-color: #f7f8f9;
 `;
-
 
 class PageGenerator extends React.Component {
 
   constructor (props) {
-      super(props);
-      this.state = {
-        availablePages: "",
-        page: "",
-        labels: ""
-      }
+    super(props);
+    this.state = {
+      availablePages: "",
+      page: "",
+      labels: ""
+    }
 
-      this.inputLabels = React.createRef();
-      this.inputPage = React.createRef();
+    this.inputLabels = React.createRef();
+    this.inputPage = React.createRef();
   }
 
   componentDidMount() {
@@ -60,14 +53,13 @@ class PageGenerator extends React.Component {
 
   /* Save Fragment */
   onSubmit = e => {
-      e.preventDefault();
+    e.preventDefault();
 
-      this.setState({
-        page: this.inputPage.current.value,
-        labels: this.inputLabels.current.value
-      });
-    };
-
+    this.setState({
+      page: this.inputPage.current.value,
+      labels: this.inputLabels.current.value
+    });
+  };
 
   render() {
 
@@ -80,40 +72,36 @@ class PageGenerator extends React.Component {
 
     return(
       <div>
-        <Sidebar>
-          <InputFields>
-            <form>
+        <InputFields>
+          <form>
+            <p>Pages:
+              <select
+                name="page"
+                defaultValue={this.state.page}
+                ref={this.inputPage}
+              >
+                {pagesList.map(page =>
+                  <option key={page} value={page}>{page}</option>
+                )}
+              </select>
+            </p>
 
-              <p>Pages:
-                <select
-                  name="page"
-                  defaultValue={this.state.page}
-                  ref={this.inputPage}
-                >
-                  {pagesList.map(page =>
-                    <option key={page} value={page}>{page}</option>
-                  )}
-                </select>
-              </p>
-
-              <p>Labels (comma seperated values):
-                  <input
-                    name="labels"
-                    placeholder="Labels"
-                    defaultValue={this.state.labels}
-                    ref={this.inputLabels}
-                  />
-              </p>
-
-            </form>
-            <Button onClick={e => this.onSubmit(e)}>Preview</Button>
-          </InputFields>
-        </Sidebar>
+            <p>Labels (comma seperated values):
+              <input
+                name="labels"
+                placeholder="Labels"
+                defaultValue={this.state.labels}
+                ref={this.inputLabels}
+              />
+            </p>
+          </form>
+          <Button variant="primary" onClick={e => this.onSubmit(e)}>Preview</Button>
+        </InputFields>
 
         <Main>
           <Iframe url={url}
-            width="900px"
-            height="600px"
+            width="65%"
+            height="700px"
             display="initial"
             position="relative"
             allowFullScreen

@@ -3,22 +3,23 @@ import ReactDOM from 'react-dom';
 
 import axios from 'axios';
 
+import { BrowserRouter as Router, Redirect, Route, Link, Switch, withRouter } from 'react-router-dom';
+
 import 'codemirror/lib/codemirror.css';
 import 'codemirror/theme/material-ocean.css';
 import {UnControlled as CodeMirror} from 'react-codemirror2';
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 
-
-
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-
 import styled from 'styled-components';
+import { Button } from 'react-bootstrap';
 
 const InputFields = styled.div`
   float: left;
+  margin-top: 1em;
 `;
 
 const Editor = styled.div`
@@ -28,23 +29,11 @@ const Editor = styled.div`
   width: 40%;
 `;
 
-const Button = styled.button`
-  background: #E5C1EE;
-  border-radius: 3px;
-  border: solid #DBB7E4;
-  color: #33153A;
-  font-size: .5em;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-  margin-top: 1em;
-`
-
 const Preview = styled.div`
   border: 0.25em solid black;
   height: 400px;
   width: 500px;
 `;
-
 
 class NewTemplate extends React.Component {
 
@@ -79,17 +68,15 @@ class NewTemplate extends React.Component {
         this.toggleEditor = this.toggleEditor.bind(this);
     }
 
-
     /* Handle changes to the input boxes */
     change = e => {
-        this.setState({
-            [e.target.name]: e.target.value
-        });
+      this.setState({
+          [e.target.name]: e.target.value
+      });
     };
 
-
-  /* Save Template and redirect to edit template page */
-  onSubmit = e => {
+   /* Save Template and redirect to edit template page */
+   onSubmit = e => {
     e.preventDefault();
     console.log(this.state);
 
@@ -116,23 +103,23 @@ class NewTemplate extends React.Component {
     });
   };
 
-
   /* Handle changes to the codemirror HTML editor */
-   updateCode(event) {
-      this.setState({
-        code: "<html data-id=\"\" data-label=\""
-        + this.state.dataLabel +
-        "\" data-page=\""
-        + this.state.dataPage +
-        "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
-          + this.state.content +
-          "</body></html>"
-      });
-    };
+  updateCode(event) {
+    this.setState((state) => ({
+        code: state.editorText,
 
+        // "<html data-id=\"\" data-label=\""
+        // + this.state.dataLabel +
+        // "\" data-page=\""
+        // + this.state.dataPage +
+        // "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
+        //   + this.state.content +
+        //   "</body></html>"
+      }));
+   };
 
-  /* Handle submitting a fragment slot */
-    onAddSlot = e => {
+   /* Handle submitting a fragment slot */
+   onAddSlot = e => {
       e.preventDefault();
 
       this.setState((state, props) => ({
@@ -152,7 +139,6 @@ class NewTemplate extends React.Component {
         showEditor: !state.showEditor,
       }));
     };
-
 
     render() {
       if(this.state.toEdit === true) {
@@ -183,122 +169,135 @@ class NewTemplate extends React.Component {
         'link', 'image'
       ];
 
+      /* Codemirror options */
       var options = {
-            lineNumbers: true,
-            lineWrapping: true,
-            theme: "material-ocean",
-            mode: 'xml',
-        };
+        lineNumbers: true,
+        lineWrapping: true,
+        theme: "material-ocean",
+        mode: 'xml',
+      };
 
-        return (
-          <div>
-            <h1>New Template</h1>
+      return (
+        <div>
+          <h1>New Template</h1>
 
-            <InputFields>
-              <form>
-                <p>Template Name:
+          <InputFields>
+            <form>
+              <p>Template Name:
+                  <input
+                      size="30"
+                      name="templateName"
+                      placeholder="Template Name"
+                      value={this.state.templateName}
+                      onChange={e => this.change(e)}
+                  />
+              </p>
+              <p>Data Label:
+                  <input
+                      name="dataLabel"
+                      placeholder="Data Label"
+                      value={this.state.dataLabel}
+                      onChange={e => this.change(e)}
+                  />
+              </p>
+              <p>Data Page:
+                  <input
+                      name="dataPage"
+                      placeholder="Data Page"
+                      value={this.state.dataPage}
+                      onChange={e => this.change(e)}
+                  />
+              </p>
+            </form>
+
+            <ReactQuill theme="snow"
+              modules={modules}
+              formats={formats}
+              value={this.state.content}
+              onChange={(content, delta, source, editor) => {
+                this.setState({
+                  content: content,
+                }, this.updateCode)
+              }} ref="content"/>
+
+            <Button style={{marginBottom: "1em", marginTop:"1em"}}
+              variant="success"
+              size="sm"
+              onClick={e => this.onSubmit(e)}>Create Template
+            </Button>
+
+            <h2>Fragment Slot:</h2>
+            <form>
+                <p>Class:
                     <input
-                        size="30"
-                        name="templateName"
-                        placeholder="Template Name"
-                        value={this.state.templateName}
-                        onChange={e => this.change(e)}
+                        name="class"
+                        placeholder="Class"
+                        defaultValue={this.state.class}
+                        ref={this.inputDataChildClass}
                     />
                 </p>
-                <p>Data Label:
+                <p>Data Child Limit:
                     <input
-                        name="dataLabel"
-                        placeholder="Data Label"
-                        value={this.state.dataLabel}
-                        onChange={e => this.change(e)}
+                        name="dataChildLimit"
+                        type="number"
+                        placeholder="Data Child Limit"
+                        defaultValue=""
+                        ref={this.inputDataChildLimit}
                     />
                 </p>
-                <p>Data Page:
+                <p>Data Child Type:
                     <input
-                        name="dataPage"
-                        placeholder="Data Page"
-                        value={this.state.dataPage}
-                        onChange={e => this.change(e)}
+                        name="dataChildType"
+                        placeholder="Data Child Type"
+                        defaultValue={this.state.dataChildType}
+                        ref={this.inputDataChildType}
                     />
                 </p>
+                <Button variant="success" size="sm" onClick={e => this.onAddSlot(e)}>Add Template Slot</Button>
               </form>
 
-              <ReactQuill theme="snow"
-                modules={modules}
-                formats={formats}
-                value={this.state.content}
-                onChange={(content, delta, source, editor) => {
-                  this.setState({
-                    content: content,
-                  }, this.updateCode)
-                }} ref="content"/>
+          </InputFields>
 
-              <Button onClick={e => this.onSubmit(e)}>Create Template</Button>
+          <Editor>
+            {this.state.showEditor &&
+              <>
+              <Button style={{marginBottom: "1em"}}
+                variant="outline-primary"
+                size="sm"
+                onClick={this.toggleEditor}>Show Preview
+              </Button>
 
-              <h2>Fragment Slot:</h2>
-              <form>
-                  <p>Class:
-                      <input
-                          name="class"
-                          placeholder="Class"
-                          defaultValue={this.state.class}
-                          ref={this.inputDataChildClass}
-                      />
-                  </p>
-                  <p>Data Child Limit:
-                      <input
-                          name="dataChildLimit"
-                          type="number"
-                          placeholder="Data Child Limit"
-                          defaultValue=""
-                          ref={this.inputDataChildLimit}
-                      />
-                  </p>
-                  <p>Data Child Type:
-                      <input
-                          name="dataChildType"
-                          placeholder="Data Child Type"
-                          defaultValue={this.state.dataChildType}
-                          ref={this.inputDataChildType}
-                      />
-                  </p>
-                  <Button onClick={e => this.onAddSlot(e)}>Add Template Slot</Button>
-                </form>
+                <CodeMirror value={
+                  "<html data-id=\"\" data-label=\""
+                  + this.state.dataLabel +
+                  "\" data-page=\""
+                  + this.state.dataPage +
+                  "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
+                    + this.state.content +
+                    "</body></html>"
+                  }
+                onChange={(editor, data, value) => {
+                    this.setState({
+                      editorText: value,
+                    }, this.updateCode)
+                  }} options={options}/>
+              </>
+            }
 
-            </InputFields>
-
-            <Editor>
-              {this.state.showEditor &&
-                <>
-                  <Button onClick={this.toggleEditor}>Show Preview</Button>
-
-                  <CodeMirror value={
-                    "<html data-id=\"\" data-label=\""
-                    + this.state.dataLabel +
-                    "\" data-page=\""
-                    + this.state.dataPage +
-                    "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
-                      + this.state.content +
-                      "</body></html>"
-                    }
-                  onChange={(editor, data, value) => {
-                      this.setState({
-                        editorText: value,
-                      }, this.updateCode)
-                    }} options={options}/>
-                </>
-              }
-
-              {!this.state.showEditor &&
-                <>
-                  <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
-                  <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
-                </>
-              }
-            </Editor>
-          </div>
-        );
+            {!this.state.showEditor &&
+              <>
+                <Button style={{marginBottom: "1em"}}
+                  variant="outline-primary"
+                  size="sm"
+                  onClick={this.toggleEditor}>Show HTML Editor
+                </Button>
+                <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
+              </>
+            }
+          </Editor>
+        </div>
+      );
     }
 };
 
-export default NewTemplate;
+export default withRouter(NewTemplate);

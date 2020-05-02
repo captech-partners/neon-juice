@@ -9,15 +9,15 @@ import {UnControlled as CodeMirror} from 'react-codemirror2';
 require('codemirror/mode/xml/xml');
 require('codemirror/mode/javascript/javascript');
 
-
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
-
 import styled from 'styled-components';
+import { Button } from 'react-bootstrap';
 
 const InputFields = styled.div`
   float: left;
+  margin-top: 1em;
 `;
 
 const Editor = styled.div`
@@ -27,17 +27,6 @@ const Editor = styled.div`
   width: 40%;
 `;
 
-const Button = styled.button`
-  background: #E5C1EE;
-  border-radius: 3px;
-  border: solid #DBB7E4;
-  color: #33153A;
-  font-size: .5em;
-  margin: 0 1em;
-  padding: 0.25em 1em;
-  margin-top: 1em;
-`
-
 const Preview = styled.div`
   border: 0.25em solid black;
   height: 400px;
@@ -46,33 +35,33 @@ const Preview = styled.div`
 
 class EditTemplate extends React.Component {
 
-    constructor (props) {
-        super(props);
-        this.state = {
-            class: "",
-            content: "",
+   constructor (props) {
+      super(props);
+      this.state = {
+          class: "",
+          content: "",
 
-            dataChild: "",
-            dataPage: "",
-            dataLabel: "",
-            dataID: "",
+          dataChild: "",
+          dataPage: "",
+          dataLabel: "",
+          dataID: "",
 
-            dataChildClass: "",
-            dataChildLimit: 0,
-            dataChildType: "",
+          dataChildClass: "",
+          dataChildLimit: 0,
+          dataChildType: "",
 
-            code: "",
-            editorText: "",
-            showEditor: true
-        };
+          code: "",
+          editorText: "",
+          showEditor: true
+      };
 
-        this.updateCode = this.updateCode.bind(this);
+      this.updateCode = this.updateCode.bind(this);
 
-        this.inputDataChildClass = React.createRef();
-        this.inputDataChildLimit = React.createRef();
-        this.inputDataChildType = React.createRef();
+      this.inputDataChildClass = React.createRef();
+      this.inputDataChildLimit = React.createRef();
+      this.inputDataChildType = React.createRef();
 
-        this.toggleEditor = this.toggleEditor.bind(this);
+      this.toggleEditor = this.toggleEditor.bind(this);
     }
 
     componentDidMount() {
@@ -130,7 +119,6 @@ class EditTemplate extends React.Component {
       }
     }
 
-
     /* Handle changes to the input boxes */
     change = e => {
         this.setState({
@@ -138,9 +126,8 @@ class EditTemplate extends React.Component {
         });
     };
 
-
-    /* Save Template */
-    onSubmit = e => {
+   /* Save Template */
+   onSubmit = e => {
       e.preventDefault();
       console.log(this.state);
 
@@ -170,18 +157,19 @@ class EditTemplate extends React.Component {
       });
     };
 
-
     /* Handle changes to the codemirror HTML editor */
     updateCode(event) {
-      this.setState({
-        code: "<html data-id=\"\" data-label=\""
-        + this.state.dataLabel +
-        "\" data-page=\""
-        + this.state.dataPage +
-        "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
-          + this.state.content +
-          "</body></html>"
-      });
+      this.setState((state) => ({
+          code: state.editorText
+
+        // "<html data-id=\"\" data-label=\""
+        // + this.state.dataLabel +
+        // "\" data-page=\""
+        // + this.state.dataPage +
+        // "\"><head><meta content=\"text/html\; charset=utf-8\" http-equiv=\"Content-Type\"><title></title><style></style></head><body>"
+        //   + this.state.content +
+        //   "</body></html>"
+      }));
     };
 
     /* Handle submitting a fragment slot */
@@ -226,6 +214,7 @@ class EditTemplate extends React.Component {
         'link', 'image'
       ];
 
+      /* Codemirror options */
       var options = {
             lineNumbers: true,
             lineWrapping: true,
@@ -276,7 +265,10 @@ class EditTemplate extends React.Component {
                   }, this.updateCode)
                 }} ref="content"/>
 
-              <Button onClick={e => this.onSubmit(e)}>Save Template</Button>
+              <Button style={{marginBottom: "1em", marginTop:"1em"}}
+                variant="success"
+                size="sm"
+                onClick={e => this.onSubmit(e)}>Save Template</Button>
 
               <h2>Fragment Slot:</h2>
               <form>
@@ -305,14 +297,18 @@ class EditTemplate extends React.Component {
                         ref={this.inputDataChildType}
                     />
                 </p>
-                <Button onClick={e => this.onAddSlot(e)}>Add Template Slot</Button>
+                <Button variant="success" size="sm" onClick={e => this.onAddSlot(e)}>Add Template Slot</Button>
               </form>
             </InputFields>
 
             <Editor>
               {this.state.showEditor &&
                 <>
-                  <Button onClick={this.toggleEditor}>Show Preview</Button>
+                  <Button style={{marginBottom: "1em"}}
+                    variant="outline-primary"
+                    size="sm"
+                    onClick={this.toggleEditor}>Show Preview
+                  </Button>
 
                   <CodeMirror value={
                     "<html data-id=\"\" data-label=\""
@@ -330,14 +326,16 @@ class EditTemplate extends React.Component {
                 </>
               }
 
-
               {!this.state.showEditor &&
                 <>
-                  <Button onClick={this.toggleEditor}>Show HTML Editor</Button>
+                  <Button style={{marginBottom: "1em"}}
+                    variant="outline-primary"
+                    size="sm"
+                    onClick={this.toggleEditor}>Show HTML Editor
+                  </Button>
                   <Fragment><Preview dangerouslySetInnerHTML={{ __html: this.state.code }} /></Fragment>
                 </>
               }
-
             </Editor>
           </div>
         );
