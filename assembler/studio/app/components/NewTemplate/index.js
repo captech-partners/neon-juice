@@ -108,17 +108,6 @@ class NewTemplate extends React.Component {
     this.setState((state) => ({
         code: state.editorText,
 
-        // templateName: state.editorText.substring(state.editorText.indexOf(">") + 1, state.editorText.lastIndexOf("</div>")),
-        // content: state.editorText.substring(state.editorText.indexOf(">") + 1, state.editorText.lastIndexOf("</div>")),
-        //
-        // dataPage: state.editorText.substring(state.editorText.indexOf("data-page=\"") + 1, state.editorText.lastIndexOf("\"><head>")),
-        // dataLabel: state.editorText.substring(state.editorText.indexOf("data-label=\"") + 1, state.editorText.lastIndexOf("\" data-page")),
-        // dataID: state.editorText.substring(state.editorText.indexOf("data-id=\"") + 1, state.editorText.lastIndexOf("\" data-label")),
-
-        // dataChildClass: "",
-        // dataChildLimit: 0,
-        // dataChildType: "",
-
         // "<html data-id=\"\" data-label=\""
         // + this.state.dataLabel +
         // "\" data-page=\""
