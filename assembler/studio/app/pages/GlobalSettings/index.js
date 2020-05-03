@@ -1,11 +1,19 @@
 import React from 'react';
+import styled from 'styled-components';
+
+
+const Container = styled.div`
+  margin: .5em;
+  padding-left: .5em;
+`
+
 
 const GlobalSettings = () => {
 
   return (
-    <div className="global-settings">
+    <Container>
       <h1>Global Settings</h1>
-    </div>
+    </Container>
   );
 };
 

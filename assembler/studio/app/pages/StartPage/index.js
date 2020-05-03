@@ -11,12 +11,8 @@ const axios = require('axios').default;
 
 
 const Container = styled.div`
-  position: relative;
-  min-height: 100vh;
-`
-
-const Body = styled.div`
-  padding-bottom: 5em;
+  margin: .5em;
+  padding-left: .5em;
 `
 
 class StartPage extends React.Component {
@@ -39,7 +35,7 @@ class StartPage extends React.Component {
               //zip.files[filename].async('string').then(function (data) {
                 //console.log(fileData) // These are your file contents
 
-                
+
                 // console.log("DATA: " + data);
 
                 // let axiosConfig = {
@@ -65,7 +61,7 @@ class StartPage extends React.Component {
           // === tests strict equality (type matches); == tests for value not type
           // console.log(filename);
           // zip.files[filename].async('string').then(function (fileData) {
-          //   console.log(fileData) // These are your file contents      
+          //   console.log(fileData) // These are your file contents
           // })
         })
       })
@@ -86,7 +82,6 @@ class StartPage extends React.Component {
     return (
       <Router>
         <Container>
-          <Body>
             <form onSubmit={this.handleSubmit}>
               <label>
                 <h1>Import Project</h1>
@@ -99,7 +94,7 @@ class StartPage extends React.Component {
 
             <h2>Start New Project</h2>
             <button onClick={this.submit}>New Project</button>
-          </Body>
+
 
         </Container>
       </Router>
