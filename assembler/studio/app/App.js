@@ -1,6 +1,7 @@
 var React = require('react');
 var ReactDOM = require('react-dom');
 import styled from 'styled-components';
+import { BrowserRouter as Router, Redirect, Route, Link, Switch, withRouter } from 'react-router-dom';
 
 import 'bootstrap/dist/css/bootstrap.min.css';
 import $ from 'jquery';
@@ -8,6 +9,8 @@ import Popper from 'popper.js';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 
 import NavigationBar from './components/NavigationBar';
+import StartPage from './pages/StartPage';
+import LandingPage from './pages/LandingPage';
 import Footer from './components/Footer';
 
 
@@ -36,16 +39,19 @@ const Styles = styled.div`
  */
 const App = (props) => {
   return (
-    <Styles>
-    <Container>
-      <Body>
-        <NavigationBar />
-        {props.children}
-      </Body>
-
-      <Footer />
-    </Container>
-    </Styles>
+    <Router>
+      <Styles>
+        <Container>
+          <Body>
+            <StartPage />
+            <Switch>
+              <Route exact path="/landing-page" component={LandingPage} />
+            </Switch>
+          </Body>
+          <Footer />
+        </Container>
+      </Styles>
+    </Router>
   );
 };
 
