@@ -26,7 +26,6 @@ const LandingPage = (props) => {
         <NavigationBar />
         {props.children}
       </Body>
-      <Footer />
     </Container>
   );
 };
