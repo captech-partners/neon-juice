@@ -89,7 +89,7 @@ class NewFragment extends React.Component {
 
       axios.post("http://localhost:5000/fragments", data, axiosConfig)
       .then(function (response) {
-        // current.setState({toEdit: true});
+        current.setState({toEdit: true});
 
 
         console.log("Response: " + response.data);
