@@ -1,0 +1,24 @@
+{
+  "presets": [
+    [
+      "@babel/env",
+      {
+        "targets": {
+        },
+        "corejs": "2",
+        "useBuiltIns": "usage"
+      }
+    ]
+  ],
+  "plugins": [ 
+    [
+      "babel-plugin-styled-components"
+    ],
+    [
+      "@babel/plugin-proposal-class-properties",
+      {
+        "loose": true
+      }
+    ]
+  ]
+}
