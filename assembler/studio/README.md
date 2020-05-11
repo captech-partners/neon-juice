@@ -1,5 +1,5 @@
 # Project Overview
-# Install
+## Install
 
 clone the directory by:
 ```
@@ -14,7 +14,7 @@ Start up the Backend (see instructions in `assembler` folder).
 $ cd neon-juice/assembler/
 ```
 
-### Start the application
+### Start the React Application
 
 In separate terminal instance, step into studio folder:
 ```
