@@ -1,7 +1,7 @@
 # Project Overview
 ## Install
 
-clone the directory by:
+Clone the directory by:
 ```
 $ git clone https://github.com/captech-partners/neon-juice.git
 ```
