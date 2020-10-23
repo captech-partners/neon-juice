@@ -7,6 +7,7 @@ import axios from "axios";
 
 var fragmentList;
 var templateList;
+var alltemps;
 
 axios.get(`http://localhost:5000/fragments`).then((result) => {
   result.data.sort(function (a, b) {
@@ -14,6 +15,7 @@ axios.get(`http://localhost:5000/fragments`).then((result) => {
   });
   fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
   templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
+  alltemps = templateList.map((obj) => obj.class_attr);
 });
 
 class FragmentLists extends Component {
@@ -28,7 +30,7 @@ class FragmentLists extends Component {
       showDelete: false,
       target: null,
       isFragment: true, //fragment = true, template = false
-      value: "Create New Component",
+      title: "Create New Component",
       id: 0,
 
       currentFrag: {},
@@ -39,8 +41,10 @@ class FragmentLists extends Component {
       searchFrag: fragmentList,
       searchTemp: templateList,
       outputText: "",
-      pages: props.pages,
-      temps: [],
+      currentJoints: [],
+      currentPages: [],
+      currentTemps: [],
+      templateOptions: alltemps,
       html: "",
     };
   }
@@ -51,10 +55,11 @@ class FragmentLists extends Component {
       this.setState({
         name: result.data.class_attr,
         labels: result.data.labels,
-        pages: result.data.pages,
-        temps: result.data.templates,
+        currentPages: result.data.pages,
+        currentTemps: result.data.templates,
         html: result.data.html,
-        currentFrag: result.data
+        currentFrag: result.data,
+        currentJoints: result.data.joints.map(d => d.child_types)
       });
     });
   };
@@ -69,7 +74,8 @@ class FragmentLists extends Component {
   tempChange = (value) => {
     this.setState({
       tempList: value,
-      searchTemp: value
+      searchTemp: value,
+      templateOptions: alltemps
     });
   };
 
@@ -111,6 +117,7 @@ class FragmentLists extends Component {
 
       fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
       templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
+      alltemps = templateList.map((obj) => obj.class_attr);
       id >= 0 ? this.fragChange(fragmentList) : this.tempChange(templateList);
     });
   };
@@ -220,11 +227,14 @@ class FragmentLists extends Component {
   createFragment = () => {
     this.createButton();
     this.setState({
-      value: "Create New Component",
+      title: "Create New Component",
       isFragment: true,
       name: "",
       id: "1",
       labels: "",
+      currentPages: [],
+      currentTemps: [],
+      currentJoints: [],
       html: "",
     });
   };
@@ -232,32 +242,34 @@ class FragmentLists extends Component {
   createTemplate = () => {
     this.createButton();
     this.setState({
-      value: "Create New Layout",
+      title: "Create New Layout",
       isFragment: false,
       name: "",
       id: "-1",
       labels: "",
+      currentPages: [],
+      currentJoints: [],
       html: "",
     });
   };
 
   editButton = (event) => {
-    var newValue = this.state.isFragment ? "Edit Component" : "Edit Layout";
+    var newTitle = this.state.isFragment ? "Edit Component" : "Edit Layout";
 
     this.setState({
-      value: newValue,
+      title: newTitle,
     });
     this.hidePopover();
     this.toggleModal();
   };
 
   duplicateButton = (event) => {
-    var newValue = this.state.isFragment
+    var newTitle = this.state.isFragment
       ? "Duplicate Component"
       : "Duplicate Layout";
 
     this.setState({
-      value: newValue,
+      title: newTitle,
     });
     this.hidePopover();
     this.toggleModal();
@@ -283,14 +295,16 @@ class FragmentLists extends Component {
       <div style={{ width: "23%" }} ref={this.popRef}>
         <FragmentModal
           show={this.state.showModal}
-          value={this.state.value}
+          title={this.state.title}
           parentAction={this.toggleModal}
           name={this.state.name}
           id={this.state.id}
           components={this.state.fragList}
-          labels={this.state.currentFrag.labels}
-          pages={this.state.currenpages}
-          temps={this.state.temps}
+          labels={this.state.labels}
+          pages={this.state.currentPages}
+          temps={this.state.currentTemps}
+          currentJoints={this.state.currentJoints}
+          templateOptions={this.state.templateOptions}
           html={this.state.html}
           createAction={this.createFrag}
           editAction={this.editFrag}
@@ -313,6 +327,7 @@ class FragmentLists extends Component {
           handleFragmentButtons={this.handleFragmentButtons}
           searchFragment={searchFragment.bind(this)}
           searchTemplate={searchTemplate.bind(this)}
+          tutorialEnabled={this.props.tutorialEnabled}
         />
 
         <FragmentPopover

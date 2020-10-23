@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Button, Accordion, Card, ListGroup, OverlayTrigger, Tooltip, FormControl, Navbar, Form } from "react-bootstrap";
+import { Button, Accordion, Card, ListGroup, OverlayTrigger, FormControl, Navbar, Form, Popover, Tooltip } from "react-bootstrap";
 import { faPlus, faSearch, faRedo } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -18,32 +18,48 @@ class FragmentPanel extends Component {
       <Accordion defaultActiveKey="0">
         <Card>
           <Card.Header>
-            <Accordion.Toggle
-              as={Button}
-              onClick={this.props.hidePopover}
-              style={{
-                backgroundColor: "transparent",
-                outline: "0",
-                color: "black",
-                border: "none",
-              }}
-              eventKey="0"
+
+            <OverlayTrigger
+              trigger={['focus','hover']}
+              placement={"right-start"}
+              overlay={
+                this.props.tutorialEnabled ? 
+                <Popover style={{width: '45em', padding: '2em'}}>
+                  <Popover.Content>
+                    <h4>Managing Components</h4>
+                    <br/>
+                    Instructions Here
+                  </Popover.Content>
+                </Popover> :
+                <Tooltip>Click to Open</Tooltip>
+              }
             >
-              Components
-            </Accordion.Toggle>
-            <OverlayTrigger overlay={<Tooltip>Create a new component</Tooltip>}>
-              <Button
+              <Accordion.Toggle
+                as={Button}
+                onClick={this.props.hidePopover}
                 style={{
                   backgroundColor: "transparent",
                   outline: "0",
                   color: "black",
                   border: "none",
                 }}
-                onClick={this.props.createFragment}
+                eventKey="0"
               >
-                <FontAwesomeIcon icon={faPlus} />
-              </Button>
+                Components
+              </Accordion.Toggle>
             </OverlayTrigger>
+            
+            <Button
+              style={{
+                backgroundColor: "transparent",
+                outline: "0",
+                color: "black",
+                border: "none",
+              }}
+              onClick={this.props.createFragment}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </Button>
           </Card.Header>
 
           <Accordion.Collapse eventKey="0">
@@ -90,35 +106,47 @@ class FragmentPanel extends Component {
 
         <Card>
           <Card.Header>
-            <Accordion.Toggle
-              as={Button}
-              onClick={this.props.hidePopover}
-              style={{
-                backgroundColor: "transparent",
-                outline: "0",
-                color: "black",
-                border: "none",
-              }}
-              eventKey="1"
-            >
-              Layouts
-            </Accordion.Toggle>
             <OverlayTrigger
-              container={this.refs.here}
-              overlay={<Tooltip>Create a new layout</Tooltip>}
+              trigger={['focus','hover']}
+              placement={"right-start"}
+              overlay={
+                this.props.tutorialEnabled ? 
+                <Popover style={{width: '45em', padding: '2em'}}>
+                  <Popover.Content>
+                    <h4>Managing Layouts</h4>
+                    <br/>
+                    Instructions Here
+                  </Popover.Content>
+                </Popover>:
+                <Tooltip>Click to Open</Tooltip>
+              }
             >
-              <Button
+              <Accordion.Toggle
+                as={Button}
+                onClick={this.props.hidePopover}
                 style={{
                   backgroundColor: "transparent",
                   outline: "0",
                   color: "black",
                   border: "none",
                 }}
-                onClick={this.props.createTemplate}
+                eventKey="1"
               >
-                <FontAwesomeIcon icon={faPlus} />
-              </Button>
+                Layouts
+              </Accordion.Toggle>
             </OverlayTrigger>
+          
+            <Button
+              style={{
+                backgroundColor: "transparent",
+                outline: "0",
+                color: "black",
+                border: "none",
+              }}
+              onClick={this.props.createTemplate}
+            >
+              <FontAwesomeIcon icon={faPlus} />
+            </Button>
           </Card.Header>
 
           <Accordion.Collapse eventKey="1">

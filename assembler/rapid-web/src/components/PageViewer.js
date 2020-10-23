@@ -1,7 +1,7 @@
 import React, { Component } from "react";
 import Iframe from "react-iframe";
 import Select from "react-select";
-import { Button, Col, Form, Row, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Button, Col, Form, Row, OverlayTrigger, Tooltip, Popover } from "react-bootstrap";
 
 export class PageViewer extends Component {
   constructor(props) {
@@ -9,7 +9,7 @@ export class PageViewer extends Component {
     this.state = {
       pageValue: props.currentPage,
       labelValue: props.currentLabel,
-      default: props.default,
+      tutorialEnabled: props.tutorialEnabled,
       url: props.url
     };
   }
@@ -23,7 +23,6 @@ export class PageViewer extends Component {
     this.setState({
       pageValue: newProps.currentPage,
       labelValue: newProps.currentLabel,
-      default: newProps.default,
       url: newUrl
     })
   }
@@ -35,9 +34,9 @@ export class PageViewer extends Component {
   };
 
   handleLabel = (e) => {
-    var values = e=== null ? "" : e.map(d => d.value)
+    var values = e === null ? "" : e.map(d => d.value)
     this.setState({
-      labelValue: values
+      labelValue: values,
     }) 
   };
 
@@ -62,9 +61,25 @@ export class PageViewer extends Component {
         <div style={{ padding: "2em", paddingBottom: "0" }}>
           <Form>
             <Form.Group as={Row}>
-              <Col>
-                <h2>{this.props.templateName}</h2>
-              </Col>
+              <OverlayTrigger
+                trigger={['focus','hover']}
+                placement={'bottom'}
+                overlay={
+                  this.props.tutorialEnabled ?
+                  <Popover style={{padding: '2em', width: '60em'}}>
+                    <Popover.Content>
+                      <h4>Page Viewer</h4>
+                      Instructions Here more stuff
+                    </Popover.Content>
+                  </Popover> :
+                  <Tooltip>Current Layout</Tooltip>
+                }
+              >
+                <Col>
+                  <h2>{this.props.templateName}</h2>
+                </Col>
+              </OverlayTrigger>
+              
               <Form.Label>Path</Form.Label>
               <Col md={"auto"}>
                 <OverlayTrigger
@@ -90,7 +105,7 @@ export class PageViewer extends Component {
                   overlay={<Tooltip>Queries for website page path</Tooltip>}
                 >
                   <Select 
-                    defaultValue={[this.state.default]}  
+                    defaultValue={this.props.default}  
                     onChange={this.handleLabel} 
                     isClearable={false}
                     isMulti options={optionsLabels} 
