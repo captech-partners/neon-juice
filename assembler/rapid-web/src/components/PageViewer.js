@@ -3,7 +3,8 @@ import Iframe from "react-iframe";
 import Select from "react-select";
 import changeLabels from "../tutorial_assets/changeLabels.gif";
 import changeView from "../tutorial_assets/changeView.gif";
-import { Button, Col, Card, Form, Row, OverlayTrigger, Tooltip, Popover, Carousel } from "react-bootstrap";
+import { Button, Col, Card, Form, Row, OverlayTrigger, Tooltip, Popover, Image } from "react-bootstrap";
+
 
 export class PageViewer extends Component {
   constructor(props) {
@@ -68,42 +69,43 @@ export class PageViewer extends Component {
                 placement={'bottom-start'}
                 overlay={
                   this.props.tutorialEnabled ?
-                  <Popover style={{padding: '2em'}}>
+                  <Popover style={{padding: '2em', maxWidth: '1500px'}}>
                     <Popover.Content>
                       <h4>Page Viewer</h4>
                       <br/>
-                      <Carousel
-                        style={{ margin: "2em", marginTop: "0px" }}
-                        interval={15000}
-                      >
-                        <Carousel.Item>
-                          <Card border='light' style={{ width: '100%' }}>
-                            <Card.Body>
-                            <Card.Img variant="top" src={changeView} />
-                              <Card.Title>View Button</Card.Title>
-                              <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                              <Card.Text>
-                                Some quick example text to build on the card title and make up the bulk of
-                                the card's content.
-                              </Card.Text>
-                            </Card.Body>
-                          </Card>
-                        </Carousel.Item>
-                        <Carousel.Item>
-                          <Card border='light' style={{ width: '100%' }}>
-                            <Card.Body>
-                            <Card.Img variant="top" src={changeLabels} />
-                              <Card.Title>Editing Layouts</Card.Title>
-                              <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
-                              <Card.Text>
-                                Some quick example text to build on the card title and make up the bulk of
-                                the card's content.
-                              </Card.Text>
-                            </Card.Body>
-                          </Card>
-                        </Carousel.Item>
-                      </Carousel>
-          
+                      <Row>
+                        <Col>
+                          <div style={{ display: "flex" }}>
+                            <Image width={'70%'} height={'auto'} src={changeView}/>
+                            <Card border='light' style={{ width: '30%'}}>
+                              <Card.Body>
+                                <Card.Title>Change View</Card.Title>
+                                <Card.Subtitle className="mb-2 text-muted">View, Edit, Duplicate & Delete</Card.Subtitle>
+                                <Card.Text>
+                                  Click on a layout to show the Layout Options: <br/>
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          </div>
+                          
+                        </Col>
+                        
+                        <Col>
+                          <div style={{ display: "flex" }}>
+                            <Image width={'70%'} height={'auto'} src={changeLabels}/>
+                            <Card border='light' style={{ width: '30%' }}>
+                              <Card.Body>
+                                <Card.Title>Change Path & Labels</Card.Title>
+                                <Card.Subtitle className="mb-2 text-muted">View, Edit, Duplicate & Delete</Card.Subtitle>
+                                <Card.Text>
+                                  Click on a layout to show the Layout Options: <br/>
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          </div>
+                        </Col>
+                      </Row>
+                      
                     </Popover.Content>
                   </Popover> :
                   <Tooltip style={{opacity: '0'}}>Current Layout</Tooltip>

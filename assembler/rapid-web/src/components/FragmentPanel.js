@@ -2,9 +2,11 @@ import React, { Component } from "react";
 import { Button, Accordion, Card, ListGroup, OverlayTrigger, FormControl, Navbar, Form, Popover, Tooltip, Row , Image} from "react-bootstrap";
 import { faPlus, faSearch, faRedo , faCopy, faEdit, faTrashAlt, faEye } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import createComponent from "../tutorial_assets/createComponent.png";
 import componentSearch from "../tutorial_assets/componentSearch.png";
 import componentOptions from "../tutorial_assets/componentOptions.png";
 import componentModal from "../tutorial_assets/componentModal.png";
+import createLayout from "../tutorial_assets/createLayout.png";
 import layoutSearch from "../tutorial_assets/layoutSearch.png";
 import layoutOptions from "../tutorial_assets/layoutOptions.png";
 import layoutModal from "../tutorial_assets/layoutModal.png";
@@ -30,11 +32,20 @@ class FragmentPanel extends Component {
               placement={"right-start"}
               overlay={
                 this.props.tutorialEnabled ? 
-                <Popover style={{width: '45em', padding: '2em'}}>
+                <Popover style={{width: '45em', padding: '1em'}}>
                   <Popover.Content>
                     <h4>Managing Components</h4>
                     <br/>
                     <Row>
+                      <div style={{ display: "flex", marginBottom: '2em'}}>
+                        <Image  src={createComponent}/>
+                        <Card border='light' width={'100%'}>
+                          <Card.Body>
+                            <Card.Text>Create a new component by clicking on the <FontAwesomeIcon icon={faPlus} /> button.</Card.Text>
+                          </Card.Body>
+                        </Card>
+                      </div>
+                      
                       <div style={{ display: "flex" }}>
                         <Image width={'50%'} height={'auto'} src={componentSearch}/>
                         <Card border='light' style={{ width: '50%' }}>
@@ -165,6 +176,15 @@ class FragmentPanel extends Component {
                     <h4>Managing Layouts</h4>
                     <br/>
                     <Row>
+                     <div style={{ display: "flex", marginBottom: '1em'}}>
+                        <Image  src={createLayout}/>
+                        <Card border='light' width={'100%'}>
+                          <Card.Body>
+                            <Card.Text>Create a new layout by clicking on the <FontAwesomeIcon icon={faPlus} /> button.</Card.Text>
+                          </Card.Body>
+                        </Card>
+                      </div>
+
                       <div style={{ display: "flex" }}>
                         <Image width={'50%'} height={'auto'} src={layoutSearch}/>
                         <Card border='light' style={{ width: '50%' }}>

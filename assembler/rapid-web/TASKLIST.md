@@ -15,6 +15,7 @@
 - [x] Remove harded variables in PageViewer Component in SecondPage.js | PH  
 - [x] Add Multiselect dropdown for labels and have the PageViewer call the API with more than one label | PH  
 - [ ] Fix label default value on update and empty dropdown width  
+- [ ] Change label multiselect to creatable  
 ## Start Page Functionality  
 - [x] Fix Import Button's Modal submit button | AM  
 - [ ] Have the imported files show in the Component and Layout Panel | AM  
@@ -58,5 +59,7 @@
 - [x] Add refresh button for components and layout cards next to the search bar | PH  
 - [ ] Add a method in the API that adds a picture file to static/images file  
 - [ ] Add picture input into Fragment Modal options  
+## Project Management Functionality  
+- [ ] Add a dashboard for multiple started projects on the Start Page, complete MVP before starting this functionality  
 ## Bugs to Fix
 - [ ] When I press enter in the empty search bar it goes to the start page, please fix
