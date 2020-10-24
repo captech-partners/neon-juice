@@ -2,10 +2,10 @@
 [//]: <> (Please add two spaces after the task bullet to make a new line. This will stop the code from being one big awkward sentence.)
 ## General Setup  
 - [x] Add page viewer | PH  
-- [x] Make page viewer dropdown options functional | PH   
+- [x] Make page viewer dropdown options functional | PH  
+- [x] Update README.md | PH   
 - [ ] Create fragments for premade components, should have form input fields working before starting this task  
 - [ ] Create default template with premade fragments mentioned above   
-- [ ] Update README.md  
 ## Frontend API Fucntions/Axios Functions  
 - [ ] Add input validation for API calling methods  
 - [ ] Make API calling methods into utility functions in a separate file  
@@ -30,11 +30,12 @@
 - [ ] Add default input into Create a Component & Create a Layout in FragmentSettingsModal code editor  
 - [ ] Convert Joint Input to html code
 - [ ] Remove data-id variable from dupicate fragment div tag  
+- [ ] Raise state of name from FragmentSettingsModal to FragmentList   
 ## Fragment Popover Functionality  
 - [x] Create modal to prompt user if they are sure they want to delete a fragment - modal connected to the trash button | PH  
 - [x] Setup the view button on Template PopOver, eyeball button, so the page viewer inputs(dropdowns) update with the current template's data-page and data-label variables | PH
 - [x] Update url when dropdowns are updated | PH    
-- [ ] Setup the add button on Fragment PopOver so the fragment will be added to the current template and seen on the page viewer  
+- [ ] Setup the add button on Fragment Popover so the fragment will be added to the current template and seen on the page viewer  
 ## Fragment Panel Functionality  
 - [x] Need to raise state of the fraglist and templist in FragmentPanel | PH  
 - [x] Update fragment list and template list when fragment is created or deleted | PH  
@@ -50,7 +51,6 @@
 - [ ] Post Method needs to create a new html file with the fragment class_attr, also needs file name input validation
 - [ ] Put Method need to receive the file of the fragment and insert changed into the file  
 - [ ] Figure out the error "template_set = self.template_map[template.file_name]  # fragments under template" when you view a template created with the frontend  
-- [ ] Add a API call that returns just the child types for the joints as a 2D array  
 ## Search Bar Functionality  
 - [x] Add Search bars to fragment/template panels | PH  
 - [ ] Clear search bar when opening the other accordion card | PH  

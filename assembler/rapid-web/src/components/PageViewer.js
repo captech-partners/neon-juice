@@ -1,7 +1,9 @@
 import React, { Component } from "react";
 import Iframe from "react-iframe";
 import Select from "react-select";
-import { Button, Col, Form, Row, OverlayTrigger, Tooltip, Popover } from "react-bootstrap";
+import changeLabels from "../tutorial_assets/changeLabels.gif";
+import changeView from "../tutorial_assets/changeView.gif";
+import { Button, Col, Card, Form, Row, OverlayTrigger, Tooltip, Popover, Carousel } from "react-bootstrap";
 
 export class PageViewer extends Component {
   constructor(props) {
@@ -63,16 +65,48 @@ export class PageViewer extends Component {
             <Form.Group as={Row}>
               <OverlayTrigger
                 trigger={['focus','hover']}
-                placement={'bottom'}
+                placement={'bottom-start'}
                 overlay={
                   this.props.tutorialEnabled ?
-                  <Popover style={{padding: '2em', width: '60em'}}>
+                  <Popover style={{padding: '2em'}}>
                     <Popover.Content>
                       <h4>Page Viewer</h4>
-                      Instructions Here more stuff
+                      <br/>
+                      <Carousel
+                        style={{ margin: "2em", marginTop: "0px" }}
+                        interval={15000}
+                      >
+                        <Carousel.Item>
+                          <Card border='light' style={{ width: '100%' }}>
+                            <Card.Body>
+                            <Card.Img variant="top" src={changeView} />
+                              <Card.Title>View Button</Card.Title>
+                              <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+                              <Card.Text>
+                                Some quick example text to build on the card title and make up the bulk of
+                                the card's content.
+                              </Card.Text>
+                            </Card.Body>
+                          </Card>
+                        </Carousel.Item>
+                        <Carousel.Item>
+                          <Card border='light' style={{ width: '100%' }}>
+                            <Card.Body>
+                            <Card.Img variant="top" src={changeLabels} />
+                              <Card.Title>Editing Layouts</Card.Title>
+                              <Card.Subtitle className="mb-2 text-muted">Card Subtitle</Card.Subtitle>
+                              <Card.Text>
+                                Some quick example text to build on the card title and make up the bulk of
+                                the card's content.
+                              </Card.Text>
+                            </Card.Body>
+                          </Card>
+                        </Carousel.Item>
+                      </Carousel>
+          
                     </Popover.Content>
                   </Popover> :
-                  <Tooltip>Current Layout</Tooltip>
+                  <Tooltip style={{opacity: '0'}}>Current Layout</Tooltip>
                 }
               >
                 <Col>

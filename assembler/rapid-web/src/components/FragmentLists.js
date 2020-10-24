@@ -126,6 +126,7 @@ class FragmentLists extends Component {
     const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
       html: this.state.html,
+      file: 'assets.html'
     });
 
     let axiosConfig = {
@@ -149,6 +150,7 @@ class FragmentLists extends Component {
     const url = `http://localhost:5000/fragments/` + this.state.id;
     let data = JSON.stringify({
       html: this.state.html,
+      file: this.state.currentFrag.class_attr + '.html'
     });
 
     let axiosConfig = {

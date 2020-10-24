@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Navbar, NavDropdown, Form } from "react-bootstrap";
 import FragmentList from "./FragmentLists";
 import PageViewer from "./PageViewer";
-import Tutorial from "./TutorialInterface"
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -73,8 +72,6 @@ export class SecondPage extends Component {
             </Form>
           </NavDropdown>
         </Navbar>
-
-        <Tutorial show={this.state.tutorialTrue}/>
 
         <div style={{ display: "flex" }}>
           <FragmentList
