@@ -9,8 +9,8 @@ class JointInput extends Component {
   render() {
     return (
         <Form.Group as={Row}>
-          <Col lg={8}>
-            <Select isMulti options={this.props.options} />
+          <Col lg={8} sm={"auto"}>
+            <Select isMulti defaultValue={this.props.defaultValue} options={this.props.options} />
           </Col>
           <Col>
             <Button className="popButton" onClick={this.props.onDelete}>

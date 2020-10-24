@@ -54,3 +54,7 @@ div.StartPage{
 .carousel-indicators {
   bottom: -60px;
 }
+
+.popover{
+  max-width: 800px;
+}

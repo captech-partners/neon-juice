@@ -15,16 +15,39 @@ class FragmentModal extends Component {
     this.updateHtml = this.updateHtml.bind(this);
     this.state = {
       html: props.html,
-      joints: [<JointInput key={count++} onDelete={() => console.log("disabled")} options={this.props.components.map((d) => ({ label: d.class_attr ? d.class_attr : "No Name", value: d.class_attr ? d.class_attr : "No Name", id: d.id}))}/>],
+      joints: [],
       options: this.props.components.map((d) => ({ label: d.class_attr ? d.class_attr : "No Name", value: d.class_attr ? d.class_attr : "No Name", id: d.id})),
       step: 1,
     };
   }
 
-  addJoint = () => {
+  componentWillReceiveProps(newProps) {
+    if (!newProps.currentJoints.length){
+      this.setState({
+        joints: []
+      })
+    }else if(JSON.stringify(newProps.currentJoints) !== JSON.stringify(this.props.currentJoints)){
+      var newJoints = []
+
+      if(newProps.currentJoints.length && newProps.currentJoints !== this.state.joints){
+        var defaultJoints = []
+        newProps.currentJoints.forEach(joint => {
+          defaultJoints = [];
+          joint.map(d => defaultJoints.push({label: d, value: d}))
+          var id = count;
+          newJoints.push(<JointInput key={count++} defaultValue={defaultJoints} options={this.state.options} onDelete={() => this.deleteJoint(id)}/>)
+        })
+        this.setState({
+          joints: newJoints
+        })
+      }
+    }
+  }
+
+  addJoint = (value) => {
     var id = count;
     this.setState({
-      joints: [...this.state.joints, <JointInput key={count++} options={this.state.options} onDelete={() => this.deleteJoint(id)}/>]
+      joints: [...this.state.joints, <JointInput key={count++} defaultValue={value} options={this.state.options} onDelete={() => this.deleteJoint(id)}/>]
     })
   }
 
@@ -98,9 +121,12 @@ class FragmentModal extends Component {
 
   render() {
     var optionsTemp = [];
+    var selectedTemps = [];
     var optionComp = [];
+    
     this.props.components.map((d) => optionComp.push({ label: d.class_attr ? d.class_attr : "No Name", value: d.class_attr ? d.class_attr : "No Name", id: d.id}))
-    this.props.temps.map((d) => optionsTemp.push({label: d, value: d}));
+    this.props.templateOptions.map((d) => optionsTemp.push({label: d, value: d}))
+    this.props.temps.map((d) => selectedTemps.push({label: d, value: d}));
 
     const { step } = this.state;
     switch (step) {
@@ -114,7 +140,7 @@ class FragmentModal extends Component {
             size="lg"
           >
             <Modal.Header style={{ border: "none" }}>
-              <Modal.Title>{this.props.value}</Modal.Title>
+              <Modal.Title>{this.props.title}</Modal.Title>
             </Modal.Header>
 
             <Modal.Body>
@@ -156,7 +182,7 @@ class FragmentModal extends Component {
                 <Form.Group as={Row}>
                   <Form.Label column>Layouts</Form.Label>
                   <Col>
-                    <Select isMulti options={optionsTemp} />
+                    <Select isMulti defaultValue={selectedTemps} options={optionsTemp}/>
                   </Col>
                 </Form.Group>
               ) : null}
@@ -165,7 +191,8 @@ class FragmentModal extends Component {
                 <div style={{marginLeft: "2em"}}>
                   <Form.Label>Choose Components</Form.Label>
                   {this.state.joints}
-                  <Button onClick={this.addJoint}>+ Add Another Component</Button>
+                  <br/>
+                  <Button onClick={() => this.addJoint("")}>+ Add Another Component</Button>
                 </div>
     
               <Button style={{ margin: "1em" }} onClick={this.nextStep}>
@@ -180,8 +207,8 @@ class FragmentModal extends Component {
               <Button
                 variant="primary"
                 onClick={
-                  this.props.value === "Edit Component" ||
-                  this.props.value === "Edit Layout"
+                  this.props.title === "Edit Component" ||
+                  this.props.title === "Edit Layout"
                     ? this.props.editAction
                     : this.props.createAction
                 }

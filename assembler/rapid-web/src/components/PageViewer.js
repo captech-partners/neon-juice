@@ -1,7 +1,10 @@
 import React, { Component } from "react";
 import Iframe from "react-iframe";
 import Select from "react-select";
-import { Button, Col, Form, Row, OverlayTrigger, Tooltip } from "react-bootstrap";
+import changeLabels from "../tutorial_assets/changeLabels.gif";
+import changeView from "../tutorial_assets/changeView.gif";
+import { Button, Col, Card, Form, Row, OverlayTrigger, Tooltip, Popover, Image } from "react-bootstrap";
+
 
 export class PageViewer extends Component {
   constructor(props) {
@@ -9,7 +12,7 @@ export class PageViewer extends Component {
     this.state = {
       pageValue: props.currentPage,
       labelValue: props.currentLabel,
-      default: props.default,
+      tutorialEnabled: props.tutorialEnabled,
       url: props.url
     };
   }
@@ -23,7 +26,6 @@ export class PageViewer extends Component {
     this.setState({
       pageValue: newProps.currentPage,
       labelValue: newProps.currentLabel,
-      default: newProps.default,
       url: newUrl
     })
   }
@@ -35,9 +37,9 @@ export class PageViewer extends Component {
   };
 
   handleLabel = (e) => {
-    var values = e=== null ? "" : e.map(d => d.value)
+    var values = e === null ? "" : e.map(d => d.value)
     this.setState({
-      labelValue: values
+      labelValue: values,
     }) 
   };
 
@@ -62,9 +64,58 @@ export class PageViewer extends Component {
         <div style={{ padding: "2em", paddingBottom: "0" }}>
           <Form>
             <Form.Group as={Row}>
-              <Col>
-                <h2>{this.props.templateName}</h2>
-              </Col>
+              <OverlayTrigger
+                trigger={['focus','hover']}
+                placement={'bottom-start'}
+                overlay={
+                  this.props.tutorialEnabled ?
+                  <Popover style={{padding: '2em', maxWidth: '1500px'}}>
+                    <Popover.Content>
+                      <h4>Page Viewer</h4>
+                      <br/>
+                      <Row>
+                        <Col>
+                          <div style={{ display: "flex" }}>
+                            <Image width={'70%'} height={'auto'} src={changeView}/>
+                            <Card border='light' style={{ width: '30%'}}>
+                              <Card.Body>
+                                <Card.Title>Change View</Card.Title>
+                                <Card.Subtitle className="mb-2 text-muted">View, Edit, Duplicate & Delete</Card.Subtitle>
+                                <Card.Text>
+                                  Click on a layout to show the Layout Options: <br/>
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          </div>
+                          
+                        </Col>
+                        
+                        <Col>
+                          <div style={{ display: "flex" }}>
+                            <Image width={'70%'} height={'auto'} src={changeLabels}/>
+                            <Card border='light' style={{ width: '30%' }}>
+                              <Card.Body>
+                                <Card.Title>Change Path & Labels</Card.Title>
+                                <Card.Subtitle className="mb-2 text-muted">View, Edit, Duplicate & Delete</Card.Subtitle>
+                                <Card.Text>
+                                  Click on a layout to show the Layout Options: <br/>
+                                </Card.Text>
+                              </Card.Body>
+                            </Card>
+                          </div>
+                        </Col>
+                      </Row>
+                      
+                    </Popover.Content>
+                  </Popover> :
+                  <Tooltip style={{opacity: '0'}}>Current Layout</Tooltip>
+                }
+              >
+                <Col>
+                  <h2>{this.props.templateName}</h2>
+                </Col>
+              </OverlayTrigger>
+              
               <Form.Label>Path</Form.Label>
               <Col md={"auto"}>
                 <OverlayTrigger
@@ -90,7 +141,7 @@ export class PageViewer extends Component {
                   overlay={<Tooltip>Queries for website page path</Tooltip>}
                 >
                   <Select 
-                    defaultValue={[this.state.default]}  
+                    defaultValue={this.props.default}  
                     onChange={this.handleLabel} 
                     isClearable={false}
                     isMulti options={optionsLabels} 

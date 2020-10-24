@@ -2,7 +2,6 @@ import React, { Component } from "react";
 import { Navbar, NavDropdown, Form } from "react-bootstrap";
 import FragmentList from "./FragmentLists";
 import PageViewer from "./PageViewer";
-import Tutorial from "./TutorialInterface"
 import { faCog } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 
@@ -15,8 +14,8 @@ export class SecondPage extends Component {
       viewLabels: ["default"],
       currentPage: "newpage",
       currentLabel: "default",
-      default: {label: "default", value: "default"},
-      tutorialTrue: true
+      default: [{label: "default", value: "default"}],
+      tutorialEnabled: true
     };
   }
 
@@ -35,7 +34,7 @@ export class SecondPage extends Component {
       viewLabels: labels,
       currentPage: pages[0],
       currentLabel: labels[0],
-      default: {label: labels[0], value: labels[0]}
+      default: [{label: labels[0], value: labels[0]}]
     })
   }
 
@@ -45,9 +44,9 @@ export class SecondPage extends Component {
       <div className="SecondPage">
         <Navbar style={{ backgroundColor: "#0059b3" }}>
           <div className="mr-auto">
-          <Navbar.Brand onClick={this.back} style={{ color: "white" }}>
-            Rapid Website Creation Studio
-          </Navbar.Brand>
+            <Navbar.Brand onClick={this.back} style={{ color: "white" }}>
+              Rapid Website Creation Studio
+            </Navbar.Brand>
           </div>
           
           <NavDropdown
@@ -65,8 +64,8 @@ export class SecondPage extends Component {
               <Form.Check
                 style={{ marginLeft: "1em", marginRight: "1em" }}
                 type="switch"
-                checked={this.state.tutorialTrue}
-                onChange={() => this.setState({tutorialTrue: !this.state.tutorialTrue})}
+                checked={this.state.tutorialEnabled}
+                onChange={() => this.setState({tutorialEnabled: !this.state.tutorialEnabled})}
                 id="custom-switch"
                 label="Enable Tutorial"
               />
@@ -74,15 +73,15 @@ export class SecondPage extends Component {
           </NavDropdown>
         </Navbar>
 
-        <Tutorial show={this.state.tutorialTrue}/>
-
         <div style={{ display: "flex" }}>
           <FragmentList
             name={this.state.viewTemplate}
             labels={this.state.viewLabels}
             pages={this.state.viewPages}
             updateTemplate={updateTemplate.bind(this)}
+            tutorialEnabled={this.state.tutorialEnabled}
           />
+
           <PageViewer
             url={"http://localhost:5000/newpage?label=default"}
             templateName={this.state.viewTemplate}
@@ -91,6 +90,7 @@ export class SecondPage extends Component {
             pages={this.state.viewPages}
             labels={this.state.viewLabels}
             default={this.state.default}
+            tutorialEnabled={this.state.tutorialEnabled}
           />
         </div>
       </div>
