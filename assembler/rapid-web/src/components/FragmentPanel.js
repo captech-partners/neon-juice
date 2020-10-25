@@ -11,6 +11,7 @@ import layoutSearch from "../tutorial_assets/layoutSearch.png";
 import layoutOptions from "../tutorial_assets/layoutOptions.png";
 import layoutModal from "../tutorial_assets/layoutModal.png";
 
+
 class FragmentPanel extends Component {
   constructor(props) {
     super(props);

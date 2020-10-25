@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Col, Row, Form, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { Modal, Col, Row, Form, Button } from "react-bootstrap";
 import Select from "react-select";
 import CodeEditor from "./CodeEditor";
 import JointInput from "./JointInput";
@@ -15,17 +15,32 @@ class FragmentModal extends Component {
     this.handleChange = this.handleChange.bind(this);
     this.updateHtml = this.updateHtml.bind(this);
     this.state = {
-      html: props.html,
+      name: props.currentFragment.class_attr,
+      id: props.currentFragment.id,
+      labels: props.currentFragment.labels,
+      pages: props.currentFragment.pages,
+      templates: props.currentFragment.templates,
+      html: props.currentFragment.html,
       joints: [],
-      options: this.props.components.map((d) => ({ label: d.class_attr, value: d.class_attr, id: d.id})),
+      options: this.props.componentOptions.map((d) => ({ label: d.class_attr, value: d.class_attr, id: d.id})),
       step: 1,
     };
   }
 
   componentWillReceiveProps(newProps) {
-    if(newProps.html !== this.state.html) {
+    if(newProps.currentFragment !== this.props.currentFragment) {
       this.setState({
-        html: newProps.html
+        name: newProps.currentFragment.class_attr,
+        id: newProps.currentFragment.id,
+        labels: newProps.currentFragment.labels,
+        pages: newProps.currentFragment.pages,
+        templates: newProps.currentFragment.templates,
+        html: newProps.currentFragment.html
+      })
+    }
+    if(newProps.components !== this.props.components){
+      this.setState({
+        options: newProps.componentOptions.map((d) => ({ label: d.class_attr, value: d.class_attr, id: d.id}))
       })
     }
     if (!newProps.currentJoints.length){
@@ -80,15 +95,15 @@ class FragmentModal extends Component {
 
   updateHtml = (value) => (e) => {
     var update = e.target.value;
-    str = this.props.html;
+    str = this.state.html;
 
     var replaced;
     if (value === "name") {
-      replaced = this.props.name;
+      replaced = this.state.name;
       str = str.replace(replaced, update);
     }
     if (value === "labels") {
-      replaced = this.props.labels;
+      replaced = this.state.labels;
       var i;
       var label_replacement = "";
       for (i = 0; i < replaced.length; i++) {
@@ -102,7 +117,7 @@ class FragmentModal extends Component {
       str = str.replace(label_replacement, update);
     }
     if (value === "pages") {
-      replaced = this.props.pages;
+      replaced = this.state.pages;
       var j;
       var replacement = "";
       for (j = 0; j < replaced.length; j++) {
@@ -120,59 +135,73 @@ class FragmentModal extends Component {
   };
 
   handleChange = (value) => {
-    this.props.onHtmlChange(value);
+    this.setState({
+      html: value,
+    });
   };
 
+  //Credit for this method: https://stackoverflow.com/questions/10026626/check-if-html-snippet-is-valid-with-javascript
+  checkHTML = (html) => {
+    var doc = document.createElement('div');
+    doc.innerHTML = html;
+    return (doc.innerHTML === html)
+  }
+
   createFrag = () => {
-    const url = `http://localhost:5000/fragments`;
-    let data = JSON.stringify({
-      html: this.state.html,
-      file: this.props.name + ".html"
-    });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios.post(url, data, axiosConfig).then((result) => {
-        console.log(result);
-        this.props.updateList(this.props.id);
-      })
-      .catch(function (error) {
-        console.log(error);
+    if (this.checkHTML(this.state.html)) {
+      const url = `http://localhost:5000/fragments`;
+      let data = JSON.stringify({
+        html: this.state.html,
+        file: this.state.name + ".html"
       });
-    this.props.toggleModal();
+      let axiosConfig = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      axios.post(url, data, axiosConfig).then((result) => {
+          console.log(result);
+          this.props.updateList(this.state.id);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      this.props.toggleModal();
+    }
+    
   };
 
   editFrag = () => {
-    //add input validation for html
-    const url = `http://localhost:5000/fragments/` + this.props.id;
-    //change file to result.data.file_name
-    let data = JSON.stringify({
-      html: this.state.html,
-      file: this.props.name + ".html"
-    });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios.put(url, data, axiosConfig).then((result) => {
-        console.log(result);
-        this.props.updateList(this.props.id);
-      })
-      .catch(function (error) {
-        console.log(error);
+    if (this.checkHTML(this.state.html)){
+      const url = `http://localhost:5000/fragments/` + this.state.id;
+      //change file to result.data.file_name
+      let data = JSON.stringify({
+        html: this.state.html,
+        file: this.state.name + ".html"
       });
-    this.props.toggleModal();
+      let axiosConfig = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      axios.put(url, data, axiosConfig).then((result) => {
+          console.log(result);
+          this.props.updateList(this.state.id);
+        })
+        .catch(function (error) {
+          console.log(error);
+        });
+      this.props.toggleModal();
+    }
+    
   };
 
   render() {
     var optionsTemp = [];
     var selectedTemps = [];
     
-    this.props.templateOptions.map((d) => optionsTemp.push({label: d.class_attr, value: d.class_attr}))
-    this.props.temps.map((d) => selectedTemps.push({label: d, value: d}));
+    this.props.layoutOptions.map((d) => optionsTemp.push({label: d.class_attr, value: d.class_attr}))
+    this.state.templates.map((d) => selectedTemps.push({label: d, value: d}));
 
     const { step } = this.state;
     switch (step) {
@@ -193,14 +222,10 @@ class FragmentModal extends Component {
               <Form.Group as={Row}>
                 <Form.Label column>Component Name</Form.Label>
                 <Col>
-                  <OverlayTrigger
-                    overlay={<Tooltip>Name the component</Tooltip>}
-                  >
-                    <Form.Control
-                      defaultValue={this.props.name}
-                      onChange={this.updateHtml("name")}
-                    />
-                  </OverlayTrigger>
+                  <Form.Control
+                    defaultValue={this.state.name}
+                    onChange={this.updateHtml("name")}
+                  />
                 </Col>
               </Form.Group>
 
@@ -208,7 +233,7 @@ class FragmentModal extends Component {
                 <Form.Label column>Descriptive Labels</Form.Label>
                 <Col>
                   <Form.Control
-                    defaultValue={this.props.labels}
+                    defaultValue={this.state.labels}
                     onChange={this.updateHtml("labels")}
                   />
                 </Col>
@@ -218,13 +243,13 @@ class FragmentModal extends Component {
                 <Form.Label column>Pages</Form.Label>
                 <Col>
                   <Form.Control
-                    defaultValue={this.props.pages}
+                    defaultValue={this.state.pages}
                     onChange={this.updateHtml("pages")}
                   />
                 </Col>
               </Form.Group>
 
-              {this.props.id >= 0 ? (
+              {this.state.id >= 0 ? (
                 <Form.Group as={Row}>
                   <Form.Label column>Layouts</Form.Label>
                   <Col>
@@ -279,7 +304,7 @@ class FragmentModal extends Component {
 
             <Modal.Body>
               <CodeEditor
-                outputText={str === null ? this.props.html : str}
+                outputText={str === null ? this.state.html : str}
                 onHtmlChange={this.handleChange}
               />
             </Modal.Body>

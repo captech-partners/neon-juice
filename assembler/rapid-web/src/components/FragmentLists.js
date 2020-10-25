@@ -8,6 +8,26 @@ import axios from "axios";
 var fragmentList;
 var templateList;
 
+var defaultComponent = {
+  class_attr: "Component-Default",
+  id: 0.5,
+  pages: ["StartPage"],
+  templates: ["newpage"],
+  labels: ["default"],
+  joints: [],
+  html: "",
+};
+
+var defaultLayout = {
+  class_attr: "Layout-Default",
+  id: -0.5,
+  pages: ["StartPage"],
+  templates: [],
+  labels: ["default"],
+  joints: [],
+  html: "",
+};
+
 axios.get(`http://localhost:5000/fragments`).then((result) => {
   result.data.sort(function (a, b) {
     return a.id - b.id || a.class_attr.localeCompare(b.class_attr);
@@ -26,18 +46,10 @@ class FragmentLists extends Component {
       showDelete: false,
       target: null,
       title: "",
-      currentFrag: {},
-      id: 0,
-      
-      name: props.name,
-      labels: props.labels,
+      currentFrag: defaultComponent,
       fragList: fragmentList,
       tempList: templateList,
-      outputText: "",
-      currentJoints: [],
-      currentPages: [],
-      currentTemps: [],
-      html: ""
+      currentJoints: []
     };
   }
 
@@ -45,12 +57,6 @@ class FragmentLists extends Component {
     const url = `http://localhost:5000/fragments/` + id;
     axios.get(url).then((result) => {
       this.setState({
-        name: result.data.class_attr,
-        labels: result.data.labels,
-        currentPages: result.data.pages,
-        id: result.data.id,
-        currentTemps: result.data.templates,
-        html: result.data.html,
         currentFrag: result.data,
         currentJoints: result.data.joints.map(d => d.child_types)
       });
@@ -112,13 +118,8 @@ class FragmentLists extends Component {
     this.createButton();
     this.setState({
       title: "Create New Component",
-      id: 1,
-      name: "",
-      labels: "",
-      currentPages: [],
-      currentTemps: [],
-      currentJoints: [],
-      html: "",
+      currentFrag: defaultLayout,
+      currentJoints: []
     });
   };
 
@@ -126,17 +127,13 @@ class FragmentLists extends Component {
     this.createButton();
     this.setState({
       title: "Create New Layout",
-      id: -1,
-      name: "",
-      labels: "",
-      currentPages: [],
+      currentFrag: defaultComponent,
       currentJoints: [],
-      html: "",
     });
   };
 
   editButton = (event) => {
-    var newTitle = this.state.id >= 0 ? "Edit Component" : "Edit Layout";
+    var newTitle = this.state.currentFrag.id >= 0 ? "Edit Component" : "Edit Layout";
 
     this.setState({
       title: newTitle,
@@ -146,7 +143,7 @@ class FragmentLists extends Component {
   };
 
   duplicateButton = (event) => {
-    var newTitle = this.state.id >= 0
+    var newTitle = this.state.currentFrag.id >= 0
       ? "Duplicate Component"
       : "Duplicate Layout";
 
@@ -163,12 +160,6 @@ class FragmentLists extends Component {
     this.hidePopover();
   };
 
-  handleChange = (value) => {
-    this.setState({
-      html: value,
-    });
-  };
-
   render() {
     return (
       <div style={{ width: "23%" }} ref={this.popRef}>
@@ -176,17 +167,11 @@ class FragmentLists extends Component {
           show={this.state.showModal}
           title={this.state.title}
           toggleModal={this.toggleModal}
-          name={this.state.name}
-          id={this.state.id}
-          components={this.state.fragList}
-          labels={this.state.labels}
-          pages={this.state.currentPages}
-          temps={this.state.currentTemps}
+          currentFragment={this.state.currentFrag}
           currentJoints={this.state.currentJoints}
-          templateOptions={this.state.tempList}
-          html={this.state.html}
+          componentOptions={this.state.fragList}
+          layoutOptions={this.state.tempList}
           updateList={this.updateList}
-          onHtmlChange={this.handleChange}
         />
 
         <DeleteModal
@@ -209,7 +194,7 @@ class FragmentLists extends Component {
         <FragmentPopover
           showPop={this.state.showPop}
           target={this.state.target}
-          id={this.state.id}
+          id={this.state.currentFrag.id}
           edit={this.editButton}
           duplicate={this.duplicateButton}
           view={this.viewButton}
