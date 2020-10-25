@@ -15,7 +15,7 @@ export class SecondPage extends Component {
       currentPage: "newpage",
       currentLabel: "default",
       default: [{label: "default", value: "default"}],
-      tutorialEnabled: true
+      tutorialEnabled: false
     };
   }
 

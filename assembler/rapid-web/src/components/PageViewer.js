@@ -13,6 +13,7 @@ export class PageViewer extends Component {
       pageValue: props.currentPage,
       labelValue: props.currentLabel,
       tutorialEnabled: props.tutorialEnabled,
+      labelSelectValues: props.default,
       url: props.url
     };
   }
@@ -26,6 +27,7 @@ export class PageViewer extends Component {
     this.setState({
       pageValue: newProps.currentPage,
       labelValue: newProps.currentLabel,
+      labelSelectValues: newProps.default,
       url: newUrl
     })
   }
@@ -40,6 +42,7 @@ export class PageViewer extends Component {
     var values = e === null ? "" : e.map(d => d.value)
     this.setState({
       labelValue: values,
+      labelSelectValues: e
     }) 
   };
 
@@ -141,7 +144,7 @@ export class PageViewer extends Component {
                   overlay={<Tooltip>Queries for website page path</Tooltip>}
                 >
                   <Select 
-                    defaultValue={this.props.default}  
+                    value={this.state.labelSelectValues}  
                     onChange={this.handleLabel} 
                     isClearable={false}
                     isMulti options={optionsLabels} 

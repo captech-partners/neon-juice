@@ -8,14 +8,12 @@
 - [ ] Create default template with premade fragments mentioned above   
 ## Frontend API Fucntions/Axios Functions  
 - [ ] Add input validation for API calling methods  
-- [ ] Make API calling methods into utility functions in a separate file  
 ## Frontend Structure & Refining  
 - [x] Split up components in FragmentLists - Accordion, PopOver etc | PH  
 ## Page Viewer Functionality  
 - [x] Remove harded variables in PageViewer Component in SecondPage.js | PH  
 - [x] Add Multiselect dropdown for labels and have the PageViewer call the API with more than one label | PH  
-- [ ] Fix label default value on update and empty dropdown width  
-- [ ] Change label multiselect to creatable  
+- [x] Fix label default value on update and empty dropdown width | PH  
 ## Start Page Functionality  
 - [x] Fix Import Button's Modal submit button | AM  
 - [ ] Have the imported files show in the Component and Layout Panel | AM  
@@ -27,11 +25,11 @@
 - [x] Have the Fragment Modal option dropdowns Pages and Template highlight the pages and templates where the fragment appears | PH  
 - [x] Change Type of Subcomponent input to multi select | PH  
 - [x] Create a system for adding joints to the fragment or template | PH   
-- [ ] Have the form input change the html in the code editor | AI  
-- [ ] Add default input into Create a Component & Create a Layout in FragmentSettingsModal code editor  
-- [ ] Convert Joint Input to html code
-- [ ] Remove data-id variable from dupicate fragment div tag  
-- [ ] Raise state of name from FragmentSettingsModal to FragmentList   
+- [x] Have the form input change the html in the code editor | AI  
+- [x] Raise state of name from FragmentSettingsModal to FragmentList or move get, post, and put method in FragmentSettingsModal for the file name in the post and put methods | PH  
+- [ ] Add default input into Create a Component & Create a Layout in FragmentSettingsModal code editor | AI  
+- [ ] Convert Joint Input to html code  
+- [ ] Add input validation in each input field in FragmentSettingsModal  
 ## Fragment Popover Functionality  
 - [x] Create modal to prompt user if they are sure they want to delete a fragment - modal connected to the trash button | PH  
 - [x] Setup the view button on Template PopOver, eyeball button, so the page viewer inputs(dropdowns) update with the current template's data-page and data-label variables | PH
@@ -43,23 +41,18 @@
 ## Tutorial Functionality  
 - [x] Add helpful tooltips | PH  
 - [x] Have the toggle switch in the navbardropdown affect the visibility of the TutorialInterface | PH  
-- [ ] Add PopOvers or Toasts or maybe update tooltips for tutorial instructions | PH  
-- [ ] Need to remove prev and next icon on TutorialInterface carousel  
+- [x] Add PopOvers or Toasts or maybe update tooltips for tutorial instructions | PH  
 ## API Functionality  
-- [ ] Fix errors with the backend assets.html and deletion of tp1 & tp2 when it is edited and put to the API  
-- [ ] Fix joint implementation - add n # of a subcomponent
-- [ ] Change the way templates are initialized or create a blank or default fragment with the data-page and template name in data-template  
-- [ ] Post Method needs to create a new html file with the fragment class_attr, also needs file name input validation
-- [ ] Put Method need to receive the file of the fragment and insert changed into the file  
-- [ ] Figure out the error "template_set = self.template_map[template.file_name]  # fragments under template" when you view a template created with the frontend  
+- [x] Fix errors with the backend assets.html and deletion of tp1 & tp2 when it is edited and put to the API  
+- [x] Post Method needs to create a new html file with the fragment class_attr | PH  
 ## Search Bar Functionality  
 - [x] Add Search bars to fragment/template panels | PH  
-- [ ] Clear search bar when opening the other accordion card | PH  
-## Image Adding Functionality  
+- [x] Clear search bar when opening the other accordion card | PH  
 - [x] Add refresh button for components and layout cards next to the search bar | PH  
+## Image Adding Functionality  
 - [ ] Add a method in the API that adds a picture file to static/images file  
 - [ ] Add picture input into Fragment Modal options  
 ## Project Management Functionality  
 - [ ] Add a dashboard for multiple started projects on the Start Page, complete MVP before starting this functionality  
 ## Bugs to Fix
-- [ ] When I press enter in the empty search bar it goes to the start page, please fix
+- [x] When I press enter in the empty search bar it goes to the start page, please fix | PH  

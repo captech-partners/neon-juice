@@ -2,7 +2,8 @@ import React, { Component } from "react";
 import { Modal, Col, Row, Form, Button, OverlayTrigger, Tooltip } from "react-bootstrap";
 import Select from "react-select";
 import CodeEditor from "./CodeEditor";
-import JointInput from "./JointInput"
+import JointInput from "./JointInput";
+import axios from "axios";
 
 
 var str = null;
@@ -16,12 +17,17 @@ class FragmentModal extends Component {
     this.state = {
       html: props.html,
       joints: [],
-      options: this.props.components.map((d) => ({ label: d.class_attr ? d.class_attr : "No Name", value: d.class_attr ? d.class_attr : "No Name", id: d.id})),
+      options: this.props.components.map((d) => ({ label: d.class_attr, value: d.class_attr, id: d.id})),
       step: 1,
     };
   }
 
   componentWillReceiveProps(newProps) {
+    if(newProps.html !== this.state.html) {
+      this.setState({
+        html: newProps.html
+      })
+    }
     if (!newProps.currentJoints.length){
       this.setState({
         joints: []
@@ -108,24 +114,64 @@ class FragmentModal extends Component {
       }
       str = str.replace(replacement, update);
     }
-    //console.log("before, this.html: ", this.state.html);
     this.setState({
       html: str,
     });
-    //console.log("after, this.html: ", this.state.html);
   };
 
   handleChange = (value) => {
     this.props.onHtmlChange(value);
   };
 
+  createFrag = () => {
+    const url = `http://localhost:5000/fragments`;
+    let data = JSON.stringify({
+      html: this.state.html,
+      file: this.props.name + ".html"
+    });
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    axios.post(url, data, axiosConfig).then((result) => {
+        console.log(result);
+        this.props.updateList(this.props.id);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    this.props.toggleModal();
+  };
+
+  editFrag = () => {
+    //add input validation for html
+    const url = `http://localhost:5000/fragments/` + this.props.id;
+    //change file to result.data.file_name
+    let data = JSON.stringify({
+      html: this.state.html,
+      file: this.props.name + ".html"
+    });
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    axios.put(url, data, axiosConfig).then((result) => {
+        console.log(result);
+        this.props.updateList(this.props.id);
+      })
+      .catch(function (error) {
+        console.log(error);
+      });
+    this.props.toggleModal();
+  };
+
   render() {
     var optionsTemp = [];
     var selectedTemps = [];
-    var optionComp = [];
     
-    this.props.components.map((d) => optionComp.push({ label: d.class_attr ? d.class_attr : "No Name", value: d.class_attr ? d.class_attr : "No Name", id: d.id}))
-    this.props.templateOptions.map((d) => optionsTemp.push({label: d, value: d}))
+    this.props.templateOptions.map((d) => optionsTemp.push({label: d.class_attr, value: d.class_attr}))
     this.props.temps.map((d) => selectedTemps.push({label: d, value: d}));
 
     const { step } = this.state;
@@ -134,7 +180,7 @@ class FragmentModal extends Component {
         return (
           <Modal
             show={this.props.show}
-            onHide={this.props.parentAction}
+            onHide={this.props.toggleModal}
             aria-labelledby="contained-modal-title-vcenter"
             centered
             size="lg"
@@ -201,7 +247,7 @@ class FragmentModal extends Component {
             </Modal.Body>
 
             <Modal.Footer style={{ border: "none" }}>
-              <Button variant="secondary" onClick={this.props.parentAction}>
+              <Button variant="secondary" onClick={this.props.toggleModal}>
                 Close
               </Button>
               <Button
@@ -209,8 +255,8 @@ class FragmentModal extends Component {
                 onClick={
                   this.props.title === "Edit Component" ||
                   this.props.title === "Edit Layout"
-                    ? this.props.editAction
-                    : this.props.createAction
+                    ? this.editFrag
+                    : this.createFrag
                 }
               >
                 Save changes
@@ -222,7 +268,7 @@ class FragmentModal extends Component {
         return (
           <Modal
             show={this.props.show}
-            onHide={this.props.parentAction}
+            onHide={this.props.toggleModal}
             aria-labelledby="contained-modal-title-vcenter"
             centered
             size="lg"
