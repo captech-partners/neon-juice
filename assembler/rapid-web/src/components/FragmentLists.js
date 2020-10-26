@@ -11,21 +11,56 @@ var templateList;
 var defaultComponent = {
   class_attr: "Component-Default",
   id: 0.5,
-  pages: ["StartPage"],
-  templates: ["newpage"],
+  pages: ["newpage"],
+  templates: ["StartPage"],
   labels: ["default"],
   joints: [],
-  html: "",
+  html: `
+  <div class="Component-Default" data-label="default" data-page="newpage" data-template="StartPage">
+    <section class="hero is-info is-large">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Starting Page
+          </h1>
+          <h2 class="subtitle">
+            opening default website page 
+          </h2>
+        </div>
+      </div>
+    </section>
+	</div>
+  `,
+  file_name: "defaultComponent"
 };
 
 var defaultLayout = {
   class_attr: "Layout-Default",
   id: -0.5,
-  pages: ["StartPage"],
+  pages: ["newpage"],
   templates: [],
   labels: ["default"],
   joints: [],
-  html: "",
+  html: `
+  <html class="Layout-Default" data-label="default" data-page="newpage">
+    <head>
+      <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>Starting Page</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+    </head>
+    <body>
+      <div class="container">
+        <div class="content" data-child-limit="1" data-child-type="hero"/>
+        <br/>
+        <div class="content" data-child-limit="1" data-child-type="tiles"/>
+        <br/>
+        <div class="content" data-child-limit="1" data-child-type="media"/>
+      </div>
+    </body>
+	</html>
+  `,
+  file_name: "defaultLayout"
 };
 
 axios.get(`http://localhost:5000/fragments`).then((result) => {
@@ -118,7 +153,7 @@ class FragmentLists extends Component {
     this.createButton();
     this.setState({
       title: "Create New Component",
-      currentFrag: defaultLayout,
+      currentFrag: defaultComponent,
       currentJoints: []
     });
   };
@@ -127,7 +162,7 @@ class FragmentLists extends Component {
     this.createButton();
     this.setState({
       title: "Create New Layout",
-      currentFrag: defaultComponent,
+      currentFrag: defaultLayout,
       currentJoints: [],
     });
   };

@@ -3,11 +3,12 @@
 ## General Setup  
 - [x] Add page viewer | PH  
 - [x] Make page viewer dropdown options functional | PH  
-- [x] Update README.md | PH   
+- [x] Update README.md | PH  
 - [ ] Create fragments for premade components, should have form input fields working before starting this task  
 - [ ] Create default template with premade fragments mentioned above   
 ## Frontend API Fucntions/Axios Functions  
-- [ ] Add input validation for API calling methods  
+- [x] Add input validation for API calling methods | PH  
+- [ ] Add html validation in post and put methods before calling API  
 ## Frontend Structure & Refining  
 - [x] Split up components in FragmentLists - Accordion, PopOver etc | PH  
 ## Page Viewer Functionality  
@@ -27,7 +28,7 @@
 - [x] Create a system for adding joints to the fragment or template | PH   
 - [x] Have the form input change the html in the code editor | AI  
 - [x] Raise state of name from FragmentSettingsModal to FragmentList or move get, post, and put method in FragmentSettingsModal for the file name in the post and put methods | PH  
-- [ ] Add default input into Create a Component & Create a Layout in FragmentSettingsModal code editor | AI  
+- [x] Add default input into Create a Component & Create a Layout in FragmentSettingsModal code editor | PH  
 - [ ] Convert Joint Input to html code  
 - [ ] Add input validation in each input field in FragmentSettingsModal  
 ## Fragment Popover Functionality  
@@ -45,6 +46,7 @@
 ## API Functionality  
 - [x] Fix errors with the backend assets.html and deletion of tp1 & tp2 when it is edited and put to the API  
 - [x] Post Method needs to create a new html file with the fragment class_attr | PH  
+- [ ] Have the delete function remove the file from the directory if the file is empty  
 ## Search Bar Functionality  
 - [x] Add Search bars to fragment/template panels | PH  
 - [x] Clear search bar when opening the other accordion card | PH  

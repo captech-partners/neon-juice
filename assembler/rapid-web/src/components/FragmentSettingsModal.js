@@ -3,6 +3,7 @@ import { Modal, Col, Row, Form, Button } from "react-bootstrap";
 import Select from "react-select";
 import CodeEditor from "./CodeEditor";
 import JointInput from "./JointInput";
+import Toast from 'light-toast';
 import axios from "axios";
 
 
@@ -21,6 +22,7 @@ class FragmentModal extends Component {
       pages: props.currentFragment.pages,
       templates: props.currentFragment.templates,
       html: props.currentFragment.html,
+      file_name: props.currentFragment.file_name,
       joints: [],
       options: this.props.componentOptions.map((d) => ({ label: d.class_attr, value: d.class_attr, id: d.id})),
       step: 1,
@@ -35,7 +37,8 @@ class FragmentModal extends Component {
         labels: newProps.currentFragment.labels,
         pages: newProps.currentFragment.pages,
         templates: newProps.currentFragment.templates,
-        html: newProps.currentFragment.html
+        html: newProps.currentFragment.html,
+        file_name: newProps.currentFragment.file_name
       })
     }
     if(newProps.components !== this.props.components){
@@ -140,16 +143,8 @@ class FragmentModal extends Component {
     });
   };
 
-  //Credit for this method: https://stackoverflow.com/questions/10026626/check-if-html-snippet-is-valid-with-javascript
-  checkHTML = (html) => {
-    var doc = document.createElement('div');
-    doc.innerHTML = html;
-    return (doc.innerHTML === html)
-  }
-
   createFrag = () => {
-    if (this.checkHTML(this.state.html)) {
-      const url = `http://localhost:5000/fragments`;
+    const url = `http://localhost:5000/fragments`;
       let data = JSON.stringify({
         html: this.state.html,
         file: this.state.name + ".html"
@@ -162,22 +157,19 @@ class FragmentModal extends Component {
       axios.post(url, data, axiosConfig).then((result) => {
           console.log(result);
           this.props.updateList(this.state.id);
+          this.props.toggleModal();
         })
         .catch(function (error) {
+          Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
           console.log(error);
         });
-      this.props.toggleModal();
-    }
-    
   };
 
   editFrag = () => {
-    if (this.checkHTML(this.state.html)){
-      const url = `http://localhost:5000/fragments/` + this.state.id;
-      //change file to result.data.file_name
+    const url = `http://localhost:5000/fragments/` + this.state.id;
       let data = JSON.stringify({
         html: this.state.html,
-        file: this.state.name + ".html"
+        file: this.state.file_name + ".html"
       });
       let axiosConfig = {
         headers: {
@@ -187,13 +179,13 @@ class FragmentModal extends Component {
       axios.put(url, data, axiosConfig).then((result) => {
           console.log(result);
           this.props.updateList(this.state.id);
+          this.props.toggleModal();
         })
         .catch(function (error) {
+          Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
           console.log(error);
         });
-      this.props.toggleModal();
-    }
-    
+      
   };
 
   render() {
