@@ -52,10 +52,6 @@ var defaultLayout = {
     <body>
       <div class="container">
         <div class="content" data-child-limit="1" data-child-type="hero"/>
-        <br/>
-        <div class="content" data-child-limit="1" data-child-type="tiles"/>
-        <br/>
-        <div class="content" data-child-limit="1" data-child-type="media"/>
       </div>
     </body>
 	</html>
@@ -140,28 +136,25 @@ class FragmentLists extends Component {
   toggleDelete = () => {
     this.setState({
       showDelete: !this.state.showDelete,
+      showPop: false
     });
-    this.hidePopover();
-  };
-
-  createButton = () => {
-    this.hidePopover();
-    this.toggleModal();
   };
 
   createFragment = () => {
-    this.createButton();
     this.setState({
       title: "Create New Component",
+      showPop: false,
+      showModal: !this.state.showModal,
       currentFrag: defaultComponent,
       currentJoints: []
     });
   };
 
   createTemplate = () => {
-    this.createButton();
     this.setState({
       title: "Create New Layout",
+      showPop: false,
+      showModal: !this.state.showModal,
       currentFrag: defaultLayout,
       currentJoints: [],
     });
@@ -172,21 +165,19 @@ class FragmentLists extends Component {
 
     this.setState({
       title: newTitle,
+      showPop: false,
+      showModal: !this.state.showModal
     });
-    this.hidePopover();
-    this.toggleModal();
   };
 
   duplicateButton = (event) => {
-    var newTitle = this.state.currentFrag.id >= 0
-      ? "Duplicate Component"
-      : "Duplicate Layout";
+    var newTitle = this.state.currentFrag.id >= 0 ? "Duplicate Component" : "Duplicate Layout";
 
     this.setState({
       title: newTitle,
+      showPop: false,
+      showModal: !this.state.showModal
     });
-    this.hidePopover();
-    this.toggleModal();
   };
 
   viewButton = (event) => {

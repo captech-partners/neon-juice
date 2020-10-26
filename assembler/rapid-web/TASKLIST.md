@@ -8,7 +8,6 @@
 - [ ] Create default template with premade fragments mentioned above   
 ## Frontend API Fucntions/Axios Functions  
 - [x] Add input validation for API calling methods | PH  
-- [ ] Add html validation in post and put methods before calling API  
 ## Frontend Structure & Refining  
 - [x] Split up components in FragmentLists - Accordion, PopOver etc | PH  
 ## Page Viewer Functionality  
@@ -46,7 +45,7 @@
 ## API Functionality  
 - [x] Fix errors with the backend assets.html and deletion of tp1 & tp2 when it is edited and put to the API  
 - [x] Post Method needs to create a new html file with the fragment class_attr | PH  
-- [ ] Have the delete function remove the file from the directory if the file is empty  
+- [x] Have the delete function remove the file from the directory if the file is empty | PH  
 ## Search Bar Functionality  
 - [x] Add Search bars to fragment/template panels | PH  
 - [x] Clear search bar when opening the other accordion card | PH  
@@ -58,3 +57,4 @@
 - [ ] Add a dashboard for multiple started projects on the Start Page, complete MVP before starting this functionality  
 ## Bugs to Fix
 - [x] When I press enter in the empty search bar it goes to the start page, please fix | PH  
+- [ ] Figure out the error "template_set = self.template_map[template.file_name] # fragments under template" when you view a template created with the frontend  

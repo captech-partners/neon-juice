@@ -145,47 +145,46 @@ class FragmentModal extends Component {
 
   createFrag = () => {
     const url = `http://localhost:5000/fragments`;
-      let data = JSON.stringify({
-        html: this.state.html,
-        file: this.state.name + ".html"
-      });
-      let axiosConfig = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      axios.post(url, data, axiosConfig).then((result) => {
-          console.log(result);
-          this.props.updateList(this.state.id);
-          this.props.toggleModal();
-        })
-        .catch(function (error) {
-          Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
-          console.log(error);
-        });
+    let data = JSON.stringify({
+      html: this.state.html,
+      file: this.state.name + ".html"
+    });
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    axios.post(url, data, axiosConfig).then((result) => {
+      console.log(result);
+      this.props.updateList(this.state.id);
+      this.props.toggleModal();
+    })
+    .catch(function (error) {
+      Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
+      console.log(error);
+    });
   };
 
   editFrag = () => {
     const url = `http://localhost:5000/fragments/` + this.state.id;
-      let data = JSON.stringify({
-        html: this.state.html,
-        file: this.state.file_name + ".html"
-      });
-      let axiosConfig = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      axios.put(url, data, axiosConfig).then((result) => {
-          console.log(result);
-          this.props.updateList(this.state.id);
-          this.props.toggleModal();
-        })
-        .catch(function (error) {
-          Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
-          console.log(error);
-        });
-      
+    let data = JSON.stringify({
+      html: this.state.html,
+      file: this.state.file_name + ".html"
+    });
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    axios.put(url, data, axiosConfig).then((result) => {
+      console.log(result);
+      this.props.updateList(this.state.id);
+      this.props.toggleModal();
+    })
+    .catch(function (error) {
+      Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
+      console.log(error);
+    });
   };
 
   render() {
@@ -202,15 +201,16 @@ class FragmentModal extends Component {
           <Modal
             show={this.props.show}
             onHide={this.props.toggleModal}
+            backdrop="static"
             aria-labelledby="contained-modal-title-vcenter"
             centered
             size="lg"
           >
-            <Modal.Header style={{ border: "none" }}>
-              <Modal.Title>{this.props.title}</Modal.Title>
+            <Modal.Header style={{ border: "none", margin: "0.5em", marginBottom: "0" }}>
+              <Modal.Title as={'h3'}>{this.props.title}</Modal.Title>
             </Modal.Header>
 
-            <Modal.Body>
+            <Modal.Body style={{marginLeft: "1em", marginRight: "1em"}}>
               <Form.Group as={Row}>
                 <Form.Label column>Component Name</Form.Label>
                 <Col>
@@ -250,20 +250,19 @@ class FragmentModal extends Component {
                 </Form.Group>
               ) : null}
 
-                <h5>Add Nested Dynamic Content</h5>
-                <div style={{marginLeft: "2em"}}>
-                  <Form.Label>Choose Components</Form.Label>
+              <h5>Add Nested Dynamic Content</h5>
+              <div style={{marginLeft: "1em", marginRight: "0",marginBottom: "0", paddingBottom: "0"}}>
+                <Form.Label>Choose Components</Form.Label>
                   {this.state.joints}
-                  <br/>
-                  <Button onClick={() => this.addJoint("")}>+ Add Another Component</Button>
-                </div>
-    
-              <Button style={{ margin: "1em" }} onClick={this.nextStep}>
-                Advanced Settings
-              </Button>
+                <br style={{margin: '0', padding: '0'}}/>
+                <Button onClick={() => this.addJoint("")}>+ Add Another Component</Button>
+              </div>
             </Modal.Body>
 
             <Modal.Footer style={{ border: "none" }}>
+              <Button className="mr-auto" style={{marginTop: '1em'}} onClick={this.nextStep}>
+                Advanced Settings
+              </Button>
               <Button variant="secondary" onClick={this.props.toggleModal}>
                 Close
               </Button>
@@ -285,6 +284,7 @@ class FragmentModal extends Component {
         return (
           <Modal
             show={this.props.show}
+            backdrop="static"
             onHide={this.props.toggleModal}
             aria-labelledby="contained-modal-title-vcenter"
             centered
@@ -294,14 +294,14 @@ class FragmentModal extends Component {
               <Modal.Title>Advanced Settings</Modal.Title>
             </Modal.Header>
 
-            <Modal.Body>
+            <Modal.Body style={{marginBottom: '0', paddingBottom: '0'}}>
               <CodeEditor
                 outputText={str === null ? this.state.html : str}
                 onHtmlChange={this.handleChange}
               />
             </Modal.Body>
 
-            <Modal.Footer style={{ border: "none" }}>
+            <Modal.Footer style={{ border: "none", paddingTop: '0', marginTop: '0'}}>
               <Button variant="secondary" onClick={this.prevStep}>
                 back
               </Button>

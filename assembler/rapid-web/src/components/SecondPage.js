@@ -75,9 +75,6 @@ export class SecondPage extends Component {
 
         <div style={{ display: "flex" }}>
           <FragmentList
-            name={this.state.viewTemplate}
-            labels={this.state.viewLabels}
-            pages={this.state.viewPages}
             updateTemplate={updateTemplate.bind(this)}
             tutorialEnabled={this.state.tutorialEnabled}
           />
