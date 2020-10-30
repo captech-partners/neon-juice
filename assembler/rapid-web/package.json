@@ -5,10 +5,11 @@
   "dependencies": {
     "@fortawesome/fontawesome-svg-core": "^1.2.32",
     "@fortawesome/free-solid-svg-icons": "^5.15.1",
-    "@fortawesome/react-fontawesome": "^0.1.11",
+    "@fortawesome/react-fontawesome": "^0.1.12",
     "@testing-library/jest-dom": "^5.11.5",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "array-move": "^3.0.1",
     "axios": "^0.21.0",
     "bootstrap": "^4.5.3",
     "bulma": "^0.9.1",
@@ -25,6 +26,7 @@
     "react-router-dom": "^5.2.0",
     "react-scripts": "^4.0.0",
     "react-select": "^3.1.0",
+    "react-simple-tree-menu": "^1.1.18",
     "yarn": "^1.22.10"
   },
   "scripts": {

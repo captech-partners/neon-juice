@@ -17,11 +17,12 @@
 #
 
 import copy
-import xml.etree.ElementTree as ETree
+#import xml.etree.ElementTree as ETree
 import glob
 import hashlib
 import os
 import shutil
+from lxml import etree as ETree
 
 
 def package(directory, output_path, output_file='package'):
@@ -51,6 +52,7 @@ def save_to_file(fragment_id: int, fragment):
 
 
 def delete_from_file(fragment_id: int, fragment):
+    file = fragment.path
     id_str = str(fragment_id)
     # TODO: check ETree
     tree = ETree.parse(fragment.path)
@@ -59,7 +61,11 @@ def delete_from_file(fragment_id: int, fragment):
         if fragment_element.attrib['data-id'] == id_str:
             root.remove(fragment_element)
             tree.write(fragment.path, encoding='utf-8')
-            return
+    f = open(file, 'r')
+    if len(f.readlines()) <= 2:
+        f.close()
+        os.remove(file)
+    return
 
 
 def clear_file(html_file):
