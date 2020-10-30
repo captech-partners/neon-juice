@@ -11,17 +11,49 @@ import layoutSearch from "../tutorial_assets/layoutSearch.png";
 import layoutOptions from "../tutorial_assets/layoutOptions.png";
 import layoutModal from "../tutorial_assets/layoutModal.png";
 
+
 class FragmentPanel extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      value: ""
+      componentValue: "",
+      layoutValue: "",
+      componentList: props.fragList,
+      layoutList: props.tempList
     };
   }
 
+  componentWillReceiveProps(newProps){
+    if(newProps.fragList !== this.props.fragList){
+      this.searchList(this.state.componentValue, newProps.fragList, true)
+    }else if(newProps.tempList !== this.props.tempList){
+      this.searchList(this.state.layoutValue, newProps.tempList, false)
+    }
+  }
+
+  searchList = (value, list, isComponents) => {
+    var newList;
+    value = value.toLowerCase();
+    if (value === "") {
+      newList = list
+    } else {
+      newList = list.filter((d) => d.class_attr !== null ? d.class_attr.toLowerCase().startsWith(value) : null)
+    }
+    
+    if(isComponents) {
+      this.setState({
+        componentList: newList,
+        componentValue: ""
+      })
+    } else{
+      this.setState({
+        layoutList: newList,
+        layoutValue: ""
+      })
+    }
+  };
+
   render() {
-    var searchFragment = this.props.searchFragment;
-    var searchTemplate = this.props.searchTemplate;
     return (
       <Accordion defaultActiveKey="0">
         <Card>
@@ -131,32 +163,34 @@ class FragmentPanel extends Component {
                 <Form inline>
                   <FormControl
                     placeholder="Type to search..."
-                    onChange={(e) => this.setState({ value: e.target.value })}
+                    onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                    onSubmit={(e) => e.preventDefault()}
+                    onChange={(e) => this.setState({ componentValue: e.target.value })}
                     value={this.state.value}
                   />
                   <Button
-                    onClick={() => searchFragment(this.state.value)}
+                    onClick={() => this.searchList(this.state.componentValue, this.props.fragList, true)}
                     style={{ marginLeft: "10px" }}
                   >
                     <FontAwesomeIcon icon={faSearch} />
                   </Button>
                   <Button
-                    onClick={() => searchFragment("")}
+                    onClick={() => this.setState({componentList: this.props.fragList})}
                     style={{ marginLeft: "5px" }}
                   >
                     <FontAwesomeIcon icon={faRedo} />
                   </Button>
                 </Form>
               </Navbar>
-              <ListGroup variant="flush" value={this.props.fragList}>
-                {this.props.fragList.map((d) => (
+              <ListGroup variant="flush" value={this.state.componentList}>
+                {this.state.componentList.map((d) => (
                   <ListGroup.Item
                     key={d.id}
                     id={d.id}
                     action
                     onClick={this.props.handleFragmentButtons}
                   >
-                    {d.class_attr === null ? "No Name" : d.class_attr}
+                    {d.class_attr}
                   </ListGroup.Item>
                 ))}
               </ListGroup>
@@ -269,25 +303,27 @@ class FragmentPanel extends Component {
                 <Form inline>
                   <FormControl
                     placeholder="Type to search..."
-                    onChange={(e) => this.setState({ value: e.target.value })}
+                    onKeyPress={(e) => { e.key === 'Enter' && e.preventDefault(); }}
+                    onSubmit={(e) => e.preventDefault()}
+                    onChange={(e) => this.setState({ layoutValue: e.target.value })}
                     value={this.state.value}
                   />
                   <Button
-                    onClick={() => searchTemplate(this.state.value)}
+                    onClick={() => this.searchList(this.state.layoutValue, this.props.tempList,false)}
                     style={{ marginLeft: "10px" }}
                   >
                     <FontAwesomeIcon icon={faSearch} />
                   </Button>
                     <Button
-                        onClick={() => searchTemplate("")}
+                        onClick={() => this.setState({layoutList: this.props.tempList})}
                         style={{ marginLeft: "5px" }}
                     >
                     <FontAwesomeIcon icon={faRedo} />
                   </Button>
                 </Form>
               </Navbar>
-              <ListGroup variant="flush" value={this.props.tempList}>
-                {this.props.tempList.map((d) => (
+              <ListGroup variant="flush" value={this.state.layoutList}>
+                {this.state.layoutList.map((d) => (
                   <ListGroup.Item
                     key={d.id}
                     id={d.id}

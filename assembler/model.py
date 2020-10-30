@@ -21,6 +21,8 @@ import copy
 import xml.etree.ElementTree as ETree
 import os
 import random
+import lxml.html
+from lxml import etree
 from utils import save_to_file, delete_from_file, pretty_xml
 
 
@@ -196,11 +198,13 @@ class FragmentCollection(object):
 	def post_fragments(self, json) -> bool:
 		html = json['html']
 		try:
-			et_root = ETree.fromstring(html)
+			et_root = lxml.html.fromstring(html)
 		except ETree.ParseError:
 			created = False
 		else:
-			self.build_fragment(et_root, self.root_dir + '/assets.html')
+			#empty html file(?)
+			file = json['file']
+			self.build_fragment(et_root, self.root_dir + '/' + file)
 			created = True
 		return created
 
@@ -433,6 +437,7 @@ class FragmentCollection(object):
 				.file_name(str(os.path.basename(file)).split('.')[0]) \
 				.build()
 
+			#print(f.file_name)
 			self.traverse(element, f, list(), file)
 			pretty_xml(element)
 			self.add(f)

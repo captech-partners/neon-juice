@@ -19,11 +19,11 @@
 
 import os
 import shutil
-
 import click
 import collections
 import time
 from flask import Flask, request, send_from_directory, jsonify, render_template
+from flask_cors import CORS
 from model import FragmentCollection
 from utils import compile_html, package
 from werkzeug.utils import secure_filename
@@ -31,6 +31,7 @@ from werkzeug.utils import secure_filename
 ALLOWED_EXTENSIONS = {'zip'}
 
 app = Flask(__name__, static_url_path='/static', static_folder='static/')
+CORS(app)
 mode = 'local'
 
 collection = FragmentCollection()
@@ -44,11 +45,6 @@ def builder():
 def dashboard():
     return render_template('dashboard.html')
 
-# @app.route("/assembler")
-# def home():
-#     resp = flask.Response("Foo bar baz")
-#     resp.headers['Access-Control-Allow-Origin'] = '*'
-#     return resp
 
 # assembler api
 @app.route('/assembler/templates')
@@ -105,7 +101,6 @@ def statistics():
 		 'template': template_count,
 		 'time': len(time_queue)}
 	return jsonify(s), 200
-
 
 
 @app.route('/<page>')
@@ -225,10 +220,6 @@ def start_instance(path, port, local):
 				if not collection.put_fragment(fragment_id, request.get_json()):
 					return 'INVALID INPUT/OBJECT', 400
 				return "UPDATED", 200
-			# elif request.method == 'OPTIONS':
-			# 	response.headers.add('Access-Control-Allow-Origin', '*')
-			# 	response.headers.add('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE')
-			# 	return 200
 			elif request.method == 'DELETE':
 				if not collection.delete_fragment(fragment_id):
 					return 'BAD INPUT PARAMETER', 400

@@ -7,7 +7,57 @@ import axios from "axios";
 
 var fragmentList;
 var templateList;
-var alltemps;
+
+var defaultComponent = {
+  class_attr: "Component-Default",
+  id: 0.5,
+  pages: ["newpage"],
+  templates: ["StartPage"],
+  labels: ["default"],
+  joints: [],
+  html: `
+  <div class="Component-Default" data-label="default" data-page="newpage" data-template="StartPage">
+    <section class="hero is-info is-large">
+      <div class="hero-body">
+        <div class="container">
+          <h1 class="title">
+            Starting Page
+          </h1>
+          <h2 class="subtitle">
+            opening default website page 
+          </h2>
+        </div>
+      </div>
+    </section>
+	</div>
+  `,
+  file_name: "defaultComponent"
+};
+
+var defaultLayout = {
+  class_attr: "Layout-Default",
+  id: -0.5,
+  pages: ["newpage"],
+  templates: [],
+  labels: ["default"],
+  joints: [],
+  html: `
+  <html class="Layout-Default" data-label="default" data-page="newpage">
+    <head>
+      <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+      <meta name="viewport" content="width=device-width, initial-scale=1"/>
+      <title>Starting Page</title>
+      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+    </head>
+    <body>
+      <div class="container">
+        <div class="content" data-child-limit="1" data-child-type="hero"/>
+      </div>
+    </body>
+	</html>
+  `,
+  file_name: "defaultLayout"
+};
 
 axios.get(`http://localhost:5000/fragments`).then((result) => {
   result.data.sort(function (a, b) {
@@ -15,37 +65,22 @@ axios.get(`http://localhost:5000/fragments`).then((result) => {
   });
   fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
   templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
-  alltemps = templateList.map((obj) => obj.class_attr);
 });
 
 class FragmentLists extends Component {
   constructor(props) {
     super(props);
-    this.searchFragment = this.searchFragment.bind(this);
-    this.searchTemplate = this.searchTemplate.bind(this);
     this.popRef = React.createRef();
     this.state = {
       showModal: false,
       showPop: false,
       showDelete: false,
       target: null,
-      isFragment: true, //fragment = true, template = false
-      title: "Create New Component",
-      id: 0,
-
-      currentFrag: {},
-      name: props.name,
-      labels: props.labels,
+      title: "",
+      currentFrag: defaultComponent,
       fragList: fragmentList,
       tempList: templateList,
-      searchFrag: fragmentList,
-      searchTemp: templateList,
-      outputText: "",
-      currentJoints: [],
-      currentPages: [],
-      currentTemps: [],
-      templateOptions: alltemps,
-      html: "",
+      currentJoints: []
     };
   }
 
@@ -53,59 +88,9 @@ class FragmentLists extends Component {
     const url = `http://localhost:5000/fragments/` + id;
     axios.get(url).then((result) => {
       this.setState({
-        name: result.data.class_attr,
-        labels: result.data.labels,
-        currentPages: result.data.pages,
-        currentTemps: result.data.templates,
-        html: result.data.html,
         currentFrag: result.data,
         currentJoints: result.data.joints.map(d => d.child_types)
       });
-    });
-  };
-
-  fragChange = (value) => {
-    this.setState({
-      fragList: value,
-      searchFrag: value
-    });
-  };
-
-  tempChange = (value) => {
-    this.setState({
-      tempList: value,
-      searchTemp: value,
-      templateOptions: alltemps
-    });
-  };
-
-  searchFragment = (value) => {
-    var newList;
-    value = value.toLowerCase();
-    if (value === "") {
-      newList = this.state.fragList
-    } else if (("No Name").toLowerCase().includes(value)) {
-      newList = this.state.fragList.filter((d) => (d.class_attr === null ? d : null))
-    } else {
-      newList = this.state.fragList.filter((d) => d.class_attr !== null ? d.class_attr.toLowerCase().startsWith(value) : null)
-    }
-    this.setState({
-      searchFrag: newList,
-    });
-  };
-
-  searchTemplate = (value) => {
-    var newList;
-    value = value.toLowerCase();
-    if (value === "") {
-      newList = this.state.tempList
-    } else if (("No Name").toLowerCase().includes(value)) {
-      newList = this.state.tempList.filter((d) => (d.class_attr === null ? d : null))
-    } else {
-      newList = this.state.tempList.filter((d) => d.class_attr !== null ? d.class_attr.toLowerCase().startsWith(value) : null)
-    }
-    this.setState({
-      searchTemp: newList,
     });
   };
 
@@ -117,72 +102,8 @@ class FragmentLists extends Component {
 
       fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
       templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
-      alltemps = templateList.map((obj) => obj.class_attr);
-      id >= 0 ? this.fragChange(fragmentList) : this.tempChange(templateList);
+      id >= 0 ? this.setState({fragList: fragmentList}) : this.setState({tempList: templateList});
     });
-  };
-
-  createFrag = () => {
-    const url = `http://localhost:5000/fragments`;
-    let data = JSON.stringify({
-      html: this.state.html,
-      file: 'assets.html'
-    });
-
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-      .post(url, data, axiosConfig)
-      .then((result) => {
-        console.log(result);
-        this.updateList(this.state.id);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    this.toggleModal();
-  };
-
-  editFrag = () => {
-    const url = `http://localhost:5000/fragments/` + this.state.id;
-    let data = JSON.stringify({
-      html: this.state.html,
-      file: this.state.currentFrag.class_attr + '.html'
-    });
-
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-      .put(url, data, axiosConfig)
-      .then((result) => {
-        console.log(result);
-        this.updateList(this.state.id);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-    this.toggleModal();
-  };
-
-  deleteFrag = () => {
-    this.toggleDelete();
-    const url = `http://localhost:5000/fragments/` + this.state.id;
-
-    axios
-      .delete(url)
-      .then((result) => {
-        console.log(result);
-        this.updateList(this.state.id);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
   };
 
   handleFragmentButtons = (event) => {
@@ -191,13 +112,11 @@ class FragmentLists extends Component {
       this.showPop === true && this.state.target === event.target
         ? false
         : true;
-    var checkFragment = event.target.id >= 0 ? true : false;
 
     this.setState({
       showPop: newShow,
       target: event.target,
-      isFragment: checkFragment,
-      id: event.target.id,
+      id: event.target.id
     });
     this.getById(event.target.id);
   };
@@ -217,64 +136,48 @@ class FragmentLists extends Component {
   toggleDelete = () => {
     this.setState({
       showDelete: !this.state.showDelete,
+      showPop: false
     });
-    this.hidePopover();
-  };
-
-  createButton = () => {
-    this.hidePopover();
-    this.toggleModal();
   };
 
   createFragment = () => {
-    this.createButton();
     this.setState({
       title: "Create New Component",
-      isFragment: true,
-      name: "",
-      id: "1",
-      labels: "",
-      currentPages: [],
-      currentTemps: [],
-      currentJoints: [],
-      html: "",
+      showPop: false,
+      showModal: !this.state.showModal,
+      currentFrag: defaultComponent,
+      currentJoints: []
     });
   };
 
   createTemplate = () => {
-    this.createButton();
     this.setState({
       title: "Create New Layout",
-      isFragment: false,
-      name: "",
-      id: "-1",
-      labels: "",
-      currentPages: [],
+      showPop: false,
+      showModal: !this.state.showModal,
+      currentFrag: defaultLayout,
       currentJoints: [],
-      html: "",
     });
   };
 
   editButton = (event) => {
-    var newTitle = this.state.isFragment ? "Edit Component" : "Edit Layout";
+    var newTitle = this.state.currentFrag.id >= 0 ? "Edit Component" : "Edit Layout";
 
     this.setState({
       title: newTitle,
+      showPop: false,
+      showModal: !this.state.showModal
     });
-    this.hidePopover();
-    this.toggleModal();
   };
 
   duplicateButton = (event) => {
-    var newTitle = this.state.isFragment
-      ? "Duplicate Component"
-      : "Duplicate Layout";
+    var newTitle = this.state.currentFrag.id >= 0 ? "Duplicate Component" : "Duplicate Layout";
 
     this.setState({
       title: newTitle,
+      showPop: false,
+      showModal: !this.state.showModal
     });
-    this.hidePopover();
-    this.toggleModal();
   };
 
   viewButton = (event) => {
@@ -283,59 +186,41 @@ class FragmentLists extends Component {
     this.hidePopover();
   };
 
-  handleChange = (value) => {
-    this.setState({
-      html: value,
-    });
-  };
-
   render() {
-    var searchFragment = this.searchFragment;
-    var searchTemplate = this.searchTemplate;
-
     return (
       <div style={{ width: "23%" }} ref={this.popRef}>
         <FragmentModal
           show={this.state.showModal}
           title={this.state.title}
-          parentAction={this.toggleModal}
-          name={this.state.name}
-          id={this.state.id}
-          components={this.state.fragList}
-          labels={this.state.labels}
-          pages={this.state.currentPages}
-          temps={this.state.currentTemps}
+          toggleModal={this.toggleModal}
+          currentFragment={this.state.currentFrag}
           currentJoints={this.state.currentJoints}
-          templateOptions={this.state.templateOptions}
-          html={this.state.html}
-          createAction={this.createFrag}
-          editAction={this.editFrag}
-          onHtmlChange={this.handleChange}
+          componentOptions={this.state.fragList}
+          layoutOptions={this.state.tempList}
+          updateList={this.updateList}
         />
 
         <DeleteModal
           show={this.state.showDelete}
-          value={this.state.name}
-          toggleAction={this.toggleDelete}
-          deleteAction={this.deleteFrag}
+          fragment={this.state.currentFrag}
+          toggle={this.toggleDelete}
+          updateList={this.updateList}
         />
 
         <FragmentPanel
           hidePopover={this.hidePopover}
           createFragment={this.createFragment}
           createTemplate={this.createTemplate}
-          fragList={this.state.searchFrag}
-          tempList={this.state.searchTemp}
+          fragList={this.state.fragList}
+          tempList={this.state.tempList}
           handleFragmentButtons={this.handleFragmentButtons}
-          searchFragment={searchFragment.bind(this)}
-          searchTemplate={searchTemplate.bind(this)}
           tutorialEnabled={this.props.tutorialEnabled}
         />
 
         <FragmentPopover
           showPop={this.state.showPop}
           target={this.state.target}
-          id={this.state.id}
+          id={this.state.currentFrag.id}
           edit={this.editButton}
           duplicate={this.duplicateButton}
           view={this.viewButton}
