@@ -253,8 +253,8 @@ class FragmentModal extends Component {
               <h5>Add Nested Dynamic Content</h5>
               <div style={{marginLeft: "1em", marginRight: "0",marginBottom: "0", paddingBottom: "0"}}>
                 <Form.Label>Choose Components</Form.Label>
-                  {this.state.joints}
-                <br style={{margin: '0', padding: '0'}}/>
+                {this.state.joints}
+                {!this.state.joints.length ? <br/> : null}
                 <Button onClick={() => this.addJoint("")}>+ Add Another Component</Button>
               </div>
             </Modal.Body>

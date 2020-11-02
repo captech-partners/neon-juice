@@ -1,6 +1,6 @@
 import React, { Component } from "react";
 import Iframe from "react-iframe";
-import Select from "react-select";
+import Select from "react-select/creatable";
 import changeLabels from "../tutorial_assets/changeLabels.gif";
 import changeView from "../tutorial_assets/changeView.gif";
 import { Button, Col, Card, Form, Row, OverlayTrigger, Tooltip, Popover, Image } from "react-bootstrap";
@@ -19,17 +19,19 @@ export class PageViewer extends Component {
   }
 
   componentWillReceiveProps(newProps){
-    var newUrl =
+    if (newProps.currentLabel !== this.props.currentLabel || newProps.currentPage !== this.props.currentPage) {
+      var newUrl =
       "http://localhost:5000/" +
       newProps.currentPage +
       "?label=" +
       newProps.currentLabel;
-    this.setState({
-      pageValue: newProps.currentPage,
-      labelValue: newProps.currentLabel,
-      labelSelectValues: newProps.default,
-      url: newUrl
-    })
+      this.setState({
+        pageValue: newProps.currentPage,
+        labelValue: newProps.currentLabel,
+        labelSelectValues: newProps.default,
+        url: newUrl
+      })
+    }
   }
 
   handlePage = (e) => {
@@ -63,7 +65,7 @@ export class PageViewer extends Component {
     this.props.labels.map((d) => optionsLabels.push({ label: d, value: d }));
 
     return (
-      <div style={{ width: "100%" }}>
+      <div style={{ width: "100%"}}>
         <div style={{ padding: "2em", paddingBottom: "0" }}>
           <Form>
             <Form.Group as={Row}>
@@ -162,7 +164,7 @@ export class PageViewer extends Component {
           height="770vh"
           display="initial"
           position="relative"
-          style={{ position: "fixed" }}
+          styles={{ position: "fixed" }}
           allowFullScreen
           frameBorder={"0"}
         />

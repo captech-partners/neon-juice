@@ -35,7 +35,6 @@
 - [x] Create modal to prompt user if they are sure they want to delete a fragment - modal connected to the trash button | PH  
 - [x] Setup the view button on Template PopOver, eyeball button, so the page viewer inputs(dropdowns) update with the current template's data-page and data-label variables | PH
 - [x] Update url when dropdowns are updated | PH    
-- [ ] Setup the add button on Fragment Popover so the fragment will be added to the current template and seen on the page viewer  
 ### Fragment Panel Functionality
 - [x] Need to raise state of the fraglist and templist in FragmentPanel | PH  
 - [x] Update fragment list and template list when fragment is created or deleted | PH  

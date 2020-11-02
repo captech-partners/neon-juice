@@ -1,14 +1,14 @@
 import React, { Component } from "react";
-import { Modal, Button } from "react-bootstrap";
+import { Modal, Button, Row, Col } from "react-bootstrap";
+import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import axios from "axios";
 
 class DeleteModal extends Component {
   deleteFrag = () => {
     this.props.toggle();
     const url = `http://localhost:5000/fragments/` + this.props.fragment.id;
-    axios
-      .delete(url)
-      .then((result) => {
+    axios.delete(url).then((result) => {
         console.log(result);
         this.props.updateList(this.props.fragment.id);
       })
@@ -26,8 +26,18 @@ class DeleteModal extends Component {
       >
         <Modal.Header style={{ border: "none" }}>
           <Modal.Title>
-            Warning: No Backup for fragment: <br />
-            {this.props.fragment.class_attr}
+            <Row>
+              <Col md={'auto'}>
+                <FontAwesomeIcon 
+                  icon={faExclamationTriangle}
+                  style={{marginLeft: '1vh'}}
+                />
+              </Col>
+              <Col>
+              Warning: No Backup for {this.props.fragment.class_attr}
+              </Col>
+            </Row>
+            
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
