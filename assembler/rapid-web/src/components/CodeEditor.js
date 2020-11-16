@@ -16,6 +16,14 @@ class CodeEditor extends Component {
     };
   }
 
+  componentWillReceiveProps(newProps) {
+    if (newProps.outputText !== this.state.outputText) {
+      this.setState({
+        outputText: newProps.outputText
+      })
+    }
+  }
+
   handleChange(value) {
     this.props.onHtmlChange(value);
   }
