@@ -1,113 +1,301 @@
 import React, { Component } from "react";
-import { Button } from "react-bootstrap";
-import { faBars, faHeading, faImage, faStop, faIdCard, faCaretSquareDown, faPlus } from "@fortawesome/free-solid-svg-icons";
+import { Button, OverlayTrigger, Tooltip } from "react-bootstrap";
+import { faBars, faHeading, faImage, faIdCard, faPlus, faStar, faClone, faFileDownload, faHandPointer, faRulerHorizontal } from "@fortawesome/free-solid-svg-icons";
+import TextModal from "./ComponentModals/TextComponentModal";
+import ButtonModal from "./ComponentModals/ButtonComponentModal";
+import ImageModal from "./ComponentModals/ImageComponentModal";
+import CardModal from "./ComponentModals/CardComponentModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+require('isomorphic-fetch');
+var fileDownload = require('js-file-download');
 
 
 export class SideBar extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      showText: false,
+      showButton: false,
+      showImage: false,
+      showCard: false,
+    };
+  }
+
+  downloadHtml = () => {
+    fetch(this.props.url)
+    .then(function (response) {
+      switch (response.status) {
+        // status "OK"
+        case 200:
+          return response.text();
+        // status "Not Found"
+        case 404:
+          throw response;
+
+        default:
+          console.log("nothing worked");
+      }
+    })
+    .then((template) => {
+      fileDownload(template, this.props.name+'.html')
+    })
+    .catch(function (response) {
+      console.log(response.statusText);
+    });
+  };
+
   render() {
     return (
       <div className="sidebar">
-        <Button
-          variant="outline-dark"
-          style={{
-            alignContent: "center",
-            backgroundColor: "transparent",
-            marginBottom: "1em",
-            marginTop: "15em",
-            width: "3em",
-          }}
+        <TextModal
+          show={this.state.showText}
+          hideModal={() => this.setState({ showText: false })}
+          currentFragment={this.props.currentFragment}
+          updateList={this.props.updateList}
+          refresh={this.props.refreshIframe}
+          layoutOptions={this.props.layoutOptions}
+        />
+        <ButtonModal
+          show={this.state.showButton}
+          hideModal={() => this.setState({ showButton: false })}
+          currentFragment={this.props.currentFragment}
+          updateList={this.props.updateList}
+          refresh={this.props.refreshIframe}
+          layoutOptions={this.props.layoutOptions}
+        />
+        <ImageModal
+          show={this.state.showImage}
+          hideModal={() => this.setState({ showImage: false })}
+          currentFragment={this.props.currentFragment}
+          updateList={this.props.updateList}
+          refresh={this.props.refreshIframe}
+          layoutOptions={this.props.layoutOptions}
+        />
+        <CardModal
+          show={this.state.showCard}
+          hideModal={() => this.setState({ showCard: false })}
+          currentFragment={this.props.currentFragment}
+          updateList={this.props.updateList}
+          refresh={this.props.refreshIframe}
+          layoutOptions={this.props.layoutOptions}
+        />
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Menu</Tooltip>}
         >
-          <FontAwesomeIcon
-            icon={faBars}
-            style={{ color: "#FFF", width: "1em", height: "3vh" }}
-          />
-        </Button>
-        <Button
-          variant="outline-dark"
-          style={{
-            alignContent: "center",
-            backgroundColor: "transparent",
-            marginBottom: "1em",
-            width: "3em",
-          }}
+          <Button
+            variant="outline-dark"
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: "1em",
+              marginTop: "13em",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faBars}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Banner/Hero</Tooltip>}
         >
-          <FontAwesomeIcon
-            icon={faHeading}
-            style={{ color: "#FFF", width: "1em", height: "3vh" }}
-          />
-        </Button>
-        <Button
-          variant="outline-dark"
-          style={{
-            alignContent: "center",
-            backgroundColor: "transparent",
-            marginBottom: "1em",
-            width: "3em",
-          }}
+          <Button
+            variant="outline-dark"
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: "1em",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faStar}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Text</Tooltip>}
         >
-          <FontAwesomeIcon
-            icon={faStop}
-            style={{ color: "#FFF", width: "1em", height: "3vh" }}
-          />
-        </Button>
-        <Button
-          variant="outline-dark"
-          style={{
-            alignContent: "center",
-            backgroundColor: "transparent",
-            marginBottom: "1em",
-            width: "3em",
-          }}
+          <Button
+            onClick={() => this.setState({ showText: true })}
+            variant="outline-dark"
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: "1em",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faHeading}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Level/Wrapper</Tooltip>}
         >
-          <FontAwesomeIcon
-            icon={faImage}
-            style={{ color: "#FFF", width: "1em", height: "3vh" }}
-          />
-        </Button>
-        <Button
-          variant="outline-dark"
-          style={{
-            alignContent: "center",
-            backgroundColor: "transparent",
-            marginBottom: "1em",
-            width: "3em",
-          }}
+          <Button
+            //onClick={() => this.setState({ showText: true })}
+            variant="outline-dark"
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: "1em",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faRulerHorizontal}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Button</Tooltip>}
         >
-          <FontAwesomeIcon
-            icon={faIdCard}
-            style={{ color: "#FFF", width: "1em", height: "3vh" }}
-          />
-        </Button>
-        <Button
-          variant="outline-dark"
-          style={{
-            alignContent: "center",
-            backgroundColor: "transparent",
-            marginBottom: "1em",
-            width: "3em",
-          }}
+          <Button
+            variant="outline-dark"
+            onClick={() => this.setState({ showButton: true })}
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: "1em",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faHandPointer}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Image</Tooltip>}
         >
-          <FontAwesomeIcon
-            icon={faCaretSquareDown}
-            style={{ color: "#FFF", width: "1em", height: "3vh" }}
-          />
-        </Button>
-        <Button
+          <Button
+            onClick={() => this.setState({ showImage: true })}
+            variant="outline-dark"
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: "1em",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faImage}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Card</Tooltip>}
+        >
+          <Button
+            onClick={() => this.setState({ showCard: true })}
+            variant="outline-dark"
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: "1em",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faIdCard}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Modal</Tooltip>}
+        >
+          <Button
+            variant="outline-dark"
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              marginBottom: "1em",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faClone}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Custom Component</Tooltip>}
+        >
+          <Button
             onClick={this.props.action}
-          variant="outline-dark"
-          style={{
-            alignContent: "center",
-            backgroundColor: "transparent",
-            marginBottom: "1em",
-            width: "3em",
-          }}
+            variant="outline-dark"
+            style={{
+              alignContent: "center",
+              backgroundColor: "transparent",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faPlus}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
+
+        <OverlayTrigger
+          placement={"right"}
+          delay={{ show: 500 }}
+          overlay={<Tooltip>Download Current Page</Tooltip>}
         >
-          <FontAwesomeIcon
-            icon={faPlus}
-            style={{ color: "#FFF", width: "1em", height: "3vh" }}
-          />
-        </Button>
+          <Button
+            onClick={() => this.downloadHtml()}
+            variant="outline-dark"
+            style={{
+              marginTop: "7em",
+              alignContent: "center",
+              backgroundColor: "transparent",
+              width: "3em",
+            }}
+          >
+            <FontAwesomeIcon
+              icon={faFileDownload}
+              style={{ color: "#FFF", width: "1em", height: "3vh" }}
+            />
+          </Button>
+        </OverlayTrigger>
       </div>
     );
   }

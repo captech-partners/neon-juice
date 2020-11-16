@@ -9,6 +9,10 @@ html, body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+::-webkit-scrollbar {
+  display: none;
+}
+
 code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
@@ -71,3 +75,10 @@ div.StartPage{
   overflow-x: hidden; /* Disable horizontal scroll */
   padding-top: 20px;
 }
+
+.modal-dialog {
+  max-width: 50%;
+  height: 50%;
+}
+
+.CodeMirror { height: 43em !important} 

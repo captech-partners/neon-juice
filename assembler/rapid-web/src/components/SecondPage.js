@@ -19,46 +19,10 @@ var defaultComponent = {
   joints: [],
   html: `
   <div class="Component-Default" data-label="default" data-page="newpage" data-template="StartPage">
-    <section class="hero is-info is-large">
-      <div class="hero-body">
-        <div class="container">
-          <h1 class="title">
-            Starting Page
-          </h1>
-          <h2 class="subtitle">
-            opening default website page 
-          </h2>
-        </div>
-      </div>
-    </section>
+    
 	</div>
   `,
   file_name: "defaultComponent"
-};
-
-var defaultLayout = {
-  class_attr: "Layout-Default",
-  id: -0.5,
-  pages: ["newpage"],
-  templates: [],
-  labels: ["default"],
-  joints: [],
-  html: `
-  <html class="Layout-Default" data-label="default" data-page="newpage">
-    <head>
-      <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
-      <meta name="viewport" content="width=device-width, initial-scale=1"/>
-      <title>Starting Page</title>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
-    </head>
-    <body>
-      <div class="container">
-        <div class="content" data-child-limit="1" data-child-type="hero"/>
-      </div>
-    </body>
-	</html>
-  `,
-  file_name: "defaultLayout",
 };
 
 axios.get(`http://localhost:5000/fragments`).then((result) => {
@@ -74,6 +38,9 @@ export class SecondPage extends Component {
   constructor(props) {
     super(props);
     this.popRef = React.createRef();
+    this.handlePage = this.handlePage.bind(this)
+    this.handleLabels = this.handleLabels.bind(this)
+    this.refreshIframe = this.refreshIframe.bind(this);
     this.state = {
       viewTemplate: "StartPage",
       viewPages: ["newpage"],
@@ -81,6 +48,7 @@ export class SecondPage extends Component {
       currentPage: "newpage",
       currentLabel: "default",
       default: [{label: "default", value: "default"}],
+      key: 0,
       tutorialEnabled: false,
       
       showModal: false,
@@ -99,9 +67,9 @@ export class SecondPage extends Component {
     this.props.prevStep();
   };
 
-  toggleTutorial = () => {
+  refreshIframe = () => {
     this.setState({
-      tutorialEnabled: ! this.state.tutorialEnabled
+      key: this.state.key + 1
     })
   }
 
@@ -129,55 +97,69 @@ export class SecondPage extends Component {
     });
   };
 
-  updateList = (id) => {
+  updateList = () => {
     axios.get(`http://localhost:5000/fragments`).then((result) => {
       result.data.sort(function (a, b) {
         return a.id - b.id || a.class_attr.localeCompare(b.class_attr);
       });
-
       fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
       templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
-      id >= 0 ? this.setState({fragList: fragmentList}) : this.setState({tempList: templateList});
+      
+      this.setState({fragList: fragmentList})
+      this.setState({tempList: templateList});
     });
   };
 
   handleFragmentButtons = (event) => {
-    //if popover is already showing and the user clicked the same fragment button, hide popover else show popover
     var element = document.getElementById(event.id);
-    var newShow =
-      this.showPop === true && this.state.target === element
-        ? false
-        : true;
     this.setState({
-      showPop: newShow,
+      showPop: true,
       target: element,
     });
     this.getById(event.id)
   };
 
-  hidePopover = () => {
-    this.setState({
-      showPop: false,
-    });
-  };
-
-  toggleModal = () => {
-    this.setState({
-      showModal: !this.state.showModal,
-    });
-  };
-
   createFragment = () => {
+    var change = {
+      class_attr: "Component-Default",
+      id: fragmentList.length+1,
+      pages: [this.state.currentPage],
+      templates: [this.state.viewTemplate],
+      labels: [this.state.currentLabel],
+      joints: [],
+      html: `<div class="Component-Default" data-label="${this.state.currentLabel}" data-page="${this.state.currentPage}" data-template="${this.state.viewTemplate}" data-id="${fragmentList.length+1}">\n</div>`,
+      file_name: "defaultComponent"
+    };
+  
     this.setState({
       title: "Create New Component",
       showPop: false,
       showModal: !this.state.showModal,
-      currentFrag: defaultComponent,
+      currentFrag: change,
       currentJoints: []
     });
   };
 
   createTemplate = () => {
+    var defaultLayout = {
+      class_attr: "Layout-Default",
+      id: (templateList.length+1) * -1,
+      pages: ["newpage"],
+      templates: [],
+      labels: ["default"],
+      joints: [],
+      html: `<html class="Layout-Default" data-label="default" data-page="newpage" data-id="${(templateList.length + 1) * -1}">
+        <head>
+          <meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+          <meta name="viewport" content="width=device-width, initial-scale=1"/>
+          <title>Default</title>
+          <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+        </head>
+        <body>
+        </body>
+      </html>`,
+      file_name: "defaultLayout",
+    };
     this.setState({
       title: "Create New Layout",
       showPop: false,
@@ -199,8 +181,21 @@ export class SecondPage extends Component {
 
   duplicateButton = (event) => {
     var newTitle = this.state.currentFrag.id >= 0 ? "Duplicate Component" : "Duplicate Layout";
+    var newId = this.state.currentFrag.id >=0 ? fragmentList.length+1 : (templateList.length+1) * -1;
+  
+    var change = {
+      class_attr: this.state.currentFrag.class_attr,
+      id: newId,
+      pages: [this.state.currentPage],
+      templates: [this.state.viewTemplate],
+      labels: [this.state.currentLabel],
+      joints: this.state.currentFrag.joints,
+      html: this.state.currentFrag.html,
+      file_name: this.state.currentFrag.file_name
+    };
 
     this.setState({
+      currentFrag: change,
       title: newTitle,
       showPop: false,
       showModal: !this.state.showModal
@@ -209,22 +204,48 @@ export class SecondPage extends Component {
 
   viewButton = (event) => {
     this.updateTemplate(this.state.currentFrag);
-    this.hidePopover();
+    this.setState({
+      showPop: false
+    })
   };
+
+  handlePage = (value) => {
+    this.setState({
+      currentPage: value
+    })
+  }
+
+  handleLabels = (value) => {
+    var values = value === null ? "" : value.map(d => d.value)
+    this.setState({
+      currentLabel: values,
+      default: value
+    })
+  }
 
   render() {
     return (
-      <div className="SecondPage">
+      <div style={{height: "100%", width: "100%"}}>
         
-        <NavBar back={this.back} toggleTutorial={this.toggleTutorial} tutorialEnabled={this.state.tutorialEnabled}/>
+        <NavBar back={this.back} toggleTutorial={() => this.setState({tutorialEnabled: ! this.state.tutorialEnabled})} tutorialEnabled={this.state.tutorialEnabled}/>
 
-        <SideBar action={this.createFragment}/>
+        <SideBar 
+          action={this.createFragment}
+          name={this.state.viewTemplate}
+          url={"http://localhost:5000/" + this.state.currentPage + "?label=" + this.state.currentLabel} 
+          currentFragment={this.state.currentFrag} 
+          updateList={this.updateList} 
+          refreshIframe={this.refreshIframe}
+          layoutOptions={this.state.tempList}
+        />
         
-        <div style={{marginLeft: '3em', display: 'flex'}}>
+        <div style={{marginLeft: '3em', display: 'flex', height: "100%"}}>
           <PageViewer
-            url={"http://localhost:5000/newpage?label=default"}
+            key={this.state.key}
             templateName={this.state.viewTemplate}
             currentPage={this.state.currentPage}
+            handlePage={this.handlePage}
+            handleLabels={this.handleLabels}
             currentLabel={this.state.currentLabel}
             pages={this.state.viewPages}
             labels={this.state.viewLabels}
@@ -236,16 +257,17 @@ export class SecondPage extends Component {
             <FragmentModal
               show={this.state.showModal}
               title={this.state.title}
-              toggleModal={this.toggleModal}
+              toggleModal={() => this.setState({showModal: !this.state.showModal})}
               currentFragment={this.state.currentFrag}
               currentJoints={this.state.currentJoints}
               componentOptions={this.state.fragList}
               layoutOptions={this.state.tempList}
               updateList={this.updateList}
+              refreshIframe={this.refreshIframe}
             />
 
             <FragmentPanel
-              hidePopover={this.hidePopover}
+              hidePopover={() => this.setState({showPop: false})}
               createTemplate={this.createTemplate}
               fragList={this.state.fragList}
               tempList={this.state.tempList}
@@ -261,6 +283,7 @@ export class SecondPage extends Component {
               duplicate={this.duplicateButton}
               view={this.viewButton}
               hidePop={() => this.setState({showPop: false})}
+              refresh={this.refreshIframe}
               updateList={this.updateList}
             />
           </div>

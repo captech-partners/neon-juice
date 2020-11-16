@@ -10,7 +10,8 @@ class DeleteModal extends Component {
     const url = `http://localhost:5000/fragments/` + this.props.fragment.id;
     axios.delete(url).then((result) => {
         console.log(result);
-        this.props.updateList(this.props.fragment.id);
+        this.props.updateList();
+        this.props.refresh();
       })
       .catch(function (error) {
         console.log(error);
@@ -41,8 +42,8 @@ class DeleteModal extends Component {
           </Modal.Title>
         </Modal.Header>
         <Modal.Body>
-          This fragment will be forever deleted, unless previously duplicated,
-          are you sure you want to delete this fragment?
+          This fragment will be permanently deleted, unless previously duplicated.
+          Are you sure you want to delete this fragment?
         </Modal.Body>
         <Modal.Footer style={{ border: "none" }}>
           <Button variant="secondary" onClick={this.props.toggle}>

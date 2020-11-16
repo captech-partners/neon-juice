@@ -1,15 +1,15 @@
 import React, { Component } from "react";
 import { Button, Card, ListGroup } from "react-bootstrap";
-import { faPlus } from "@fortawesome/free-solid-svg-icons";
+import { faPlus, faCaretDown, faCaretRight } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import TreeMenu from 'react-simple-tree-menu';
 
 
 const DEFAULT_PADDING = 16;
 const ICON_SIZE = 8;
-const LEVEL_SPACE = 16;
+const LEVEL_SPACE = 32;
 
-const ToggleIcon = ({ on }) => <span style={{ marginRight: 8 }}>{on ? '-' : '+'}</span>;
+const ToggleIcon = ({ on }) => <span style={{ marginRight: 8 }}>{on ? <FontAwesomeIcon icon={faCaretDown} /> : <FontAwesomeIcon icon={faCaretRight} />}</span>;
 
 const ListItem = ({
   level = 0,
@@ -25,6 +25,8 @@ const ListItem = ({
     id={props.id}
     {...props}
     style={{
+      fontWeight: hasNodes ? (600 - (level * 100)) : "normal",
+      textAlign: "left",
       paddingLeft: DEFAULT_PADDING + ICON_SIZE + level * LEVEL_SPACE,
       cursor: 'pointer',
       boxShadow: focused ? '0px 0px 5px 0px #222' : 'none',
@@ -34,7 +36,7 @@ const ListItem = ({
   >
     {hasNodes && (
       <div
-        style={{ display: 'inline-block' }}
+        style={{ display: 'inline-block'}}
         onClick={e => {
           hasNodes && toggleNode && toggleNode();
           e.stopPropagation();
@@ -43,7 +45,7 @@ const ListItem = ({
         <ToggleIcon on={isOpen} />
       </div>
     )}
-    {label}
+    {label}<p style={{fontStyle: "italic", display: "inline", fontWeight: 300}}>{level === 0 ? " ~ Layout" : ""}</p>
   </ListGroup.Item>
 );
 
@@ -69,7 +71,6 @@ class FragmentPanel extends Component {
       }
       return data;
     }
-
     dict.push({
       key: Math.random().toString(36).substring(7),
       id: fragment.id,
@@ -78,7 +79,7 @@ class FragmentPanel extends Component {
     })
     fragment.joints.forEach(joint => {
       this.props.fragList.forEach(frag => { 
-        if(joint.child_types.includes(frag.class_attr)){
+        if(joint.child_types.includes(frag.class_attr) && !nodes.some(e => e.id === frag.id)){
           nodes.push(this.treeBuild(frag))
         }
       })
@@ -95,7 +96,7 @@ class FragmentPanel extends Component {
     
     return (
       <Card>
-        <Card.Header>
+        <Card.Header style={{ textAlign: "left"}}>
           <h5 style={{display: 'inline'}}>Project Layouts</h5>
           <Button className="popButton" onClick={this.props.createTemplate}>
             <FontAwesomeIcon icon={faPlus} />

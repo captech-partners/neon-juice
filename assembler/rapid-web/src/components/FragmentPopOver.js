@@ -15,17 +15,15 @@ class FragmentPopOver extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.showPop !== this.props.showPop) {
-      this.setState({
-        showPop: newProps.showPop
-      })
-    }
+    this.setState({
+      showPop: newProps.showPop
+    })
   }
 
   toggleDelete = () => {
     this.setState({
       showDelete: !this.state.showDelete,
-      showPop: !this.state.showPop
+      showPop: false
     })
   }
 
@@ -37,6 +35,7 @@ class FragmentPopOver extends Component {
           fragment={this.props.currentFrag}
           toggle={this.toggleDelete}
           updateList={this.props.updateList}
+          refresh={this.props.refresh}
         />
 
         <Overlay
@@ -50,9 +49,7 @@ class FragmentPopOver extends Component {
           containerPadding={20}
         >
           <Popover>
-            {this.props.currentFrag.id >= 0 ? (
-              null
-            ) : (
+            {this.props.currentFrag.id < 0 ? (
               <OverlayTrigger
                 overlay={<Tooltip>View layout on Page Viewer</Tooltip>}
               >
@@ -60,7 +57,7 @@ class FragmentPopOver extends Component {
                   <FontAwesomeIcon icon={faEye} />
                 </Button>
               </OverlayTrigger>
-            )}
+            ): null}
 
             <OverlayTrigger overlay={<Tooltip>Duplicate component</Tooltip>}>
               <Button className="popButton" onClick={this.props.duplicate}>
