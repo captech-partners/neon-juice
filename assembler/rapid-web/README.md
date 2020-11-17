@@ -1,14 +1,17 @@
 # Rapid Website Creation Studio
 
-Presenters: Priscilla Hamiter, Ahmaad Idrees, Alejandro Marcovich  
-Sponsor: Roger Ruttimann  
-Faculty Advisor: Professor Doug Halperin, CS490  
+**Presenters:** Priscilla Hamiter, Ahmaad Idrees, Alejandro Marcovich  
+**Sponsor:** Roger Ruttimann  
+**Faculty Advisor:** Professor Doug Halperin, CS490  
+
 
 Rapid Website Creation Studio is an interactive web application that provides a new way of website creation. Instead of creating a "one fits all" general-purpose website, users can create fully customized content for each visitor. This project assists non-technical users with creating and maintaining HTML fragments. These fragments can then be dynamically rendered and assemble a webpage based on the content labels. With the user’s specifications, our implementation of dynamic components allows for a more personalized user experience, resulting in websites with higher levels of engagement.
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
+
+                                                                    :snowman:           :santa:             :gift:
 ## Prerequisites
 
 #### Clone the directory:
