@@ -1,6 +1,7 @@
 # Rapid Website Creation Studio
 
-Fall 2020 Senior Team :snowflake::snowman::santa::gift::christmas_tree:  
+#### Fall 2020 Senior Team :snowflake::snowman::santa::gift::christmas_tree:  
+
 **Presenters:** Priscilla Hamiter, Ahmaad Idrees, Alejandro Marcovich  
 **Sponsor:** Roger Ruttimann  
 **Faculty Advisor:** Professor Doug Halperin, CS490  
