@@ -11,7 +11,7 @@ Rapid Website Creation Studio is an interactive web application that provides a 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 
-                                                                    :snowman:           :santa:             :gift:
+:snowman::santa::gift:
 ## Prerequisites
 
 #### Clone the directory:
