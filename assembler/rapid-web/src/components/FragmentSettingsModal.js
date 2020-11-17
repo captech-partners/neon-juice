@@ -352,7 +352,17 @@ class FragmentModal extends Component {
             vertical
             className="vertical-tabs"
             style={{height: "100%"}}
-            onChange={(tabId) => {tabId === "vertical-tab-three" ? this.updateHtml() : console.log() }}
+            onChange={(tabId) => {
+              if (tabId === "vertical-tab-three") {
+                this.updateHtml()
+              }
+
+              if(tabId === "vertical-tab-one" && this.state.html !== str) {
+                this.setState({
+                  html: str
+                })
+              }
+            }}
           >
             <TabList style={{ width: "20%", textAlign: "left" }}>
               <Tab tabFor="vertical-tab-one">General Settings</Tab>
