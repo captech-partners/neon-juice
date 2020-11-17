@@ -1,5 +1,6 @@
 # Rapid Website Creation Studio
 
+Fall 2020 Senior Team :snowman::santa::gift:
 **Presenters:** Priscilla Hamiter, Ahmaad Idrees, Alejandro Marcovich  
 **Sponsor:** Roger Ruttimann  
 **Faculty Advisor:** Professor Doug Halperin, CS490  
@@ -11,7 +12,6 @@ Rapid Website Creation Studio is an interactive web application that provides a 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 
-:snowman::santa::gift:
 ## Prerequisites
 
 #### Clone the directory:
