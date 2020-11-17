@@ -168,11 +168,23 @@ class FragmentModal extends Component {
   }
 
   updateHtml = () => {
-    str = str.replace(/class="(.*?)"/, `class="` + this.state.name + `"`)
-    str = str.replace(/data-label="(.*?)"/, `data-label="` + this.state.labels + `"`);
-    str = str.replace(/data-page="(.*?)"/, `data-page="` + this.state.pages + `"`)
+
+    if (this.state.name !== this.props.currentFragment.class_attr){
+      str = str.replace(/class="(.*?)"/, `class="` + this.state.name + `"`);
+    }
+    
+    if (JSON.stringify(this.state.labels) !== JSON.stringify(this.props.currentFragment.labels)){
+      str = str.replace(/data-label="(.*?)"/, `data-label="` + this.state.labels + `"`);
+    }
+    
+    if (JSON.stringify(this.state.pages) !== JSON.stringify(this.props.currentFragment.pages)){
+      str = str.replace(/data-page="(.*?)"/, `data-page="` + this.state.pages + `"`);
+    }
+    
     var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value).join() : ""
-    str = str.replace(/data-template="(.*?)"/, `data-template="` + currLayout + `"`)
+    if (currLayout !== this.props.currentFragment.templates.join()) {
+      str = str.replace(/data-template="(.*?)"/, `data-template="` + currLayout + `"`)
+    }
      
     if (str !== this.state.html) {
       this.setState({ 
@@ -435,8 +447,7 @@ class FragmentModal extends Component {
                       + Add Another Component
                     </Button>
                   </div>
-                </div>
-                
+                </div> 
             </TabPanel>
 
             <TabPanel

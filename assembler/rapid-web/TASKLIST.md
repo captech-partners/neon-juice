@@ -16,7 +16,7 @@
 - [x] Fix label default value on update and empty dropdown width | PH  
 ### Start Page Functionality
 - [x] Fix Import Button's Modal submit button | AM  
-[comment]: <> Have the imported files show in the Component and Layout Panel | AM - not continuing this implementation   
+[//]: <> (Have the imported files show in the Component and Layout Panel | AM - not continuing this implementation)   
 ### Fragment Settings Modal Functionality
 - [x] Fix html for post and put methods, save and lift state of code editor code | PH  
 - [x] Have the code in the editor appear when the modal opens, right now it appears when you click on the editor | PH  
