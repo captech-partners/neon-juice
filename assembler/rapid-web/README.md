@@ -1,6 +1,6 @@
 # Rapid Website Creation Studio
 
-#### Fall 2020 Senior Team :snowflake::snowman::santa::gift::christmas_tree:  
+:snowflake::snowman::snowflake: **Fall 2020 Senior Team** :santa::gift::christmas_tree:  
 
 **Presenters:** Priscilla Hamiter, Ahmaad Idrees, Alejandro Marcovich  
 **Sponsor:** Roger Ruttimann  
