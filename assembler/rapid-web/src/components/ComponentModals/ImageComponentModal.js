@@ -9,38 +9,66 @@ import axios from "axios";
 class ImageModal extends Component {
   constructor(props) {
     super(props);
-    var templates = this.props.currentFragment.id < 0 ? [this.props.currentFragment.class_attr] : this.props.currentFragment.templates
+    var templates =
+      this.props.currentFragment.id < 0
+        ? [this.props.currentFragment.class_attr]
+        : this.props.currentFragment.templates;
     this.state = {
       name: "new-image",
       id: props.currentFragment.id,
       labels: props.currentFragment.labels,
       pages: props.currentFragment.pages,
       templates: templates,
-      html: props.currentFragment.html,
-      color: "#ff0000",
-      icon: "",
+      url: "https://bulma.io/images/placeholders/256x256.png",
+      width: "100",
+      height: "100",
+      wUnits: "%",
+      hUnits: "%",
+      border: 0,
     };
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.currentFragment !== this.props.currentFragment) {
-      var templates = newProps.currentFragment.id < 0 ? [newProps.currentFragment.class_attr] : newProps.currentFragment.templates
+      var templates =
+        newProps.currentFragment.id < 0
+          ? [newProps.currentFragment.class_attr]
+          : newProps.currentFragment.templates;
       this.setState({
         name: "new-image",
         id: newProps.currentFragment.id,
         labels: newProps.currentFragment.labels,
         pages: newProps.currentFragment.pages,
         templates: templates,
-        html: newProps.currentFragment.html,
+        url: "https://bulma.io/images/placeholders/256x256.png",
+        width: "100",
+        height: "100",
+        wUnits: "%",
+        hUnits: "%",
+        border: 0,
       });
     }
   }
 
   createFrag = () => {
-    this.addToLayouts();
+    var currLayout =
+      this.layoutValues && this.layoutValues.state.value
+        ? this.layoutValues.state.value.map((d) => d.value)
+        : [];
+    var html = `<div class="${this.state.name}" data-label="${
+      this.state.labels
+    }" data-page="${this.state.pages}" data-template="${
+      currLayout === [] ? "" : currLayout.join()
+    }" data-id="${this.state.id}">\n<figure class="image">
+    <img src=${this.state.url} style="width: ${
+      this.state.width + this.state.wUnits
+    }; height: ${this.state.height + this.state.hUnits}; border-radius: ${
+      this.state.border + "%"
+    }">
+    </figure>\n</div>`;
     const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
-      html: this.state.html,
+      html: html,
       file: this.state.name + ".html",
     });
     let axiosConfig = {
@@ -51,9 +79,10 @@ class ImageModal extends Component {
     axios
       .post(url, data, axiosConfig)
       .then((result) => {
-        console.log(result);
-        this.props.updateList();
         this.props.hideModal();
+        console.log(result);
+        this.addToLayouts(currLayout);
+        this.props.updateList();
         this.props.refresh();
       })
       .catch(function (error) {
@@ -61,17 +90,17 @@ class ImageModal extends Component {
       });
   };
 
-  addToLayouts = () => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
-    this.props.layoutOptions.forEach(layout => {
-      if (this.props.currentFragment.templates.includes(layout.class_attr)){
+  addToLayouts = (templates) => {
+    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`;
+    this.props.layoutOptions.forEach((layout) => {
+      if (templates.includes(layout.class_attr)) {
         var html = layout.html;
         var index = html.lastIndexOf(`</body>`);
         html = html.substring(0, index) + str + html.substring(index);
-        this.quickChange(layout.id, html, layout.file_name)
+        this.quickChange(layout.id, html, layout.file_name);
       }
-    })
-  }
+    });
+  };
 
   quickChange = (id, html, filename) => {
     const url = `http://localhost:5000/fragments/` + id;
@@ -92,9 +121,7 @@ class ImageModal extends Component {
       .catch(function (error) {
         console.log(error);
       });
-  }
-
-  
+  };
 
   render() {
     var optionsTemp = [];
@@ -117,14 +144,16 @@ class ImageModal extends Component {
           style={{ border: "none", marginBottom: "0", paddingBottom: "0" }}
           closeButton
         >
-          <Modal.Title as={"h2"} style={{margin: "2vh", marginBottom: "0"}}>Create a Image Component</Modal.Title>
+          <Modal.Title as={"h2"} style={{ margin: "2vh", marginBottom: "0" }}>
+            Create a Image Component
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ height: "40em" }}>
           <Tabs
             defaultTab="vertical-tab-one"
             vertical
             className="vertical-tabs"
-            style={{height: "100%"}}
+            style={{ height: "100%" }}
           >
             <TabList style={{ width: "20%", textAlign: "left" }}>
               <Tab tabFor="vertical-tab-one">General Settings</Tab>
@@ -137,44 +166,54 @@ class ImageModal extends Component {
             >
               <div style={{ margin: "1em" }}>
                 <h4>General Settings</h4>
-                <div style={{padding: "1em", paddingTop: "1vh"}}>
-                <Form.Group as={Row}>
-                  <Form.Label column>Component Name</Form.Label>
-                  <Col>
-                    <Form.Control
-                      defaultValue={this.state.name}
-                    />
-                  </Col>
-                </Form.Group>
+                <div style={{ padding: "1em", paddingTop: "1vh" }}>
+                  <Form.Group as={Row}>
+                    <Form.Label column>Component Name</Form.Label>
+                    <Col>
+                      <Form.Control
+                        defaultValue={this.state.name}
+                        onChange={(e) =>
+                          this.setState({ name: e.target.value })
+                        }
+                      />
+                    </Col>
+                  </Form.Group>
 
-                <Form.Group as={Row}>
-                  <Form.Label column>Descriptive Labels</Form.Label>
-                  <Col>
-                    <Form.Control
-                      defaultValue={this.state.labels}
-                    />
-                  </Col>
-                </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column>Descriptive Labels</Form.Label>
+                    <Col>
+                      <Form.Control
+                        defaultValue={this.state.labels}
+                        onChange={(e) =>
+                          this.setState({ labels: e.target.value })
+                        }
+                      />
+                    </Col>
+                  </Form.Group>
 
-                <Form.Group as={Row}>
-                  <Form.Label column>Pages</Form.Label>
-                  <Col>
-                    <Form.Control
-                      defaultValue={this.state.pages}
-                    />
-                  </Col>
-                </Form.Group>
-                <Form.Group as={Row}>
-                  <Form.Label column>Layouts</Form.Label>
-                  <Col>
-                    <Select
-                      isMulti
-                      isClearable={false}
-                      defaultValue={selectedTemps}
-                      options={optionsTemp}
-                    />
-                  </Col>
-                </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column>Pages</Form.Label>
+                    <Col>
+                      <Form.Control
+                        defaultValue={this.state.pages}
+                        onChange={(e) =>
+                          this.setState({ pages: e.target.value })
+                        }
+                      />
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column>Layouts</Form.Label>
+                    <Col>
+                      <Select
+                        isMulti
+                        isClearable={false}
+                        defaultValue={selectedTemps}
+                        options={optionsTemp}
+                        ref={(input) => (this.layoutValues = input)}
+                      />
+                    </Col>
+                  </Form.Group>
                 </div>
               </div>
             </TabPanel>
@@ -182,69 +221,115 @@ class ImageModal extends Component {
               tabId="vertical-tab-two"
               style={{ height: "100%", width: "100%" }}
             >
-                <div style={{ margin: "1em" }}>
-                    <h4>Image Settings</h4>
-                    <div style={{padding: "1em", paddingTop: "1vh", display: "flex"}}>
-                        <div style={{marginTop: "2em"}}>
-                            <Form.Group as={Row}>
-                                <Form.Label column md={"auto"}>Image URL</Form.Label>
-                                <Col>
-                                    <Form.Control
-                                    placeholder={"Enter URL"}
-                                    />
-                                </Col>
-                            </Form.Group>
+              <div style={{ margin: "1em" }}>
+                <h4>Image Settings</h4>
+                <div
+                  style={{ padding: "1em", paddingTop: "1vh", display: "flex" }}
+                >
+                  <div style={{ marginTop: "2em" }}>
+                    <Form.Group as={Row}>
+                      <Form.Label column md={"auto"}>
+                        Image URL
+                      </Form.Label>
+                      <Col>
+                        <Form.Control
+                          defaultValue={this.state.url}
+                          onChange={(e) =>
+                            this.setState({ url: e.target.value })
+                          }
+                        />
+                      </Col>
+                    </Form.Group>
 
-                            <Form.Group as={Row}>
-                                <Form.Label column>Width</Form.Label>
-                                <Col>
-                                    <Form.Control
-                                    placeholder={"Width"}
-                                    />
-                                </Col>
-                                <Col md={"auto"} style={{margin: "0", padding: "0"}}>
-                                    <Form.Control as="select" style={{margin: "0", padding: "0"}} defaultValue="px">
-                                        <option>px</option>
-                                        <option>em</option>
-                                        <option>vh</option>
-                                        <option>rem</option>
-                                        <option>%</option>
-                                    </Form.Control>
-                                </Col>
-                            </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column>Width</Form.Label>
+                      <Col>
+                        <Form.Control
+                          defaultValue={this.state.width}
+                          onChange={(e) =>
+                            this.setState({ width: e.target.value })
+                          }
+                        />
+                      </Col>
+                      <Col md={"auto"} style={{ margin: "0", padding: "0" }}>
+                        <Form.Control
+                          as="select"
+                          style={{ margin: "0", padding: "0" }}
+                          defaultValue={this.state.wUnits}
+                          onChange={(e) =>
+                            this.setState({ wUnits: e.target.value })
+                          }
+                        >
+                          <option>px</option>
+                          <option>em</option>
+                          <option>vh</option>
+                          <option>rem</option>
+                          <option>%</option>
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>
 
-                            <Form.Group as={Row}>
-                                <Form.Label column>Height</Form.Label>
-                                <Col>
-                                    <Form.Control
-                                    placeholder={"Height"}
-                                    />
-                                </Col>
-                                <Col md={"auto"} style={{margin: "0", padding: "0"}}>
-                                    <Form.Control as="select" style={{margin: "0", padding: "0"}} defaultValue="px">
-                                        <option>px</option>
-                                        <option>em</option>
-                                        <option>vh</option>
-                                        <option>rem</option>
-                                        <option>%</option>
-                                    </Form.Control>
-                                </Col>
-                            </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column>Height</Form.Label>
+                      <Col>
+                        <Form.Control 
+                        defaultValue={this.state.height}
+                        onChange={(e) => this.setState({height: e.target.value})}
+                        />
+                      </Col>
+                      <Col md={"auto"} style={{ margin: "0", padding: "0" }}>
+                        <Form.Control
+                          as="select"
+                          style={{ margin: "0", padding: "0" }}
+                          defaultValue={this.state.hUnits}
+                          onChange={(e) =>
+                            this.setState({ hUnits: e.target.value })
+                          }
+                        >
+                          <option>px</option>
+                          <option>em</option>
+                          <option>vh</option>
+                          <option>rem</option>
+                          <option>%</option>
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>
 
-                            <Form.Group controlId="formBasicRange">
-                                <Form.Label>Border Radius</Form.Label>
-                                <Form.Control type="range" />
-                            </Form.Group>
-                        </div>
-                        <div style={{margin: "auto"}}>
-                            <div className="bulma" dangerouslySetInnerHTML={{__html: `<figure class="image">
-                            <img src="https://bulma.io/images/placeholders/256x256.png">
-                            </figure>`}} />
-                        </div>
-                        
-                    </div>
+                    <Form.Group controlId="formBasicRange">
+                      <Form.Label>Border Radius</Form.Label>
+                      <Form.Control
+                        value={this.state.border}
+                        onChange={(e) => {
+                          this.setState({ border: e.target.value });
+                        }}
+                        type="range"
+                        min="0"
+                        max="50"
+                      />
+                    </Form.Group>
+                  </div>
+                  <div
+                    style={{
+                      margin: "auto",
+                      overflow: "auto",
+                      maxWidth: "15em",
+                    }}
+                  >
+                    <div
+                      className="bulma"
+                      dangerouslySetInnerHTML={{
+                        __html: `<figure class="image">
+                        <img src=${this.state.url} style="width: ${
+                          this.state.width + this.state.wUnits
+                        }; height: ${
+                          this.state.height + this.state.hUnits
+                        }; border-radius: ${this.state.border + "%"}">
+                        </figure>`,
+                      }}
+                    />
+                  </div>
                 </div>
-                
+              </div>
             </TabPanel>
           </Tabs>
         </Modal.Body>

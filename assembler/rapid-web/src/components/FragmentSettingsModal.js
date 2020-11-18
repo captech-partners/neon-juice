@@ -9,7 +9,6 @@ import Toast from 'light-toast';
 import axios from "axios";
 
 
-var parser = require('fast-xml-parser');
 var str;
 var count = 1;
 
@@ -168,7 +167,6 @@ class FragmentModal extends Component {
   }
 
   updateHtml = () => {
-
     if (this.state.name !== this.props.currentFragment.class_attr){
       str = str.replace(/class="(.*?)"/, `class="` + this.state.name + `"`);
     }
@@ -180,7 +178,7 @@ class FragmentModal extends Component {
     if (JSON.stringify(this.state.pages) !== JSON.stringify(this.props.currentFragment.pages)){
       str = str.replace(/data-page="(.*?)"/, `data-page="` + this.state.pages + `"`);
     }
-    
+  
     var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value).join() : ""
     if (currLayout !== this.props.currentFragment.templates.join()) {
       str = str.replace(/data-template="(.*?)"/, `data-template="` + currLayout + `"`)
@@ -219,47 +217,43 @@ class FragmentModal extends Component {
   }
 
   createFrag = () => {
-    if (parser.validate(this.state.html) === true || this.state.id < 0){
-      if (this.state.id < 0){
-        this.createTemplateStart()
-      }
-      var html = this.changeHTMLJoints()
-      const url = `http://localhost:5000/fragments`;
-      let data = JSON.stringify({
-        html: html,
-        file: this.state.name + ".html",
-      });
-      let axiosConfig = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      axios
-        .post(url, data, axiosConfig)
-        .then((result) => {
-          console.log(result);
-          this.addToLayouts();
-          this.props.updateList();
-          this.props.refreshIframe();
-          this.props.toggleModal();
-        })
-        .catch(function (error) {
-          Toast.fail(
-            "API could not accept data. \nPlease check code editor for syntax errors."
-          );
-          console.log(error);
-        });
-    }else{
+    if (this.state.id < 0){
+      this.createTemplateStart()
+    }
+    var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value) : []
+    this.updateHtml()
+    var html = this.changeHTMLJoints()
+    const url = `http://localhost:5000/fragments`;
+    let data = JSON.stringify({
+      html: html,
+      file: this.state.name + ".html",
+    });
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    axios
+    .post(url, data, axiosConfig)
+    .then((result) => {
+      console.log(result);
+      this.props.toggleModal();
+      this.addToLayouts(currLayout);
+      this.props.updateList();
+      this.props.refreshIframe();
+    })
+    .catch(function (error) {
       Toast.fail(
         "Invalid HTML. \nPlease check code editor for syntax errors."
       );
-    }
+      console.log(error);
+    });
   };
 
-  addToLayouts = () => {
+  addToLayouts = (templates) => {
     var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
     this.props.layoutOptions.forEach(layout => {
-      if (this.props.currentFragment.templates.includes(layout.class_attr)){
+      if (templates.includes(layout.class_attr)){
         var html = layout.html;
         var index = html.lastIndexOf(`</body>`);
         html = html.substring(0, index) + str + html.substring(index);
@@ -290,37 +284,32 @@ class FragmentModal extends Component {
   }
 
   editFrag = () => {
-    if (parser.validate(this.state.html) === true || this.state.id < 0) {
-      var html = this.changeHTMLJoints()
-      const url = `http://localhost:5000/fragments/` + this.state.id;
-      let data = JSON.stringify({
-        html: html,
-        file: this.state.file_name + ".html",
-      });
-      let axiosConfig = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      axios
-      .put(url, data, axiosConfig)
-      .then((result) => {
-        console.log(result);
-        this.props.updateList();
-        this.props.refreshIframe();
-        this.props.toggleModal();
-      })
-      .catch(function (error) {
-        Toast.fail(
-          "API could not accept data. \nPlease check code editor for syntax errors."
-        );
-        console.log(error);
-      });
-    }else{
+    this.updateHtml();
+    var html = this.changeHTMLJoints()
+    const url = `http://localhost:5000/fragments/` + this.state.id;
+    let data = JSON.stringify({
+      html: html,
+      file: this.state.file_name + ".html",
+    });
+    let axiosConfig = {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    };
+    axios
+    .put(url, data, axiosConfig)
+    .then((result) => {
+      console.log(result);
+      this.props.toggleModal();
+      this.props.updateList();
+      this.props.refreshIframe();
+    })
+    .catch(function (error) {
       Toast.fail(
         "Invalid HTML. \nPlease check code editor for syntax errors."
       );
-    }
+      console.log(error);
+    });
   };
 
   render() {
@@ -380,10 +369,16 @@ class FragmentModal extends Component {
                   <Form.Group as={Row}>
                     <Form.Label column>Component Name</Form.Label>
                     <Col>
+                      {this.props.title.includes("Edit") ? 
+                      <Form.Control
+                      defaultValue={this.state.name}
+                      disabled
+                      />
+                      :
                       <Form.Control
                         defaultValue={this.state.name}
                         onChange={(e)=>{this.setState({name: e.target.value})}}
-                      />
+                      />}
                     </Col>
                   </Form.Group>
 

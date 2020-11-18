@@ -5,6 +5,7 @@ import TextModal from "./ComponentModals/TextComponentModal";
 import ButtonModal from "./ComponentModals/ButtonComponentModal";
 import ImageModal from "./ComponentModals/ImageComponentModal";
 import CardModal from "./ComponentModals/CardComponentModal";
+import HeroModal from "./ComponentModals/HeroComponentModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 require('isomorphic-fetch');
 var fileDownload = require('js-file-download');
@@ -18,6 +19,7 @@ export class SideBar extends Component {
       showButton: false,
       showImage: false,
       showCard: false,
+      showHero: false
     };
   }
 
@@ -25,13 +27,10 @@ export class SideBar extends Component {
     fetch(this.props.url)
     .then(function (response) {
       switch (response.status) {
-        // status "OK"
         case 200:
           return response.text();
-        // status "Not Found"
         case 404:
           throw response;
-
         default:
           console.log("nothing worked");
       }
@@ -80,6 +79,15 @@ export class SideBar extends Component {
           layoutOptions={this.props.layoutOptions}
         />
 
+        <HeroModal
+          show={this.state.showHero}
+          hideModal={() => this.setState({ showHero: false })}
+          currentFragment={this.props.currentFragment}
+          updateList={this.props.updateList}
+          refresh={this.props.refreshIframe}
+          layoutOptions={this.props.layoutOptions}
+        />
+
         <OverlayTrigger
           placement={"right"}
           delay={{ show: 500 }}
@@ -108,6 +116,7 @@ export class SideBar extends Component {
           overlay={<Tooltip>Banner/Hero</Tooltip>}
         >
           <Button
+            onClick={() => this.setState({ showHero: true })}
             variant="outline-dark"
             style={{
               alignContent: "center",

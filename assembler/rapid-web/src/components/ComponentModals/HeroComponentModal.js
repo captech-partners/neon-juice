@@ -1,5 +1,5 @@
 import React, { Component } from "react";
-import { Modal, Col, Row, Form, Button } from "react-bootstrap";
+import { Modal, Col, Row, Form, Button, Card } from "react-bootstrap";
 import { Tab, TabPanel, Tabs, TabList } from "react-web-tabs";
 import "react-web-tabs/dist/react-web-tabs.css";
 import Select from "react-select";
@@ -9,37 +9,70 @@ import axios from "axios";
 class HeroModal extends Component {
   constructor(props) {
     super(props);
-    var templates = this.props.currentFragment.id < 0 ? this.props.currentFragment.class_attr : this.props.currentFragment.templates
+    var templates =
+      this.props.currentFragment.id < 0
+        ? [this.props.currentFragment.class_attr]
+        : this.props.currentFragment.templates;
     this.state = {
-      name: "new-hero",
+      name: "new-banner",
       id: props.currentFragment.id,
       labels: props.currentFragment.labels,
       pages: props.currentFragment.pages,
       templates: templates,
-      html: props.currentFragment.html,
-      color: "#ff0000"
+      url: "",
+      fontcolor: "#000000",
+      backcolor: "#FFFFFF",
+      size: "medium",
+      title: "",
+      subtitle: ""
     };
   }
 
   componentWillReceiveProps(newProps) {
     if (newProps.currentFragment !== this.props.currentFragment) {
-      var templates = newProps.currentFragment.id < 0 ? newProps.currentFragment.class_attr : newProps.currentFragment.templates
+      var templates =
+        newProps.currentFragment.id < 0
+          ? [newProps.currentFragment.class_attr]
+          : newProps.currentFragment.templates;
       this.setState({
-        name: "new-hero",
+        name: "new-image",
         id: newProps.currentFragment.id,
         labels: newProps.currentFragment.labels,
         pages: newProps.currentFragment.pages,
         templates: templates,
-        html: newProps.currentFragment.html,
+        url: "",
+        fontcolor: "#000000",
+        backcolor: "#FFFFFF",
+        size: "medium",
+        title: "",
+        subtitle: ""
       });
     }
   }
 
   createFrag = () => {
-    this.addToLayouts();
+    var currLayout =
+      this.layoutValues && this.layoutValues.state.value
+        ? this.layoutValues.state.value.map((d) => d.value)
+        : [];
+    var background = this.state.url !== "" ? `background-image:url('${this.state.url}'); background-size:cover;` : ``;
+    var html = `<div class="${this.state.name}" data-label="${this.state.labels}" data-page="${this.state.pages}" data-template="${currLayout === [] ? "" : currLayout.join()}" data-id="${this.state.id}">
+      <section class="hero is-${this.state.size}" style="background-color: ${this.state.backcolor}; color: ${this.state.fontcolor}; ${background}">
+        <div class="hero-body">
+          <div class="container">
+            <h1 class="title">
+              ${this.state.title}
+            </h1>
+            <h2 class="subtitle">
+              ${this.state.subtitle}
+            </h2>
+          </div>
+        </div>
+      </section>
+    </div>`;
     const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
-      html: this.state.html,
+      html: html,
       file: this.state.name + ".html",
     });
     let axiosConfig = {
@@ -50,10 +83,10 @@ class HeroModal extends Component {
     axios
       .post(url, data, axiosConfig)
       .then((result) => {
-        console.log(result);
-        this.props.updateList(this.state.id);
-        this.props.updateList(-1);
         this.props.hideModal();
+        console.log(result);
+        this.addToLayouts(currLayout);
+        this.props.updateList();
         this.props.refresh();
       })
       .catch(function (error) {
@@ -61,17 +94,17 @@ class HeroModal extends Component {
       });
   };
 
-  addToLayouts = () => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
-    this.props.layoutOptions.forEach(layout => {
-      if (this.props.currentFragment.templates.includes(layout.class_attr)){
+  addToLayouts = (templates) => {
+    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`;
+    this.props.layoutOptions.forEach((layout) => {
+      if (templates.includes(layout.class_attr)) {
         var html = layout.html;
         var index = html.lastIndexOf(`</body>`);
         html = html.substring(0, index) + str + html.substring(index);
-        this.quickChange(layout.id, html, layout.file_name)
+        this.quickChange(layout.id, html, layout.file_name);
       }
-    })
-  }
+    });
+  };
 
   quickChange = (id, html, filename) => {
     const url = `http://localhost:5000/fragments/` + id;
@@ -92,7 +125,7 @@ class HeroModal extends Component {
       .catch(function (error) {
         console.log(error);
       });
-  }
+  };
 
   render() {
     var optionsTemp = [];
@@ -115,18 +148,21 @@ class HeroModal extends Component {
           style={{ border: "none", marginBottom: "0", paddingBottom: "0" }}
           closeButton
         >
-          <Modal.Title as={"h2"} style={{margin: "2vh", marginBottom: "0"}}>Create a Button Component</Modal.Title>
+          <Modal.Title as={"h2"} style={{ margin: "2vh", marginBottom: "0" }}>
+            Create a Banner Component
+          </Modal.Title>
         </Modal.Header>
         <Modal.Body style={{ height: "40em" }}>
           <Tabs
             defaultTab="vertical-tab-one"
             vertical
             className="vertical-tabs"
-            style={{height: "100%"}}
+            style={{ height: "100%" }}
           >
             <TabList style={{ width: "20%", textAlign: "left" }}>
               <Tab tabFor="vertical-tab-one">General Settings</Tab>
               <Tab tabFor="vertical-tab-two">Content</Tab>
+              <Tab tabFor="vertical-tab-three">Preview</Tab>
             </TabList>
 
             <TabPanel
@@ -135,44 +171,54 @@ class HeroModal extends Component {
             >
               <div style={{ margin: "1em" }}>
                 <h4>General Settings</h4>
-                <div style={{padding: "1em", paddingTop: "1vh"}}>
-                <Form.Group as={Row}>
-                  <Form.Label column>Component Name</Form.Label>
-                  <Col>
-                    <Form.Control
-                      defaultValue={this.state.name}
-                    />
-                  </Col>
-                </Form.Group>
+                <div style={{ padding: "1em", paddingTop: "1vh" }}>
+                  <Form.Group as={Row}>
+                    <Form.Label column>Component Name</Form.Label>
+                    <Col>
+                      <Form.Control
+                        defaultValue={this.state.name}
+                        onChange={(e) =>
+                          this.setState({ name: e.target.value })
+                        }
+                      />
+                    </Col>
+                  </Form.Group>
 
-                <Form.Group as={Row}>
-                  <Form.Label column>Descriptive Labels</Form.Label>
-                  <Col>
-                    <Form.Control
-                      defaultValue={this.state.labels}
-                    />
-                  </Col>
-                </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column>Descriptive Labels</Form.Label>
+                    <Col>
+                      <Form.Control
+                        defaultValue={this.state.labels}
+                        onChange={(e) =>
+                          this.setState({ labels: e.target.value })
+                        }
+                      />
+                    </Col>
+                  </Form.Group>
 
-                <Form.Group as={Row}>
-                  <Form.Label column>Pages</Form.Label>
-                  <Col>
-                    <Form.Control
-                      defaultValue={this.state.pages}
-                    />
-                  </Col>
-                </Form.Group>
-                <Form.Group as={Row}>
-                  <Form.Label column>Layouts</Form.Label>
-                  <Col>
-                    <Select
-                      isMulti
-                      isClearable={false}
-                      defaultValue={selectedTemps}
-                      options={optionsTemp}
-                    />
-                  </Col>
-                </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column>Pages</Form.Label>
+                    <Col>
+                      <Form.Control
+                        defaultValue={this.state.pages}
+                        onChange={(e) =>
+                          this.setState({ pages: e.target.value })
+                        }
+                      />
+                    </Col>
+                  </Form.Group>
+                  <Form.Group as={Row}>
+                    <Form.Label column>Layouts</Form.Label>
+                    <Col>
+                      <Select
+                        isMulti
+                        isClearable={false}
+                        defaultValue={selectedTemps}
+                        options={optionsTemp}
+                        ref={(input) => (this.layoutValues = input)}
+                      />
+                    </Col>
+                  </Form.Group>
                 </div>
               </div>
             </TabPanel>
@@ -180,71 +226,102 @@ class HeroModal extends Component {
               tabId="vertical-tab-two"
               style={{ height: "100%", width: "100%" }}
             >
-                <div style={{ margin: "1em" }}>
-                    <h4>Button Content</h4>
-                    <div style={{padding: "1em", paddingTop: "1vh"}}>
-                        <Form.Group as={Row}>
-                            <Form.Label column md={2}>Button Text</Form.Label>
-                            <Col md={4}>
-                                <Form.Control
-                                placeholder={"Enter Button Text"}
-                                />
-                            </Col>
-                        </Form.Group>
+              <div style={{ margin: "1em" }}>
+                <h4>Banner Settings</h4>
+                <div style={{ padding: "1em", paddingTop: "1vh"}}>
+                  <div style={{ marginTop: "2em" }}>
+                    <Form.Group as={Row}>
+                      <Form.Label column md={2}>Title</Form.Label>
+                      <Col>
+                          <Form.Control
+                          value={this.state.title}
+                          onChange={(e) => this.setState({title: e.target.value})}
+                          />
+                      </Col>
+                    </Form.Group>
 
-                        <Form.Group as={Row}>
-                            <Form.Label column md={2}>Button Size</Form.Label>
-                            <Col md={3}>
-                                <Form.Control as="select" defaultValue="Default">
-                                    <option>Small</option>
-                                    <option>Default</option>
-                                    <option>Normal</option>
-                                    <option>Medium</option>
-                                    <option>Large</option>
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column md={2}>Subtitle</Form.Label>
+                      <Col>
+                          <Form.Control
+                          value={this.state.subtitle}
+                          onChange={(e) => this.setState({subtitle: e.target.value})}
+                          />
+                      </Col>
+                    </Form.Group>
 
-                        <Form.Group as={Row}>
-                            <Form.Label column md={2}>Icons</Form.Label>
-                            <Col md={4}>
-                                <Form.Control
-                                defaultValue={this.state.labels}
-                                />
-                            </Col>
-                        </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column md={2}>
+                        Image URL
+                      </Form.Label>
+                      <Col>
+                        <Form.Control
+                          defaultValue={this.state.url}
+                          onChange={(e) =>
+                            this.setState({ url: e.target.value })
+                          }
+                        />
+                      </Col>
+                    </Form.Group>
 
-                        <Form.Group as={Row}>
-                            <Form.Label column md={2}>Icon Size</Form.Label>
-                            <Col md={3}>
-                                <Form.Control as="select" defaultValue="Default">
-                                    <option>Small</option>
-                                    <option>Default</option>
-                                    <option>Normal</option>
-                                    <option>Medium</option>
-                                    <option>Large</option>
-                                </Form.Control>
-                            </Col>
-                        </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column>Background Color</Form.Label>
+                      <Col>
+                          <input type="color" onChange={(e) => this.setState({backcolor: e.target.value})} value={this.state.backcolor}/>
+                      </Col>
+                    </Form.Group>
 
-                        <Form.Group as={Row}>
-                            <Form.Label column md={2}>Color</Form.Label>
-                            <Col>
-                                <input type="color" onChange={(e) => this.setState({color: e.target.value})} value={this.state.color}/>
-                            </Col>
-                        </Form.Group>
+                    <Form.Group as={Row}>
+                      <Form.Label column>Font Color</Form.Label>
+                        <Col>
+                            <input type="color" onChange={(e) => this.setState({fontcolor: e.target.value})} value={this.state.fontcolor}/>
+                        </Col>
+                    </Form.Group>
 
-                        <Form.Group as={Row} style={{marginLeft: "1px"}}>
-                            <Form.Check
-                                custom
-                                type={"checkbox"}
-                                id={`custom-checkbox`}
-                                label={"Button is Rounded"}
-                            />
-                        </Form.Group>
-                    </div>
+                    <Form.Group as={Row}>
+                      <Form.Label column>Button Size</Form.Label>
+                      <Col>
+                        <Form.Control as="select" defaultValue="Normal" onChange={(e) => this.setState({size: e.target.value})}>
+                          <option>medium</option>
+                          <option>large</option>
+                          <option>fullheight</option>
+                        </Form.Control>
+                      </Col>
+                    </Form.Group>
+                  </div>
                 </div>
-                
+              </div>
+            </TabPanel>
+
+            <TabPanel
+              tabId="vertical-tab-three"
+              style={{ height: "100%", width: "100%" }}
+            >
+              <div
+                style={{
+                  margin: "1em",
+                }}
+              >
+                <h4>Preview: </h4>
+                  <Card>
+                    <Card.Header style={{width: "100%", height: "35em", overflow: "auto"}}>
+                      <div className="bulma" dangerouslySetInnerHTML={{__html:` 
+                      <section class="hero is-${this.state.size}" style="background-color: ${this.state.backcolor}; ${this.state.url !== "" ? `background-image:url('${this.state.url}'); background-size:cover` : ``}">
+                        <div class="hero-body">
+                          <div class="container">
+                            <h1 class="title" style="color: ${this.state.fontcolor}">
+                              ${this.state.title}
+                            </h1>
+                            <h2 class="subtitle" style="color: ${this.state.fontcolor}">
+                              ${this.state.subtitle}
+                            </h2>
+                          </div>
+                        </div>
+                      </section>
+                    `}} />
+                    </Card.Header>
+                  </Card>
+              </div>
             </TabPanel>
           </Tabs>
         </Modal.Body>

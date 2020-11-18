@@ -18,7 +18,7 @@ class ButtonModal extends Component {
       pages: props.currentFragment.pages,
       templates: templates,
       text: "Button",
-      size: "",
+      size: "normal",
       fontcolor: "#000000",
       backcolor: "#FFFFFF",
       isRound: false
@@ -35,7 +35,7 @@ class ButtonModal extends Component {
         pages: newProps.currentFragment.pages,
         templates: templates,
         text: "Button",
-        size: "",
+        size: "normal",
         fontcolor: "#000000",
         backcolor: "#FFFFFF",
         isRound: false
@@ -44,8 +44,8 @@ class ButtonModal extends Component {
   }
 
   createFrag = () => {
-    this.addToLayouts();
-    var html = `<div class="${this.state.name}" data-label="${this.state.labels}" data-page="${this.state.pages}" data-template="${this.state.templates}" data-id="${this.state.id}">\n<button class="button ${this.state.size} ${this.state.isRound ? "is-rounded" : ""}" style="background-color: ${this.state.backcolor}; color: ${this.state.fontcolor}">${this.state.text}</button>\n</div>`
+    var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value) : []
+    var html = `<div class="${this.state.name}" data-label="${this.state.labels}" data-page="${this.state.pages}" data-template="${currLayout === [] ? "" : currLayout.join()}" data-id="${this.state.id}">\n<button class="button ${this.state.size !== "normal" ? "is-" + this.state.size : ""} ${this.state.isRound ? "is-rounded" : ""}" style="background-color: ${this.state.backcolor}; color: ${this.state.fontcolor}">${this.state.text}</button>\n</div>`
     const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
       html: html,
@@ -59,8 +59,9 @@ class ButtonModal extends Component {
     axios
       .post(url, data, axiosConfig)
       .then((result) => {
-        console.log(result);
         this.props.hideModal();
+        console.log(result);
+        this.addToLayouts(currLayout);
         this.props.updateList();
         this.props.refresh();
       })
@@ -69,10 +70,10 @@ class ButtonModal extends Component {
       });
   };
 
-  addToLayouts = () => {
+  addToLayouts = (templates) => {
     var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
     this.props.layoutOptions.forEach(layout => {
-      if (this.state.templates.includes(layout.class_attr)){
+      if (templates.includes(layout.class_attr)){
         var html = layout.html;
         var index = html.lastIndexOf(`</body>`);
         html = html.substring(0, index) + str + html.substring(index);
@@ -100,28 +101,6 @@ class ButtonModal extends Component {
       .catch(function (error) {
         console.log(error);
       });
-  }
-
-  checkSize = (size) =>{
-    switch(size){
-        case "Small":
-            return "is-small";
-        case "Normal":
-            return "is-normal";
-        case "Medium":
-            return "is-medium";
-        case "Large":
-            return "is-large";
-        default:
-            return "";
-    }
-  }
-
-  changeLabels = (value) => {
-      var newList = value ? value.map(d => d.value).join() : []
-      this.setState({
-          labelValue: newList
-      })
   }
 
   render() {
@@ -202,7 +181,7 @@ class ButtonModal extends Component {
                       isMulti
                       isClearable={false}
                       defaultValue={selectedTemps}
-                      onChange={(e) => this.changeLabels(e)}
+                      ref={input => this.layoutValues = input}
                       options={optionsTemp}
                     />
                   </Col>
@@ -218,53 +197,53 @@ class ButtonModal extends Component {
                     <h4>Button Content</h4>
                     <div style={{padding: "1em", paddingTop: "1vh", display: "flex"}}>
                         <div>
-                            <Form.Group as={Row}>
-                                <Form.Label column>Button Text</Form.Label>
-                                <Col>
-                                    <Form.Control
-                                    value={this.state.text}
-                                    onChange={(e) => this.setState({text: e.target.value})}
-                                    />
-                                </Col>
-                            </Form.Group>
+                          <Form.Group as={Row}>
+                            <Form.Label column>Button Text</Form.Label>
+                            <Col>
+                              <Form.Control
+                              value={this.state.text}
+                              onChange={(e) => this.setState({text: e.target.value})}
+                              />
+                            </Col>
+                          </Form.Group>
 
-                            <Form.Group as={Row}>
-                                <Form.Label column>Button Size</Form.Label>
-                                <Col>
-                                    <Form.Control as="select" defaultValue="Normal" onChange={(e) => this.setState({size: this.checkSize(e.target.value)})}>
-                                        <option>Small</option>
-                                        <option>Normal</option>
-                                        <option>Medium</option>
-                                        <option>Large</option>
-                                    </Form.Control>
-                                </Col>
-                            </Form.Group>
+                          <Form.Group as={Row}>
+                            <Form.Label column>Button Size</Form.Label>
+                            <Col>
+                              <Form.Control as="select" defaultValue="normal" onChange={(e) => this.setState({size: e.target.value})}>
+                                <option>small</option>
+                                <option>normal</option>
+                                <option>medium</option>
+                                <option>large</option>
+                              </Form.Control>
+                            </Col>
+                          </Form.Group>
 
-                            <Form.Group as={Row}>
-                                <Form.Label column>Background Color</Form.Label>
-                                <Col>
-                                    <input type="color" onChange={(e) => this.setState({backcolor: e.target.value})} value={this.state.backcolor}/>
-                                </Col>
-                            </Form.Group>
+                          <Form.Group as={Row}>
+                            <Form.Label column>Background Color</Form.Label>
+                            <Col>
+                              <input type="color" onChange={(e) => this.setState({backcolor: e.target.value})} value={this.state.backcolor}/>
+                            </Col>
+                          </Form.Group>
 
-                            <Form.Group as={Row}>
+                          <Form.Group as={Row}>
                             <Form.Label column>Font Color</Form.Label>
-                                <Col>
-                                    <input type="color" onChange={(e) => this.setState({fontcolor: e.target.value})} value={this.state.fontcolor}/>
-                                </Col>
-                            </Form.Group>
+                              <Col>
+                                <input type="color" onChange={(e) => this.setState({fontcolor: e.target.value})} value={this.state.fontcolor}/>
+                              </Col>
+                          </Form.Group>
 
-                            <Form.Group as={Row} style={{marginLeft: "1px"}}>
-                                <Form.Check
-                                    type={"checkbox"}
-                                    checked={this.state.isRound}
-                                    onChange={(e) => this.setState({isRound: e.target.checked})}
-                                    label={"Button is Rounded"}
-                                />
-                            </Form.Group>
+                          <Form.Group as={Row} style={{marginLeft: "1px"}}>
+                              <Form.Check
+                                type={"checkbox"}
+                                checked={this.state.isRound}
+                                onChange={(e) => this.setState({isRound: e.target.checked})}
+                                label={"Button is Rounded"}
+                              />
+                          </Form.Group>
                         </div>
                         <div style={{margin: "auto"}}>
-                            <div className="bulma" dangerouslySetInnerHTML={{__html: `<button class="button ${this.state.size} ${this.state.isRound ? "is-rounded" : ""}" style="background-color: ${this.state.backcolor}; color: ${this.state.fontcolor}">${this.state.text}</button>`}} />
+                          <div className="bulma" dangerouslySetInnerHTML={{__html: `<button class="button ${this.state.size !== "normal" ? "is-" + this.state.size : ""} ${this.state.isRound ? "is-rounded" : ""}" style="background-color: ${this.state.backcolor}; color: ${this.state.fontcolor}">${this.state.text}</button>`}} />
                         </div>
                         
                     </div>
