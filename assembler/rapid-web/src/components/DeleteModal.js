@@ -9,13 +9,12 @@ class DeleteModal extends Component {
     this.props.toggle();
     const url = `http://localhost:5000/fragments/` + this.props.fragment.id;
     axios.delete(url).then((result) => {
-        console.log(result);
-        this.props.updateList();
-        this.props.refresh();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+      console.log(result);
+      this.props.updateList();
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
   
   render() {

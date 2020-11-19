@@ -25,22 +25,12 @@ var defaultComponent = {
   file_name: "defaultComponent"
 };
 
-axios.get(`http://localhost:5000/fragments`).then((result) => {
-  result.data.sort(function (a, b) {
-    return a.id - b.id || a.class_attr.localeCompare(b.class_attr);
-  });
-  
-  fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
-  templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
-});
-
 export class SecondPage extends Component {
   constructor(props) {
     super(props);
     this.popRef = React.createRef();
     this.handlePage = this.handlePage.bind(this)
     this.handleLabels = this.handleLabels.bind(this)
-    this.refreshIframe = this.refreshIframe.bind(this);
     this.state = {
       viewTemplate: "StartPage",
       viewPages: ["newpage"],
@@ -56,10 +46,26 @@ export class SecondPage extends Component {
       target: null,
       title: "",
       currentFrag: defaultComponent,
-      fragList: fragmentList,
-      tempList: templateList,
+      fragList: [],
+      tempList: [],
       currentJoints: []
     };
+  }
+
+  componentWillMount () {
+    axios.get(`http://localhost:5000/fragments`).then((result) => {
+      result.data.sort(function (a, b) {
+        return a.id - b.id || a.class_attr.localeCompare(b.class_attr);
+      });
+      
+      fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
+      templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
+
+      this.setState({
+        fragList: fragmentList,
+        tempList: templateList
+      })
+    });
   }
 
   back = (e) => {
@@ -104,10 +110,13 @@ export class SecondPage extends Component {
       });
       fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
       templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
-      
-      this.setState({fragList: fragmentList})
-      this.setState({tempList: templateList});
+
+      this.setState({
+        fragList: fragmentList,
+        tempList: templateList
+      }, () => {this.refreshIframe()})
     });
+    
   };
 
   handleFragmentButtons = (event) => {
@@ -235,7 +244,6 @@ export class SecondPage extends Component {
           url={"http://localhost:5000/" + this.state.currentPage + "?label=" + this.state.currentLabel} 
           currentFragment={this.state.currentFrag} 
           updateList={this.updateList} 
-          refreshIframe={this.refreshIframe}
           layoutOptions={this.state.tempList}
         />
         
@@ -263,16 +271,15 @@ export class SecondPage extends Component {
               componentOptions={this.state.fragList}
               layoutOptions={this.state.tempList}
               updateList={this.updateList}
-              refreshIframe={this.refreshIframe}
             />
 
             <FragmentPanel
               hidePopover={() => this.setState({showPop: false})}
               createTemplate={this.createTemplate}
+              currentFragment={this.state.currentFrag}
               fragList={this.state.fragList}
               tempList={this.state.tempList}
               handleFragmentButtons={this.handleFragmentButtons}
-              tutorialEnabled={this.props.tutorialEnabled}
             />
 
             <FragmentPopover
@@ -283,7 +290,6 @@ export class SecondPage extends Component {
               duplicate={this.duplicateButton}
               view={this.viewButton}
               hidePop={() => this.setState({showPop: false})}
-              refresh={this.refreshIframe}
               updateList={this.updateList}
             />
           </div>

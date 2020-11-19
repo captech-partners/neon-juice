@@ -16,9 +16,9 @@ const ListItem = ({
   hasNodes,
   isOpen,
   label,
+  focused,
   openNodes,
   toggleNode,
-  focused,
   ...props
 }) => (
   <ListGroup.Item
@@ -29,8 +29,6 @@ const ListItem = ({
       textAlign: "left",
       paddingLeft: DEFAULT_PADDING + ICON_SIZE + level * LEVEL_SPACE,
       cursor: 'pointer',
-      boxShadow: focused ? '0px 0px 5px 0px #222' : 'none',
-      zIndex: focused ? 999 : 'unset',
       position: 'relative',
     }}
   >
@@ -49,22 +47,36 @@ const ListItem = ({
   </ListGroup.Item>
 );
 
+var lastClicked = [];
 class FragmentPanel extends Component {
-
-  shouldComponentUpdate(newProps){
-    if (newProps.fragList !== this.props.fragList || newProps.tempList !== this.props.tempList){
-      return true;
-    }else {
-      return false;
+  constructor(props){
+    super(props);
+    this.state = {
+      openNode: [],
     }
   }
+
+  shouldComponentUpdate(newProps){
+    if (this.props.tempList !== newProps.tempList || this.props.fragList.length !== newProps.fragList.length) {
+      this.setState({openNode: lastClicked})
+      return true
+    }
+    return false
+  }
+
+  componentWillReceiveProps(newProps){
+    if (this.props.currentFragment.id < 0) {
+      lastClicked = [this.props.currentFragment.class_attr + this.props.currentFragment.id]
+    }
+  }
+
 
   treeBuild = (fragment) => {
     var dict = [];
     var nodes = [];
     if (!fragment.joints) {
       var data = {
-        key: Math.random().toString(36).substring(7),
+        key: fragment.class_attr + fragment.id,
         id: fragment.id,
         label: fragment.class_attr,
         nodes: [] 
@@ -72,7 +84,7 @@ class FragmentPanel extends Component {
       return data;
     }
     dict.push({
-      key: Math.random().toString(36).substring(7),
+      key: fragment.class_attr + fragment.id,
       id: fragment.id,
       label: fragment.class_attr,
       nodes: []
@@ -80,7 +92,11 @@ class FragmentPanel extends Component {
     fragment.joints.forEach(joint => {
       this.props.fragList.forEach(frag => { 
         if(joint.child_types.includes(frag.class_attr) && !nodes.some(e => e.id === frag.id)){
-          nodes.push(this.treeBuild(frag))
+          if (fragment.id < 0 && frag.templates.includes(fragment.class_attr)) {
+            nodes.push(this.treeBuild(frag))
+          } else if(fragment.id >= 0){
+            nodes.push(this.treeBuild(frag))
+          }
         }
       })
       dict[0].nodes = nodes;
@@ -89,11 +105,11 @@ class FragmentPanel extends Component {
   }
 
   render() {
-    var testing = []
+    var testing = [];
     this.props.tempList.forEach((element) => {
       testing.push(this.treeBuild(element))
     })
-    
+
     return (
       <Card>
         <Card.Header style={{ textAlign: "left"}}>
@@ -107,10 +123,9 @@ class FragmentPanel extends Component {
         >
           <TreeMenu
             data={testing}
+            initialOpenNodes={this.state.openNode}
             onClickItem={this.props.handleFragmentButtons}
-            resetOpenNodesOnDataUpdate={false}
-            initialActiveKey='first-level-node-1/second-level-node-1' // the path to the active node
-            debounceTime={125}>
+            resetOpenNodesOnDataUpdate={false}>
               {({ search, items }) => (
                   <>
                     <ListGroup style={{borderRadius: '0px'}}>

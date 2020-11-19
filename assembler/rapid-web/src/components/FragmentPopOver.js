@@ -35,7 +35,6 @@ class FragmentPopOver extends Component {
           fragment={this.props.currentFrag}
           toggle={this.toggleDelete}
           updateList={this.props.updateList}
-          refresh={this.props.refresh}
         />
 
         <Overlay
@@ -78,7 +77,6 @@ class FragmentPopOver extends Component {
             </OverlayTrigger>
           </Popover>
         </Overlay>
-
       </div>
     );
   }

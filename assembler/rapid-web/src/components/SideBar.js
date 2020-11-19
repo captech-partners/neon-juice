@@ -51,7 +51,6 @@ export class SideBar extends Component {
           hideModal={() => this.setState({ showText: false })}
           currentFragment={this.props.currentFragment}
           updateList={this.props.updateList}
-          refresh={this.props.refreshIframe}
           layoutOptions={this.props.layoutOptions}
         />
         <ButtonModal
@@ -59,7 +58,6 @@ export class SideBar extends Component {
           hideModal={() => this.setState({ showButton: false })}
           currentFragment={this.props.currentFragment}
           updateList={this.props.updateList}
-          refresh={this.props.refreshIframe}
           layoutOptions={this.props.layoutOptions}
         />
         <ImageModal
@@ -67,7 +65,6 @@ export class SideBar extends Component {
           hideModal={() => this.setState({ showImage: false })}
           currentFragment={this.props.currentFragment}
           updateList={this.props.updateList}
-          refresh={this.props.refreshIframe}
           layoutOptions={this.props.layoutOptions}
         />
         <CardModal
@@ -75,7 +72,6 @@ export class SideBar extends Component {
           hideModal={() => this.setState({ showCard: false })}
           currentFragment={this.props.currentFragment}
           updateList={this.props.updateList}
-          refresh={this.props.refreshIframe}
           layoutOptions={this.props.layoutOptions}
         />
 
@@ -84,7 +80,6 @@ export class SideBar extends Component {
           hideModal={() => this.setState({ showHero: false })}
           currentFragment={this.props.currentFragment}
           updateList={this.props.updateList}
-          refresh={this.props.refreshIframe}
           layoutOptions={this.props.layoutOptions}
         />
 

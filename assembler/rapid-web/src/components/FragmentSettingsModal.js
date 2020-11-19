@@ -239,8 +239,6 @@ class FragmentModal extends Component {
       console.log(result);
       this.props.toggleModal();
       this.addToLayouts(currLayout);
-      this.props.updateList();
-      this.props.refreshIframe();
     })
     .catch(function (error) {
       Toast.fail(
@@ -252,17 +250,19 @@ class FragmentModal extends Component {
 
   addToLayouts = (templates) => {
     var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
-    this.props.layoutOptions.forEach(layout => {
+    var count = 0;
+    this.props.layoutOptions.forEach((layout) => {
       if (templates.includes(layout.class_attr)){
         var html = layout.html;
         var index = html.lastIndexOf(`</body>`);
+        var isLast = templates.length === ++count ? true : false;
         html = html.substring(0, index) + str + html.substring(index);
-        this.quickChange(layout.id, html, layout.file_name)
+        this.quickChange(layout.id, html, layout.file_name, isLast)        
       }
     })
   }
 
-  quickChange = (id, html, filename) => {
+  quickChange = (id, html, filename, isLast) => {
     const url = `http://localhost:5000/fragments/` + id;
     let data = JSON.stringify({
       html: html,
@@ -274,13 +274,14 @@ class FragmentModal extends Component {
       },
     };
     axios
-      .put(url, data, axiosConfig)
-      .then((result) => {
-        console.log(result);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    .put(url, data, axiosConfig)
+    .then((result) => {
+      console.log(result);
+      isLast ? this.props.updateList() : console.log()
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   }
 
   editFrag = () => {
@@ -302,7 +303,6 @@ class FragmentModal extends Component {
       console.log(result);
       this.props.toggleModal();
       this.props.updateList();
-      this.props.refreshIframe();
     })
     .catch(function (error) {
       Toast.fail(
