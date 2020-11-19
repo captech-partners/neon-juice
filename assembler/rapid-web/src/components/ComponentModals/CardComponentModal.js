@@ -160,6 +160,7 @@ class CardModal extends Component {
             <TabList style={{ width: "20%", textAlign: "left" }}>
               <Tab tabFor="vertical-tab-one">General Settings</Tab>
               <Tab tabFor="vertical-tab-two">Content</Tab>
+              <Tab tabFor="vertical-tab-three">Preview</Tab>
             </TabList>
 
             <TabPanel
@@ -167,6 +168,8 @@ class CardModal extends Component {
               style={{ height: "100%", width: "100%" }}
             >
               <div style={{ margin: "1em" }}>
+                <h4>Description</h4>
+                <p style={{marginBottom: "1em"}}>A card is a bordered box with padding around its content. It can include a heading, image, content, and a footer. See <a href="https://bulma.io/documentation/components/card/" target="_blank" rel="noopener noreferrer">Bulma</a> documentation for more information.</p>
                 <h4>General Settings</h4>
                 <div style={{padding: "1em", paddingTop: "1vh"}}>
                 <Form.Group as={Row}>
@@ -219,35 +222,11 @@ class CardModal extends Component {
               style={{ height: "100%", width: "100%" }}
             >
               <div style={{ margin: "1em" }}>
-                <h4>Image Settings</h4>
-                <div
-                  style={{ padding: "1em", paddingTop: "1vh", display: "flex" }}
-                >
-                  <div style={{ marginTop: "2em" }}>
-                    <Form.Group as={Row}>
-                      <Form.Label column md={"auto"}>
-                        Image URL
-                      </Form.Label>
-                      <Col>
-                        <Form.Control
-                          defaultValue={this.state.url}
-                          onChange={(e) =>
-                            this.setState({ url: e.target.value })
-                          }
-                        />
-                      </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row}>
-                      <Form.Label column>Background Color</Form.Label>
-                        <Col>
-                          <input type="color" onChange={(e) => this.setState({color: e.target.value})} value={this.state.color}/>
-                        </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row}>
+                <h4>Card Settings</h4>
+                <div style={{padding: "1em", paddingTop: "1vh", paddingRight: "5em"}}>
+                <Form.Group as={Row}>
                       <Form.Label column>Width</Form.Label>
-                      <Col>
+                      <Col md={2}>
                         <Form.Control
                           defaultValue={this.state.width}
                           onChange={(e) =>
@@ -271,11 +250,9 @@ class CardModal extends Component {
                           <option>%</option>
                         </Form.Control>
                       </Col>
-                    </Form.Group>
-
-                    <Form.Group as={Row}>
+                  
                       <Form.Label column>Height</Form.Label>
-                      <Col>
+                      <Col md={2}>
                         <Form.Control 
                         defaultValue={this.state.height}
                         onChange={(e) => this.setState({height: e.target.value})}
@@ -297,6 +274,32 @@ class CardModal extends Component {
                           <option>%</option>
                         </Form.Control>
                       </Col>
+                    </Form.Group>
+                </div>
+                <h4>Image Settings</h4>
+                <div
+                  style={{ padding: "1em", paddingTop: "1vh", display: "flex", paddingBottom: "0" }}
+                >
+                  <div style={{ marginTop: "2em" }}>
+                    <Form.Group as={Row}>
+                      <Form.Label column md={"auto"}>
+                        Image URL
+                      </Form.Label>
+                      <Col>
+                        <Form.Control
+                          defaultValue={this.state.url}
+                          onChange={(e) =>
+                            this.setState({ url: e.target.value })
+                          }
+                        />
+                      </Col>
+                    </Form.Group>
+
+                    <Form.Group as={Row}>
+                      <Form.Label column>Background Color</Form.Label>
+                        <Col>
+                          <input type="color" onChange={(e) => this.setState({color: e.target.value})} value={this.state.color}/>
+                        </Col>
                     </Form.Group>
                   </div>
                   <div
@@ -326,6 +329,26 @@ class CardModal extends Component {
                       onChange={this.onEditorChange}
                     />
                   </div>
+              </div>
+            </TabPanel>
+
+            <TabPanel
+              tabId="vertical-tab-three"
+              style={{ height: "100%", width: "100%" }}
+            >
+              <div style={{ margin: "1em" , maxHeight: "50em", maxWidth: "40em", overflow: "auto"}}>
+                <div className="bulma" dangerouslySetInnerHTML={{__html: `<div class="card" style="background-color: ${this.state.color}; width: ${this.state.width + this.state.wUnits}; height: ${this.state.height + this.state.hUnits}">
+                  <div class="card-image">
+                    <figure class="image is-4by3" style="margin: 0">
+                      <img src=${this.state.url} alt="Placeholder image">
+                    </figure>
+                  </div>
+                  <div class="card-content">
+                    <div class="content">
+                      ${this.state.textValue}
+                    </div>
+                  </div>
+                </div>`}} />
               </div>
             </TabPanel>
           </Tabs>

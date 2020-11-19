@@ -143,6 +143,9 @@ class ButtonModal extends Component {
               style={{ height: "100%", width: "100%" }}
             >
               <div style={{ margin: "1em" }}>
+                <h4>Description</h4>
+                <p style={{marginBottom: "1em"}}>A button is a clickable interactive element. See <a href="https://bulma.io/documentation/elements/button/" target="_blank" rel="noopener noreferrer">Bulma</a> documentation for more information.</p>
+                <p> <span style={{fontWeight: "bold"}}>Note: </span>If you want to add a function to the button, you should create the button, edit the component, and then add javascript in the HTML code with script tags. See <a href="https://www.w3schools.com/tags/ev_onclick.asp" target="_blank" rel="noopener noreferrer">here</a> for more details.</p>
                 <h4>General Settings</h4>
                 <div style={{padding: "1em", paddingTop: "1vh"}}>
                 <Form.Group as={Row}>
