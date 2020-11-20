@@ -7,7 +7,13 @@ import CodeEditor from "./CodeEditor";
 import JointInput from "./JointInput";
 import Toast from 'light-toast';
 import axios from "axios";
+import { sortableContainer, sortableElement } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
 
+
+const SortableItem = sortableElement(({value}) => (<li>{value}</li>));
+
+const SortableContainer = sortableContainer(({children}) => {return <ul>{children}</ul>;});
 
 var str;
 var count = 1;
@@ -165,6 +171,12 @@ class FragmentModal extends Component {
     }
     return innerHtml;
   }
+
+  onSortEnd = ({oldIndex, newIndex}) => {
+    this.setState(({joints}) => ({
+      joints: arrayMove(joints, oldIndex, newIndex),
+    }));
+  };
 
   updateHtml = () => {
     if (this.state.name !== this.props.currentFragment.class_attr){
@@ -446,8 +458,14 @@ class FragmentModal extends Component {
                     }}
                   >
                     <Form.Label>Choose Components</Form.Label>
-                    {this.state.joints}
-                    {!this.state.joints.length ? <br /> : null}
+                    
+                    {!this.state.joints.length ? <br /> :
+                    <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
+                    {this.state.joints.map((value, index) => (
+                      <SortableItem key={`item-${index}`} index={index} value={value} />
+                    ))}
+                  </SortableContainer>
+                    }
                     <Button onClick={() => this.addJoint("")}>
                       + Add Another Component
                     </Button>

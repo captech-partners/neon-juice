@@ -58,9 +58,9 @@ export class StartPage extends Component {
         </Jumbotron>
 
         <div className="section" style={{marginTop: "10em", height: "50em"}}>
-          <Text family="Vollkorn">
+          <Font family="Vollkorn">
             <h2 style={{marginBottom: "2em", fontSize: 50, fontWeight: "bold"}}>Create Websites Without Coding Experience</h2>
-          </Text>
+          </Font>
           <br/>
 
           <div style={{ margin: "auto", }}>

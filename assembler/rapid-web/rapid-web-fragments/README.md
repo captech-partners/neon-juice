@@ -1,0 +1,2 @@
+Here are fragments created by the rapid website frontend.   
+They can't be added to the fragment folder in github but you can add them to your fragment folder on your local computer to see templates and examples for the frontend.

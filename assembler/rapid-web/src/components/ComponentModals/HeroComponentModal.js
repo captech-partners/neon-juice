@@ -173,7 +173,7 @@ class HeroModal extends Component {
               <div style={{ margin: "1em" }}>
                 <h4>Description</h4>
                 <p style={{marginBottom: "1em"}}>A banner or hero is a prominently placed image, slider, text or similar element at the top of the web page. See <a href="https://bulma.io/documentation/layout/hero/" target="_blank" rel="noopener noreferrer">Bulma</a> documentation for more information.</p>
-                <p> <span style={{fontWeight: "bold"}}>Note: </span>If you want to embed a navigation bar or tabs within the banner/hero's header or footer, you need to first create those components.</p>
+                <p> <span style={{fontWeight: "bold"}}>Note: </span>If you want to embed a navigation bar within the banner/hero's header, you need to first create the component.</p>
                 <h4>General Settings</h4>
                 <div style={{ padding: "1em", paddingTop: "1vh" }}>
                   <Form.Group as={Row}>
@@ -291,7 +291,6 @@ class HeroModal extends Component {
                     </Form.Group>
                   </div>
                 </div>
-                <h4>Banner Footer</h4>
               </div>
             </TabPanel>
 

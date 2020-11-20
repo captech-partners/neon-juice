@@ -136,3 +136,7 @@ div.StartPage{
   overflow: hidden;
   border: none;
 }
+
+ul {
+  list-style-type: none;
+}
