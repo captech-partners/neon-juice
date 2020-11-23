@@ -70,7 +70,6 @@ class FragmentPanel extends Component {
     }
   }
 
-
   treeBuild = (fragment) => {
     var dict = [];
     var nodes = [];

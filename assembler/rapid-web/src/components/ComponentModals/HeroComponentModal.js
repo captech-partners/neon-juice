@@ -13,12 +13,27 @@ class HeroModal extends Component {
       this.props.currentFragment.id < 0
         ? [this.props.currentFragment.class_attr]
         : this.props.currentFragment.templates;
+    var filtered = this.props.componentOptions.filter((d) => {
+      return this.props.currentFragment.id >= 0
+        ? d.class_attr !== "initizalingTemplateComponent" &&
+            this.props.currentFragment.templates.some((r) =>
+              d.templates.includes(r)
+            ) &&
+            d.class_attr !== this.props.currentFragment.class_attr
+        : d.class_attr !== "initizalingTemplateComponent" &&
+            d.templates.includes(this.props.currentFragment.class_attr);
+    });
     this.state = {
       name: "new-banner",
       id: props.currentFragment.id,
       labels: props.currentFragment.labels,
       pages: props.currentFragment.pages,
       templates: templates,
+      options: filtered !== [] ? filtered.map((d) => ({
+        label: d.class_attr,
+        value: d.class_attr,
+        id: d.id,
+      })) : [],
       url: "",
       fontcolor: "#000000",
       backcolor: "#FFFFFF",
@@ -30,16 +45,28 @@ class HeroModal extends Component {
 
   componentWillReceiveProps(newProps) {
     if (newProps.currentFragment !== this.props.currentFragment) {
-      var templates =
-        newProps.currentFragment.id < 0
-          ? [newProps.currentFragment.class_attr]
-          : newProps.currentFragment.templates;
+      var templates = newProps.currentFragment.id < 0 ? [newProps.currentFragment.class_attr] : newProps.currentFragment.templates;
+      var filtered = newProps.componentOptions.filter((d) => {
+        return newProps.currentFragment.id >= 0
+          ? d.class_attr !== "initizalingTemplateComponent" &&
+              newProps.currentFragment.templates.some((r) =>
+                d.templates.includes(r)
+              ) &&
+              d.class_attr !== newProps.currentFragment.class_attr
+          : d.class_attr !== "initizalingTemplateComponent" &&
+              d.templates.includes(newProps.currentFragment.class_attr);
+      });
       this.setState({
-        name: "new-image",
+        name: "new-banner",
         id: newProps.currentFragment.id,
         labels: newProps.currentFragment.labels,
         pages: newProps.currentFragment.pages,
         templates: templates,
+        options: filtered !== [] ? filtered.map((d) => ({
+          label: d.class_attr,
+          value: d.class_attr,
+          id: d.id,
+        })) : [],
         url: "",
         fontcolor: "#000000",
         backcolor: "#FFFFFF",
@@ -55,9 +82,13 @@ class HeroModal extends Component {
       this.layoutValues && this.layoutValues.state.value
         ? this.layoutValues.state.value.map((d) => d.value)
         : [];
+    var headerNav = this.navigation && this.navigation.state.value ? `<div class="hero-header">
+      <div class="content" data-child-limit="1" data-child-type="${this.navigation.state.value.value}"></div>
+    </div>` : ``;
     var background = this.state.url !== "" ? `background-image:url('${this.state.url}'); background-size:cover;` : ``;
     var html = `<div class="${this.state.name}" data-label="${this.state.labels}" data-page="${this.state.pages}" data-template="${currLayout === [] ? "" : currLayout.join()}" data-id="${this.state.id}">
       <section class="hero is-${this.state.size}" style="background-color: ${this.state.backcolor}; color: ${this.state.fontcolor}; ${background}">
+        ${headerNav}
         <div class="hero-body">
           <div class="container">
             <h1 class="title">
@@ -232,6 +263,18 @@ class HeroModal extends Component {
             >
               <div style={{ margin: "1em" }}>
                 <h4>Banner Header</h4>
+                <Form.Group as={Row}>
+                  <Form.Label column md={"auto"}>Insert Navigation Bar</Form.Label>
+                  <Col>
+                    <Select
+                      isClearable={false}
+                      isSearchable={true}
+                      placeholder={"Choose Navigation bar Component"}
+                      options={this.state.options}
+                      ref={(input) => (this.navigation = input)}
+                    />
+                  </Col>
+                </Form.Group>
                 <h4>Banner Body</h4>
                 <div style={{ padding: "1em", paddingTop: "0"}}>
                   <div style={{ marginTop: "2em" }}>
@@ -282,7 +325,7 @@ class HeroModal extends Component {
                     
                       <Form.Label column md={2}>Size</Form.Label>
                       <Col md={"auto"}>
-                        <Form.Control as="select" defaultValue="Normal" onChange={(e) => this.setState({size: e.target.value})}>
+                        <Form.Control as="select" defaultValue="medium" onChange={(e) => this.setState({size: e.target.value})}>
                           <option>medium</option>
                           <option>large</option>
                           <option>fullheight</option>
@@ -308,6 +351,9 @@ class HeroModal extends Component {
                     <Card.Header style={{width: "100%", height: "35em", overflow: "auto"}}>
                       <div className="bulma" dangerouslySetInnerHTML={{__html:` 
                       <section class="hero is-${this.state.size}" style="background-color: ${this.state.backcolor}; ${this.state.url !== "" ? `background-image:url('${this.state.url}'); background-size:cover` : ``}">
+                        <div class="hero-header">
+                          <div class="content" data-child-limit="1" data-child-type="${this.navigation && this.navigation.state && this.navigation.state.value ? this.navigation.state.value.value : ""}"></div>
+                        </div>
                         <div class="hero-body">
                           <div class="container">
                             <h1 class="title" style="color: ${this.state.fontcolor}">

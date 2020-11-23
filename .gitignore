@@ -1,5 +1,5 @@
 # Ignore fragments working directory
-/assembler/fragments
+#/assembler/fragments
 
 # Environments
 .env

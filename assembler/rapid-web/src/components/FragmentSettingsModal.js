@@ -3,12 +3,18 @@ import { Modal, Col, Row, Form, Button, Card } from "react-bootstrap";
 import { Tab, TabPanel, Tabs, TabList } from "react-web-tabs";
 import "react-web-tabs/dist/react-web-tabs.css";
 import Select from "react-select";
-import CodeEditor from "./CodeEditor";
 import JointInput from "./JointInput";
 import Toast from 'light-toast';
 import axios from "axios";
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/monokai.css";
+import "codemirror/addon/display/autorefresh";
+import { UnControlled as CodeMirror } from "react-codemirror2";
+require("codemirror/mode/xml/xml");
+require("codemirror/mode/javascript/javascript");
+require("codemirror/mode/htmlmixed/htmlmixed");
 
 
 const SortableItem = sortableElement(({value}) => (<li>{value}</li>));
@@ -21,8 +27,6 @@ var count = 1;
 class FragmentModal extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.updateHtml = this.updateHtml.bind(this);
     var filtered = this.props.componentOptions.filter((d) => {
       return this.props.currentFragment.id >= 0
         ? d.class_attr !== "initizalingTemplateComponent" &&
@@ -203,10 +207,6 @@ class FragmentModal extends Component {
     }
   };
 
-  handleChange = (value) => {
-    str = value
-  };
-
   createTemplateStart = () => {
     var html =`<div class="initizalingTemplateComponent" data-label="start" data-page="${this.state.pages}" data-template="${this.state.name}"></div>`;
     var file_name = "initializingTempComponent.html";
@@ -232,8 +232,6 @@ class FragmentModal extends Component {
     if (this.state.id < 0){
       this.createTemplateStart()
     }
-    var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value) : []
-    this.updateHtml()
     var html = this.changeHTMLJoints()
     const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
@@ -250,7 +248,7 @@ class FragmentModal extends Component {
     .then((result) => {
       console.log(result);
       this.props.toggleModal();
-      this.addToLayouts(currLayout);
+      this.props.currentFragment.id >= 0 ? console.log() : this.props.updateList()
     })
     .catch(function (error) {
       Toast.fail(
@@ -260,44 +258,7 @@ class FragmentModal extends Component {
     });
   };
 
-  addToLayouts = (templates) => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
-    var count = 0;
-    this.props.layoutOptions.forEach((layout) => {
-      if (templates.includes(layout.class_attr)){
-        var html = layout.html;
-        var index = html.lastIndexOf(`</body>`);
-        var isLast = templates.length === ++count ? true : false;
-        html = html.substring(0, index) + str + html.substring(index);
-        this.quickChange(layout.id, html, layout.file_name, isLast)        
-      }
-    })
-  }
-
-  quickChange = (id, html, filename, isLast) => {
-    const url = `http://localhost:5000/fragments/` + id;
-    let data = JSON.stringify({
-      html: html,
-      file: filename + ".html",
-    });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-    .put(url, data, axiosConfig)
-    .then((result) => {
-      console.log(result);
-      isLast ? this.props.updateList() : console.log()
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
-  }
-
   editFrag = () => {
-    this.updateHtml();
     var html = this.changeHTMLJoints()
     const url = `http://localhost:5000/fragments/` + this.state.id;
     let data = JSON.stringify({
@@ -355,13 +316,7 @@ class FragmentModal extends Component {
             style={{height: "100%"}}
             onChange={(tabId) => {
               if (tabId === "vertical-tab-three") {
-                this.updateHtml()
-              }
-
-              if(tabId === "vertical-tab-one" && this.state.html !== str) {
-                this.setState({
-                  html: str
-                })
+                this.updateHtml();
               }
             }}
           >
@@ -389,7 +344,7 @@ class FragmentModal extends Component {
                       :
                       <Form.Control
                         defaultValue={this.state.name}
-                        onChange={(e)=>{this.setState({name: e.target.value})}}
+                        onChange={(e)=>{this.setState({name: e.target.value}, () => this.updateHtml)}}
                       />}
                     </Col>
                   </Form.Group>
@@ -399,7 +354,7 @@ class FragmentModal extends Component {
                     <Col>
                       <Form.Control
                         defaultValue={this.state.labels}
-                        onChange={(e)=>{this.setState({labels: e.target.value})}}
+                        onChange={(e)=>{this.setState({labels: e.target.value}, () => this.updateHtml)}}
                       />
                     </Col>
                   </Form.Group>
@@ -409,7 +364,7 @@ class FragmentModal extends Component {
                     <Col>
                       <Form.Control
                         defaultValue={this.state.pages}
-                        onChange={(e)=>{this.setState({pages: e.target.value})} }
+                        onChange={(e)=>{this.setState({pages: e.target.value}, () => this.updateHtml)} }
                       />
                     </Col>
                   </Form.Group>
@@ -423,6 +378,7 @@ class FragmentModal extends Component {
                           isClearable={false}
                           defaultValue={selectedTemps}
                           options={optionsTemp}
+                          onChange={this.updateHtml}
                           ref={input => this.layoutValues = input}
                         />
                       </Col>
@@ -480,10 +436,19 @@ class FragmentModal extends Component {
               <div class="container" style={{ margin: "1em" }}>
                   <h5>HTML Code Editor</h5>
                   <div style={{ height: "50%", width: "90%" }}>
-                    <CodeEditor
-                      outputText={this.state.html}
-                      onHtmlChange={this.handleChange}
-                    />
+                  <CodeMirror
+                    value={str}
+                    options={{
+                      mode: "htmlmixed",
+                      theme: "monokai",
+                      lineNumbers: true,
+                      lineWrapping: true,
+                      autoRefresh: true,
+                    }}
+                    onChange={(editor, data, value) => {
+                      this.setState({html: value})
+                    }}
+                  />
                   </div>
               </div>
             </TabPanel>

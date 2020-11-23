@@ -5,6 +5,7 @@ import NavBar from "./NavBar";
 import FragmentModal from "./FragmentSettingsModal";
 import FragmentPopover from "./FragmentPopOver";
 import FragmentPanel from "./FragmentPanel";
+import CreateLayoutModal from "./CreateLayoutModal";
 import axios from "axios";
 
 var fragmentList;
@@ -43,6 +44,7 @@ export class SecondPage extends Component {
       
       showModal: false,
       showPop: false,
+      showCreate: false,
       target: null,
       title: "",
       currentFrag: defaultComponent,
@@ -116,7 +118,6 @@ export class SecondPage extends Component {
         tempList: templateList
       }, () => {this.refreshIframe()})
     });
-    
   };
 
   handleFragmentButtons = (event) => {
@@ -126,27 +127,6 @@ export class SecondPage extends Component {
       target: element,
     });
     this.getById(event.id)
-  };
-
-  createFragment = () => {
-    var change = {
-      class_attr: "Component-Default",
-      id: fragmentList.length+1,
-      pages: [this.state.currentPage],
-      templates: [this.state.viewTemplate],
-      labels: [this.state.currentLabel],
-      joints: [],
-      html: `<div class="Component-Default" data-label="${this.state.currentLabel}" data-page="${this.state.currentPage}" data-template="${this.state.viewTemplate}" data-id="${fragmentList.length+1}">\n</div>`,
-      file_name: "defaultComponent"
-    };
-  
-    this.setState({
-      title: "Create New Component",
-      showPop: false,
-      showModal: !this.state.showModal,
-      currentFrag: change,
-      currentJoints: []
-    });
   };
 
   createTemplate = () => {
@@ -170,9 +150,8 @@ export class SecondPage extends Component {
       file_name: "defaultLayout",
     };
     this.setState({
-      title: "Create New Layout",
       showPop: false,
-      showModal: !this.state.showModal,
+      showCreate: true,
       currentFrag: defaultLayout,
       currentJoints: [],
     });
@@ -238,13 +217,21 @@ export class SecondPage extends Component {
         
         <NavBar back={this.back} toggleTutorial={() => this.setState({tutorialEnabled: ! this.state.tutorialEnabled})} tutorialEnabled={this.state.tutorialEnabled}/>
 
+        <CreateLayoutModal
+          show={this.state.showCreate}
+          onHide={() => this.setState({showCreate: false})}
+          currentFragment={this.state.currentFrag}
+          updateList={this.updateList}
+          layoutOptions={this.state.tempList}
+        />
+
         <SideBar 
-          action={this.createFragment}
           name={this.state.viewTemplate}
           url={"http://localhost:5000/" + this.state.currentPage + "?label=" + this.state.currentLabel} 
           currentFragment={this.state.currentFrag} 
           updateList={this.updateList} 
           layoutOptions={this.state.tempList}
+          componentOptions={this.state.fragList}
         />
         
         <div style={{marginLeft: '3em', display: 'flex', height: "100%"}}>
