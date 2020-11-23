@@ -30,7 +30,7 @@
 - [x] Add default input into Create a Component & Create a Layout in FragmentSettingsModal code editor | PH  
 - [x] Convert Joint Input to html code | PH  
 - [x] Add input validation in each input field in FragmentSettingsModal | AI  
-- [ ] Create new settings for specialized components | PH  
+- [x] Create new settings for specialized components | PH  
 ### Fragment Popover Functionality
 - [x] Create modal to prompt user if they are sure they want to delete a fragment - modal connected to the trash button | PH  
 - [x] Setup the view button on Template PopOver, eyeball button, so the page viewer inputs(dropdowns) update with the current template's data-page and data-label variables | PH

@@ -84,17 +84,17 @@ class LevelModal extends Component {
     var str = ``;
     if (this.state.type === "default") {
         if (this.center && this.center.state.value) {
-            this.center.state.value.forEach((d) => str = str + `<div class="level-item">\n<div class="content" data-child-limit="1" data-child-type="${d.value}"></div>\n</div>\n`);
+            this.center.state.value.forEach((d) => str = str + `<div class="level-item" style="margin: 1em">\n<div data-child-limit="1" data-child-type="${d.value}"></div>\n</div>\n`);
         }
         
     } else {
         str = str + `<div class="level-left">`;
         if (this.left && this.left.state.value) {
-            this.left.state.value.forEach((d) => str = str + `<div class="level-item"><div class="content" data-child-limit="1" data-child-type="${d.value}"></div>\n</div>\n`);
+            this.left.state.value.forEach((d) => str = str + `<div class="level-item" style="margin: 1em"><div data-child-limit="1" data-child-type="${d.value}"></div>\n</div>\n`);
         }
         str = str + `</div>\n<div class="level-right">`;
         if (this.right && this.right.state.value) { 
-            this.right.state.value.forEach((d) => str = str + `<div class="level-item"><div class="content" data-child-limit="1" data-child-type="${d.value}"></div>\n</div>\n`)
+            this.right.state.value.forEach((d) => str = str + `<div class="level-item" style="margin: 1em"><div data-child-limit="1" data-child-type="${d.value}"></div>\n</div>\n`)
         }
         str = str + `</div>`
     }
@@ -126,7 +126,7 @@ class LevelModal extends Component {
   };
 
   addToLayouts = (templates) => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`;
+    var str = `<div data-child-limit="1" data-child-type="${this.state.name}"></div>\n`;
     var count = 0;
     this.props.layoutOptions.forEach((layout) => {
       if (templates.includes(layout.class_attr)) {

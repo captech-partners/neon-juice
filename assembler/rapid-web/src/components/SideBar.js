@@ -10,6 +10,7 @@ import HeroModal from "./ComponentModals/HeroComponentModal";
 import LevelModal from "./ComponentModals/LevelComponentModal";
 import CustomModal from "./ComponentModals/CustomComponentModal";
 import ContainerModal from "./ComponentModals/ContainerComponentModal";
+import MenuModal from "./ComponentModals/MenuComponentModal";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 require('isomorphic-fetch');
 var fileDownload = require('js-file-download');
@@ -26,7 +27,8 @@ export class SideBar extends Component {
       showHero: false,
       showLevel: false,
       showCustom: false,
-      showContainer: false
+      showContainer: false,
+      showMenu: false
     };
   }
 
@@ -100,6 +102,15 @@ export class SideBar extends Component {
           componentOptions={this.props.componentOptions}
         />
 
+        <MenuModal
+          show={this.state.showMenu}
+          hideModal={() => this.setState({ showMenu: false })}
+          currentFragment={this.props.currentFragment}
+          updateList={this.props.updateList}
+          layoutOptions={this.props.layoutOptions}
+          componentOptions={this.props.componentOptions}
+        />
+
         <CustomModal
           show={this.state.showCustom}
           hideModal={() => this.setState({ showCustom: false })}
@@ -123,6 +134,7 @@ export class SideBar extends Component {
           overlay={<Tooltip>Menu</Tooltip>}
         >
           <Button
+            onClick={() => this.setState({ showMenu: true })}
             variant="outline-dark"
             style={{
               alignContent: "center",

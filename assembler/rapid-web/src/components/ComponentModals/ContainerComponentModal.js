@@ -124,7 +124,7 @@ class ContainerModal extends Component {
     var innerHtml = this.state.html
     var str = ``;
     joints.forEach((joint) => {
-        str = str + `<div class="content" data-child-limit="${joint.length}" data-child-type="${joint.join(", ")}"></div>\n`
+        str = str + `<div data-child-limit="${joint.length}" data-child-type="${joint.join(", ")}"></div>\n`
     })
     var index = this.state.id >= 0 ? innerHtml.lastIndexOf(`</div>`) : innerHtml.lastIndexOf(`</body>`);
     innerHtml = innerHtml.substring(0, index) + str + innerHtml.substring(index);
@@ -169,7 +169,7 @@ class ContainerModal extends Component {
   };
 
   addToLayouts = (templates) => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
+    var str = `<div data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
     var count = 0;
     this.props.layoutOptions.forEach((layout) => {
       if (templates.includes(layout.class_attr)){

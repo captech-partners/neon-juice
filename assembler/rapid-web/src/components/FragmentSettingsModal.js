@@ -165,10 +165,10 @@ class FragmentModal extends Component {
     var str = ``;
     if (JSON.stringify(previous) !== JSON.stringify(newJoints)){
       previous.forEach((joint) => {
-        innerHtml = innerHtml.replace(`<div class="content" data-child-limit="${joint.length}" data-child-type="${joint.join(", ")}"></div>`, ``)
+        innerHtml = innerHtml.replace(`<div data-child-limit="${joint.length}" data-child-type="${joint.join(", ")}"></div>`, ``)
       })
       newJoints.forEach((newJoint) => {
-        str = str + `<div class="content" data-child-limit="${newJoint.length}" data-child-type="${newJoint.join(", ")}"></div>\n`
+        str = str + `<div data-child-limit="${newJoint.length}" data-child-type="${newJoint.join(", ")}"></div>\n`
       })
       var index = this.state.id >= 0 ? innerHtml.lastIndexOf(`</div>`) : innerHtml.lastIndexOf(`</body>`);
       innerHtml = innerHtml.substring(0, index) + str + innerHtml.substring(index);
@@ -389,7 +389,7 @@ class FragmentModal extends Component {
                   <>
                     <h4>Preview: </h4><br/>
                     <Card>
-                      <Card.Header style={{width: "100%", height: "17em", overflow: "auto"}}>
+                      <Card.Header style={{ height: "17em", overflow: "auto"}}>
                         <div className="bulma" dangerouslySetInnerHTML={{__html: this.state.html}} />
                       </Card.Header>
                     </Card>
@@ -433,24 +433,24 @@ class FragmentModal extends Component {
               tabId="vertical-tab-three"
               style={{ height: "100%", width: "100%" }}
             >
-              <div class="container" style={{ margin: "1em" }}>
-                  <h5>HTML Code Editor</h5>
-                  <div style={{ height: "50%", width: "90%" }}>
-                  <CodeMirror
-                    value={str}
-                    options={{
+              <div class="container" style={{ margin: "1em", maxWidth: "45em"}}>
+                <h4>HTML Code</h4>
+                <div style={{ height: "30em", marginRight:"1em" }}>
+                <CodeMirror
+                  value={str}
+                  options={{
                       mode: "htmlmixed",
                       theme: "monokai",
                       lineNumbers: true,
                       lineWrapping: true,
                       autoRefresh: true,
-                    }}
-                    onChange={(editor, data, value) => {
+                  }}
+                  onChange={(editor, data, value) => {
                       this.setState({html: value})
-                    }}
+                  }}
                   />
-                  </div>
-              </div>
+                </div>
+                </div>
             </TabPanel>
           </Tabs>
         </Modal.Body>

@@ -1,6 +1,10 @@
 import React, { Component } from "react";
-import { Button, Jumbotron, Navbar, Nav} from "react-bootstrap";
+import { Button, Jumbotron, Navbar, Nav, Carousel, Row} from "react-bootstrap";
+import { faFontAwesome, faNpm, faReact } from "@fortawesome/free-brands-svg-icons";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import exp1 from "../tutorial_assets/example1.png";
+import exp2 from "../tutorial_assets/example2.png";
+import exp3 from "../tutorial_assets/example3.png";
 import Font, {Text} from 'react-font'
 
 
@@ -57,81 +61,77 @@ export class StartPage extends Component {
           </div>
         </Jumbotron>
 
-        <div className="section" style={{marginTop: "10em", height: "50em"}}>
+        <div className="section" style={{marginTop: "10em", height: "70em", color: "#545454"}}>
           <Font family="Vollkorn">
-            <h2 style={{marginBottom: "2em", fontSize: 50, fontWeight: "bold"}}>Create Websites Without Coding Experience</h2>
+            <h2 style={{margin: "4em",marginTop: "8em", fontSize: 36, fontWeight: "bold"}}>Create Websites Without Coding Experience</h2>
           </Font>
           <br/>
 
-          <div style={{ margin: "auto", }}>
+          <div style={{ margin: "auto"}}>
             <div class="laptop">
               <div class="content">
-                <img className="d-block w-100" src={exp1} alt="viewing" />
+                <Carousel>
+                  <Carousel.Item>
+                    <img className="d-block w-100" src={exp1} alt="viewing" />
+                  </Carousel.Item>
+                  <Carousel.Item>
+                    <img className="d-block w-100" src={exp2} alt="viewing" />
+                  </Carousel.Item>
+                  <Carousel.Item>
+                    <img className="d-block w-100" src={exp3} alt="viewing" />
+                  </Carousel.Item>
+                </Carousel>
               </div>
             </div>
-          </div>
-        </div>
-
-        <div className="section" style={{backgroundColor: "#e9ecef"}}>
-          <div style={{ padding: "10em", textAlign: "left", color: "#333333" }}>
-            <Font family="Vollkorn">
-              <h2 style={{marginBottom: "20px"}}>Dynamically Render Website Layouts</h2>
-            </Font>
-            
-            <Font family="Nanum Myeongjo">
-              <h3 style={{ fontWeight: "light", color: "#222222" }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum
-              </h3>
-            </Font>
-          </div>
-        </div>
-
-        <div className="section">
-          <div style={{ padding: "10em", textAlign: "left", color: "#333333" }}>
-            <Font family="Vollkorn">
-              <h2 style={{marginBottom: "20px"}}>Create Nested Customizable Components</h2>
-            </Font>
-            
-            <Font family="Nanum Myeongjo">
-              <h3 style={{ fontWeight: "light", color: "#222222" }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum
-              </h3>
-            </Font>
+            <hr style={{height: "56em",width: "3px", backgroundColor: "#d4d4d4"}}></hr>
           </div>
           
         </div>
+        
 
-        <div className="section" style={{backgroundColor: "#e9ecef"}}>
-          <div style={{ padding: "10em", textAlign: "left", color: "#333333" }}>
+        <div className="section">
+          <div style={{ padding: "10em", textAlign: "center", color: "#333333" }}>
             <Font family="Vollkorn">
-              <h2 style={{marginBottom: "20px"}}>Design Unique Web Experience</h2>
-            </Font>
-            
-            <Font family="Nanum Myeongjo">
-              <h3 style={{ fontWeight: "light", color: "#222222" }}>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do
-                eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut
-                enim ad minim veniam, quis nostrud exercitation ullamco laboris
-                nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor
-                in reprehenderit in voluptate velit esse cillum dolore eu fugiat
-                nulla pariatur. Excepteur sint occaecat cupidatat non proident,
-                sunt in culpa qui officia deserunt mollit anim id est laborum
-              </h3>
+              <h2>Create Nested Customizable Components</h2>
             </Font>
           </div>
         </div>
+
+        <hr style={{position: "relative", top: "-1em", height: "20em",width: "3px", backgroundColor: "#d4d4d4"}}></hr>
+        
+        <div className="section">
+          <div style={{ padding: "10em", textAlign: "center", color: "#333333" }}>
+            <Font family="Vollkorn">
+              <h2>Dynamically Render Website Layouts</h2>
+            </Font>
+          </div>
+        </div>
+
+        <hr style={{position: "relative", bottom: "-1em", height: "20em",width: "3px", backgroundColor: "#d4d4d4"}}></hr>
+
+        <div className="section">
+          <div style={{ padding: "10em", textAlign: "center", color: "#333333" }}>
+            <Font family="Vollkorn">
+              <h2>Design Unique Web Experience</h2>
+            </Font>
+          </div>
+        </div>
+
+        <hr style={{position: "relative", top: "-1em",height: "20em",width: "3px", backgroundColor: "#d4d4d4"}}></hr>
+
+        <div className="section">
+          <div style={{ padding: "10em", paddingTop: 0,textAlign: "center", color: "#6a6a6a" }}>
+            <Font family="Vollkorn">
+              <h5>Created With</h5>
+            </Font>
+            <Row style={{margin: "auto", position: "relative", width: "15em" }}>
+            <FontAwesomeIcon icon={faReact} style={{height: "3em", width: "auto", margin: "1em"}}></FontAwesomeIcon>
+            <FontAwesomeIcon icon={faNpm} style={{height: "3em", width: "auto", margin: "1em"}}></FontAwesomeIcon>
+            <FontAwesomeIcon icon={faFontAwesome} style={{height: "3em", width: "auto", margin: "1em"}}></FontAwesomeIcon>
+            </Row>
+          </div>
+        </div>
+
       </div>
     );
   }

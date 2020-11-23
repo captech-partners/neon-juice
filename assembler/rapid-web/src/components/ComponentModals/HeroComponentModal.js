@@ -83,7 +83,7 @@ class HeroModal extends Component {
         ? this.layoutValues.state.value.map((d) => d.value)
         : [];
     var headerNav = this.navigation && this.navigation.state.value ? `<div class="hero-header">
-      <div class="content" data-child-limit="1" data-child-type="${this.navigation.state.value.value}"></div>
+      <div data-child-limit="1" data-child-type="${this.navigation.state.value.value}"></div>
     </div>` : ``;
     var background = this.state.url !== "" ? `background-image:url('${this.state.url}'); background-size:cover;` : ``;
     var html = `<div class="${this.state.name}" data-label="${this.state.labels}" data-page="${this.state.pages}" data-template="${currLayout === [] ? "" : currLayout.join()}" data-id="${this.state.id}">
@@ -124,7 +124,7 @@ class HeroModal extends Component {
   };
 
   addToLayouts = (templates) => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
+    var str = `<div data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
     var count = 0;
     this.props.layoutOptions.forEach((layout) => {
       if (templates.includes(layout.class_attr)){
@@ -352,7 +352,7 @@ class HeroModal extends Component {
                       <div className="bulma" dangerouslySetInnerHTML={{__html:` 
                       <section class="hero is-${this.state.size}" style="background-color: ${this.state.backcolor}; ${this.state.url !== "" ? `background-image:url('${this.state.url}'); background-size:cover` : ``}">
                         <div class="hero-header">
-                          <div class="content" data-child-limit="1" data-child-type="${this.navigation && this.navigation.state && this.navigation.state.value ? this.navigation.state.value.value : ""}"></div>
+                          <div data-child-limit="1" data-child-type="${this.navigation && this.navigation.state && this.navigation.state.value ? this.navigation.state.value.value : ""}"></div>
                         </div>
                         <div class="hero-body">
                           <div class="container">

@@ -81,11 +81,12 @@ class CreateLayoutModal extends Component {
             <title>Starting Page</title>
             <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css">
             <script defer="defer" src="https://use.fontawesome.com/releases/v5.14.0/js/all.js"></script>
+            <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"/>
             <style>
             ::-webkit-scrollbar {
                 display: none;
             }
-            html, body {
+            html {
               width: 100%;
               height: 100%;
               background-color: ${this.state.backcolor};

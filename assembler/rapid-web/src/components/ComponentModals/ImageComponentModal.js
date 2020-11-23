@@ -89,7 +89,7 @@ class ImageModal extends Component {
   };
 
   addToLayouts = (templates) => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
+    var str = `<div data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
     var count = 0;
     this.props.layoutOptions.forEach((layout) => {
       if (templates.includes(layout.class_attr)){
