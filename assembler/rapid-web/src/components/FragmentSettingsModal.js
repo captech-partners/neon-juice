@@ -334,7 +334,7 @@ class FragmentModal extends Component {
                 <h4>General Settings</h4>
                 <div style={{padding: "1em", paddingTop: "1vh"}}>
                   <Form.Group as={Row}>
-                    <Form.Label column>Component Name</Form.Label>
+                    <Form.Label column>{this.state.id < 0 ? "Layout Name" : "Component Name" }</Form.Label>
                     <Col>
                       {this.props.title.includes("Edit") ? 
                       <Form.Control

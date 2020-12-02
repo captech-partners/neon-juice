@@ -44,7 +44,7 @@ class HeroModal extends Component {
   }
 
   componentWillReceiveProps(newProps) {
-    if (newProps.currentFragment !== this.props.currentFragment) {
+    if (newProps.currentFragment !== this.props.currentFragment || newProps.componentOptions !== this.props.componentOptions) {
       var templates = newProps.currentFragment.id < 0 ? [newProps.currentFragment.class_attr] : newProps.currentFragment.templates;
       var filtered = newProps.componentOptions.filter((d) => {
         return newProps.currentFragment.id >= 0

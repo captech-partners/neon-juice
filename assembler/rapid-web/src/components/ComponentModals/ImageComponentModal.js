@@ -64,7 +64,7 @@ class ImageModal extends Component {
       this.state.width + this.state.wUnits
     }; height: ${this.state.height + this.state.hUnits}; border-radius: ${
       this.state.border + "%"
-    }">
+    }; object-fit: cover;">
     </figure>\n</div>`;
     const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({

@@ -70,9 +70,9 @@ class MenuModal extends Component {
               <span aria-hidden="true"></span>
               <span aria-hidden="true"></span>
             </a>
-          </div>\n<div id="navbarBasicExample" class="navbar-menu">\n<div class="navbar-start">\n`
+          </div>\n`
         }
-        
+        str = str + `<div id="navbarBasicExample" class="navbar-menu">\n<div class="navbar-start">\n`;
         for (i = 1; i <= 6 ; ) {
             if (this["NavigationText" + i].value) {
                 str = str + `<a class="navbar-item" href="${this["NavigationLink" + i].value}">${this["NavigationText" + i].value}</a>`;

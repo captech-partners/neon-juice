@@ -115,8 +115,8 @@ class CreateLayoutModal extends Component {
     axios
       .post(url, data, axiosConfig)
       .then((result) => {
-        this.setState({show: false})
         this.props.updateList();
+        this.props.onHide();
         console.log(result);
       })
       .catch(function (error) {
@@ -142,7 +142,7 @@ class CreateLayoutModal extends Component {
   render() {
     return (
       <Modal
-        show={this.state.show}
+        show={this.props.show}
         onHide={this.props.onHide}
         backdrop="static"
         aria-labelledby="contained-modal-title-vcenter"
@@ -172,11 +172,11 @@ class CreateLayoutModal extends Component {
             >
               <div style={{ margin: "1em" }}>
                 <h4>Description</h4>
-                <p style={{marginBottom: "1em"}}>A layout is the base of the website and it describes the layout of the website. Here are <a href="https://www.w3schools.com/html/" target="_blank" rel="noopener noreferrer">resources</a> to help you if want to add code to your layout </p>
+                <p style={{marginBottom: "1em"}}>A layout is the base of the website and it describes the layout of the website. Here are <a href="https://www.w3schools.com/html/" target="_blank" rel="noopener noreferrer">resources</a> to help you if want to add code to your layout. </p>
                 <h4>General Settings</h4>
                 <div style={{padding: "1em", paddingTop: "1vh"}}>
                   <Form.Group as={Row}>
-                    <Form.Label column>Component Name</Form.Label>
+                    <Form.Label column>Layout Name</Form.Label>
                     <Col>
                       <Form.Control
                         defaultValue={this.state.name}

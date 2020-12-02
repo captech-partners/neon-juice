@@ -76,9 +76,11 @@ export class SecondPage extends Component {
   };
 
   refreshIframe = () => {
-    this.setState({
-      key: this.state.key + 1
-    })
+    if (this.state.currentFrag.class_attr === this.state.viewTemplate){
+      this.setState({
+        key: this.state.key + 1
+      })
+    }
   }
 
   updateTemplate = (temp) => {
