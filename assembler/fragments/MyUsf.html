@@ -1,0 +1,35 @@
+<html>
+	<html class="MyUsf" data-label="home" data-page="homepage,myusfdashboard" data-id="-2">
+		<head>
+			<meta content="text/html; charset=utf-8" http-equiv="Content-Type"/>
+			<meta name="viewport" content="width=device-width, initial-scale=1"/>
+			<title>MyUsf</title>
+			<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bulma@0.9.1/css/bulma.min.css"/>
+			<style>
+				::-webkit-scrollbar {
+					display: none;
+				}
+			</style>
+		</head>
+		<body>
+			<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"/>
+			<script>
+				$(document).ready(function() {
+					$(".navbar-burger").click(function() {
+						$(".navbar-burger").toggleClass("is-active");
+						$(".navbar-menu").toggleClass("is-active");
+					});
+				});
+			</script>
+			<div class="content" data-child-limit="1" data-child-type="usfbanner"/>
+			<div class="content" data-child-limit="1" data-child-type="new-image"/>
+			<div class="content" data-child-limit="1" data-child-type="orangeLevel"/>
+			<div class="content" data-child-limit="1" data-child-type="cyanLevel"/>
+			<div data-child-limit="1" data-child-type="navbar"/>
+			<div data-child-limit="1" data-child-type="usfbanner"/>
+			<div data-child-limit="1" data-child-type="new-image"/>
+			<div data-child-limit="1" data-child-type="orangeLevel"/>
+			<div data-child-limit="1" data-child-type="cyanLevel"/>
+		</body>
+	</html>
+</html>

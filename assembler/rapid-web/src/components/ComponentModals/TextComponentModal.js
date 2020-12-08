@@ -5,8 +5,7 @@ import "react-web-tabs/dist/react-web-tabs.css";
 import Select from "react-select";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import axios from "axios";
-
+import { createFragment, editFragment } from "../APIMiddleLayer";
 
 class TextModal extends Component {
   constructor(props) {
@@ -18,7 +17,7 @@ class TextModal extends Component {
       labels: props.currentFragment.labels,
       pages: props.currentFragment.pages,
       templates: templates,
-      html: props.currentFragment.html,
+      textValue: "",
     };
   }
 
@@ -31,67 +30,62 @@ class TextModal extends Component {
         labels: newProps.currentFragment.labels,
         pages: newProps.currentFragment.pages,
         templates: templates,
-        html: newProps.currentFragment.html,
+        textValue: ""
       });
     }
   }
 
   createFrag = () => {
-    this.addToLayouts();
-    const url = `http://localhost:5000/fragments`;
+    var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value) : []
+    var html = `<div class="${this.state.name}" data-label="${this.state.labels}" data-page="${this.state.pages}" data-template="${currLayout === [] ? "" : currLayout.join()}" data-id="${this.state.id}">\n${this.state.textValue}\n</div>`
     let data = JSON.stringify({
-      html: this.state.html,
+      html: html,
       file: this.state.name + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-      .post(url, data, axiosConfig)
-      .then((result) => {
-        console.log(result);
-        this.props.updateList();
-        this.props.hideModal();
-        this.props.refresh();
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    
+    createFragment(data).then((result) => {
+      this.props.hideModal();
+      console.log(result);
+      this.addToLayouts(currLayout);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
 
-  addToLayouts = () => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
-    this.props.layoutOptions.forEach(layout => {
-      if (this.props.currentFragment.templates.includes(layout.class_attr)){
+  addToLayouts = (templates) => {
+    var str = `<div data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
+    var count = 0;
+    this.props.layoutOptions.forEach((layout) => {
+      if (templates.includes(layout.class_attr)){
         var html = layout.html;
         var index = html.lastIndexOf(`</body>`);
+        var isLast = templates.length === ++count ? true : false;
         html = html.substring(0, index) + str + html.substring(index);
-        this.quickChange(layout.id, html, layout.file_name)
+        this.quickChange(layout.id, html, layout.file_name, isLast)        
       }
     })
   }
 
-  quickChange = (id, html, filename) => {
-    const url = `http://localhost:5000/fragments/` + id;
+  quickChange = (id, html, filename, isLast) => {
     let data = JSON.stringify({
       html: html,
       file: filename + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-      .put(url, data, axiosConfig)
-      .then((result) => {
-        console.log(result);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+    editFragment(id,data).then((result) => {
+      console.log(result);
+      isLast ? this.props.updateList() : console.log()
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
+  }
+
+  onEditorChange = (value, delta, source, editor) => {
+    this.setState({
+      textValue: editor.getHTML()
+    });
   }
 
   render() {
@@ -141,6 +135,7 @@ class TextModal extends Component {
                   <Col>
                     <Form.Control
                       defaultValue={this.state.name}
+                      onChange={(e) => this.setState({name: e.target.value})}
                     />
                   </Col>
                 </Form.Group>
@@ -150,6 +145,7 @@ class TextModal extends Component {
                   <Col>
                     <Form.Control
                       defaultValue={this.state.labels}
+                      onChange={(e) => this.setState({labels: e.target.value})}
                     />
                   </Col>
                 </Form.Group>
@@ -159,6 +155,7 @@ class TextModal extends Component {
                   <Col>
                     <Form.Control
                       defaultValue={this.state.pages}
+                      onChange={(e) => this.setState({pages: e.target.value})}
                     />
                   </Col>
                 </Form.Group>
@@ -170,6 +167,7 @@ class TextModal extends Component {
                       isClearable={false}
                       defaultValue={selectedTemps}
                       options={optionsTemp}
+                      ref={input => this.layoutValues = input}
                     />
                   </Col>
                 </Form.Group>
@@ -186,7 +184,8 @@ class TextModal extends Component {
                     <div style={{ height: "30em" }}>
                       <ReactQuill
                         style={{ height: "100%", width: "90%" }}
-                        value={``}
+                        value={this.state.textValue}
+                        onChange={this.onEditorChange}
                       />
                     </div>
                 </div>

@@ -3,21 +3,31 @@ import { Modal, Col, Row, Form, Button, Card } from "react-bootstrap";
 import { Tab, TabPanel, Tabs, TabList } from "react-web-tabs";
 import "react-web-tabs/dist/react-web-tabs.css";
 import Select from "react-select";
-import CodeEditor from "./CodeEditor";
 import JointInput from "./JointInput";
 import Toast from 'light-toast';
-import axios from "axios";
+import { sortableContainer, sortableElement } from 'react-sortable-hoc';
+import arrayMove from 'array-move';
+import {createFragment, editFragment} from "./APIMiddleLayer";
+//Code Mirror Imports
+import "codemirror/lib/codemirror.css";
+import "codemirror/theme/monokai.css";
+import "codemirror/addon/display/autorefresh";
+import { UnControlled as CodeMirror } from "react-codemirror2";
+require("codemirror/mode/xml/xml");
+require("codemirror/mode/javascript/javascript");
+require("codemirror/mode/htmlmixed/htmlmixed");
 
 
-var parser = require('fast-xml-parser');
+const SortableItem = sortableElement(({value}) => (<li>{value}</li>));
+
+const SortableContainer = sortableContainer(({children}) => {return <ul>{children}</ul>;});
+
 var str;
 var count = 1;
 
 class FragmentModal extends Component {
   constructor(props) {
     super(props);
-    this.handleChange = this.handleChange.bind(this);
-    this.updateHtml = this.updateHtml.bind(this);
     var filtered = this.props.componentOptions.filter((d) => {
       return this.props.currentFragment.id >= 0
         ? d.class_attr !== "initizalingTemplateComponent" &&
@@ -59,6 +69,13 @@ class FragmentModal extends Component {
         file_name: newProps.currentFragment.file_name,
       });
     }
+
+    if (newProps.title.includes("Edit")) {
+      this.setState({
+        html: newProps.currentFragment.html 
+      }, () => this.updateHtml())
+    }
+
     if (newProps.componentOptions !== this.props.componentOptions || newProps.currentFragment !== this.props.currentFragment) {
       var filtered = newProps.componentOptions.filter((d) => {
         return newProps.currentFragment.id >= 0
@@ -78,6 +95,7 @@ class FragmentModal extends Component {
         })) : [],
       });
     }
+
     if (!newProps.currentJoints.length) {
       this.setState({
         joints: [],
@@ -152,28 +170,34 @@ class FragmentModal extends Component {
         newJoints.push(this[refname].state.value.map(d => d.value))
       }
     })
-    var innerHtml = this.state.html
-    var str = ``;
+    var innerHtml = str;
+    var string = ``;
     if (JSON.stringify(previous) !== JSON.stringify(newJoints)){
       previous.forEach((joint) => {
-        innerHtml = innerHtml.replace(`<div class="content" data-child-limit="${joint.length}" data-child-type="${joint.join(", ")}"></div>`, ``)
+        innerHtml = innerHtml.replace(`<div data-child-limit="${joint.length}" data-child-type="${joint.join(", ")}"></div>`, ``)
       })
       newJoints.forEach((newJoint) => {
-        str = str + `<div class="content" data-child-limit="${newJoint.length}" data-child-type="${newJoint.join(", ")}"></div>\n`
+        string = string + `<div data-child-limit="${newJoint.length}" data-child-type="${newJoint.join(", ")}"></div>\n`
       })
       var index = this.state.id >= 0 ? innerHtml.lastIndexOf(`</div>`) : innerHtml.lastIndexOf(`</body>`);
-      innerHtml = innerHtml.substring(0, index) + str + innerHtml.substring(index);
+      innerHtml = innerHtml.substring(0, index) + string + innerHtml.substring(index);
     }
     return innerHtml;
   }
 
+  onSortEnd = ({oldIndex, newIndex}) => {
+    this.setState(({joints}) => ({
+      joints: arrayMove(joints, oldIndex, newIndex),
+    }));
+  };
+
   updateHtml = () => {
-    str = str.replace(/class="(.*?)"/, `class="` + this.state.name + `"`)
+    str = str.replace(/class="(.*?)"/, `class="` + this.state.name + `"`);
     str = str.replace(/data-label="(.*?)"/, `data-label="` + this.state.labels + `"`);
-    str = str.replace(/data-page="(.*?)"/, `data-page="` + this.state.pages + `"`)
+    str = str.replace(/data-page="(.*?)"/, `data-page="` + this.state.pages + `"`);
     var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value).join() : ""
     str = str.replace(/data-template="(.*?)"/, `data-template="` + currLayout + `"`)
-     
+  
     if (str !== this.state.html) {
       this.setState({ 
         html: str
@@ -181,134 +205,37 @@ class FragmentModal extends Component {
     }
   };
 
-  handleChange = (value) => {
-    str = value
-  };
-
-  createTemplateStart = () => {
-    var html =`<div class="initizalingTemplateComponent" data-label="start" data-page="${this.state.pages}" data-template="${this.state.name}"></div>`;
-    var file_name = "initializingTempComponent.html";
-    const url = `http://localhost:5000/fragments`;
-    let data = JSON.stringify({
-      html: html,
-      file: file_name
-    });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios.post(url, data, axiosConfig).then((result) => {
-        console.log(result);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
   createFrag = () => {
-    if (parser.validate(this.state.html) === true || this.state.id < 0){
-      if (this.state.id < 0){
-        this.createTemplateStart()
-      }
-      var html = this.changeHTMLJoints()
-      const url = `http://localhost:5000/fragments`;
-      let data = JSON.stringify({
-        html: html,
-        file: this.state.name + ".html",
-      });
-      let axiosConfig = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      axios
-        .post(url, data, axiosConfig)
-        .then((result) => {
-          console.log(result);
-          this.addToLayouts();
-          this.props.updateList();
-          this.props.refreshIframe();
-          this.props.toggleModal();
-        })
-        .catch(function (error) {
-          Toast.fail(
-            "API could not accept data. \nPlease check code editor for syntax errors."
-          );
-          console.log(error);
-        });
-    }else{
-      Toast.fail(
-        "Invalid HTML. \nPlease check code editor for syntax errors."
-      );
-    }
-  };
-
-  addToLayouts = () => {
-    var str = `<div class="content" data-child-limit="1" data-child-type="${this.state.name}"></div>\n`
-    this.props.layoutOptions.forEach(layout => {
-      if (this.props.currentFragment.templates.includes(layout.class_attr)){
-        var html = layout.html;
-        var index = html.lastIndexOf(`</body>`);
-        html = html.substring(0, index) + str + html.substring(index);
-        this.quickChange(layout.id, html, layout.file_name)
-      }
-    })
-  }
-
-  quickChange = (id, html, filename) => {
-    const url = `http://localhost:5000/fragments/` + id;
+    var html = this.changeHTMLJoints();
     let data = JSON.stringify({
       html: html,
-      file: filename + ".html",
+      file: this.state.name + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-      .put(url, data, axiosConfig)
-      .then((result) => {
-        console.log(result);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
+    createFragment(data).then((result) => {
+      console.log(result);
+      this.props.toggleModal();
+      this.props.updateList();
+    }).catch(function(error) {
+      Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
+      console.log(error);
+    });
+  };
 
   editFrag = () => {
-    if (parser.validate(this.state.html) === true || this.state.id < 0) {
-      var html = this.changeHTMLJoints()
-      const url = `http://localhost:5000/fragments/` + this.state.id;
-      let data = JSON.stringify({
-        html: html,
-        file: this.state.file_name + ".html",
-      });
-      let axiosConfig = {
-        headers: {
-          "Content-Type": "application/json",
-        },
-      };
-      axios
-      .put(url, data, axiosConfig)
-      .then((result) => {
-        console.log(result);
-        this.props.updateList();
-        this.props.refreshIframe();
-        this.props.toggleModal();
-      })
-      .catch(function (error) {
-        Toast.fail(
-          "API could not accept data. \nPlease check code editor for syntax errors."
-        );
-        console.log(error);
-      });
-    }else{
-      Toast.fail(
-        "Invalid HTML. \nPlease check code editor for syntax errors."
-      );
-    }
+    var html = this.changeHTMLJoints();
+    let data = JSON.stringify({
+      html: html,
+      file: this.state.file_name + ".html",
+    });
+    editFragment(this.state.id,data).then((result) => {
+      console.log(result);
+      this.props.updateList();
+      this.props.toggleModal();
+    })
+    .catch(function (error) {
+      Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
+      console.log(error);
+    });
   };
 
   render() {
@@ -319,6 +246,7 @@ class FragmentModal extends Component {
       optionsTemp.push({ label: d.class_attr, value: d.class_attr })
     );
     this.state.templates.map((d) => selectedTemps.push({ label: d, value: d }));
+
 
     return (
       <Modal
@@ -340,7 +268,13 @@ class FragmentModal extends Component {
             vertical
             className="vertical-tabs"
             style={{height: "100%"}}
-            onChange={(tabId) => {tabId === "vertical-tab-three" ? this.updateHtml() : console.log() }}
+            onChange={(tabId) => {
+              if (tabId === "vertical-tab-one") {
+                this.setState({html: str}); 
+              } else if (tabId === "vertical-tab-three"){
+                this.updateHtml();
+              }
+            }}
           >
             <TabList style={{ width: "20%", textAlign: "left" }}>
               <Tab tabFor="vertical-tab-one">General Settings</Tab>
@@ -356,12 +290,18 @@ class FragmentModal extends Component {
                 <h4>General Settings</h4>
                 <div style={{padding: "1em", paddingTop: "1vh"}}>
                   <Form.Group as={Row}>
-                    <Form.Label column>Component Name</Form.Label>
+                    <Form.Label column>{this.state.id < 0 ? "Layout Name" : "Component Name" }</Form.Label>
                     <Col>
+                      {this.props.title.includes("Edit") ? 
+                      <Form.Control
+                      defaultValue={this.state.name}
+                      disabled
+                      />
+                      :
                       <Form.Control
                         defaultValue={this.state.name}
-                        onChange={(e)=>{this.setState({name: e.target.value})}}
-                      />
+                        onChange={(e)=>{this.setState({name: e.target.value}, () => this.updateHtml())}}
+                      />}
                     </Col>
                   </Form.Group>
 
@@ -370,7 +310,7 @@ class FragmentModal extends Component {
                     <Col>
                       <Form.Control
                         defaultValue={this.state.labels}
-                        onChange={(e)=>{this.setState({labels: e.target.value})}}
+                        onChange={(e)=>{this.setState({labels: e.target.value}, () => this.updateHtml())}}
                       />
                     </Col>
                   </Form.Group>
@@ -380,7 +320,7 @@ class FragmentModal extends Component {
                     <Col>
                       <Form.Control
                         defaultValue={this.state.pages}
-                        onChange={(e)=>{this.setState({pages: e.target.value})} }
+                        onChange={(e)=>{this.setState({pages: e.target.value}, () => this.updateHtml())} }
                       />
                     </Col>
                   </Form.Group>
@@ -394,6 +334,7 @@ class FragmentModal extends Component {
                           isClearable={false}
                           defaultValue={selectedTemps}
                           options={optionsTemp}
+                          onChange={this.updateHtml()}
                           ref={input => this.layoutValues = input}
                         />
                       </Col>
@@ -404,7 +345,7 @@ class FragmentModal extends Component {
                   <>
                     <h4>Preview: </h4><br/>
                     <Card>
-                      <Card.Header style={{width: "100%", height: "17em", overflow: "auto"}}>
+                      <Card.Header style={{ height: "17em", overflow: "auto"}}>
                         <div className="bulma" dangerouslySetInnerHTML={{__html: this.state.html}} />
                       </Card.Header>
                     </Card>
@@ -429,29 +370,43 @@ class FragmentModal extends Component {
                     }}
                   >
                     <Form.Label>Choose Components</Form.Label>
-                    {this.state.joints}
-                    {!this.state.joints.length ? <br /> : null}
+                    
+                    {!this.state.joints.length ? <br /> :
+                    <SortableContainer onSortEnd={this.onSortEnd} useDragHandle>
+                    {this.state.joints.map((value, index) => (
+                      <SortableItem key={`item-${index}`} index={index} value={value} />
+                    ))}
+                  </SortableContainer>
+                    }
                     <Button onClick={() => this.addJoint("")}>
                       + Add Another Component
                     </Button>
                   </div>
-                </div>
-                
+                </div> 
             </TabPanel>
 
             <TabPanel
               tabId="vertical-tab-three"
               style={{ height: "100%", width: "100%" }}
             >
-              <div class="container" style={{ margin: "1em" }}>
-                  <h5>HTML Code Editor</h5>
-                  <div style={{ height: "50%", width: "90%" }}>
-                    <CodeEditor
-                      outputText={this.state.html}
-                      onHtmlChange={this.handleChange}
-                    />
-                  </div>
-              </div>
+              <div class="container" style={{ margin: "1em", maxWidth: "45em"}}>
+                <h4>HTML Code</h4>
+                <div style={{ height: "30em", marginRight:"1em" }}>
+                <CodeMirror
+                  value={str}
+                  options={{
+                      mode: "htmlmixed",
+                      theme: "monokai",
+                      lineNumbers: true,
+                      lineWrapping: true,
+                      autoRefresh: true,
+                  }}
+                  onChange={(editor, data, value) => {
+                      str = value;
+                  }}
+                  />
+                </div>
+                </div>
             </TabPanel>
           </Tabs>
         </Modal.Body>

@@ -14,9 +14,9 @@
 - [x] Remove harded variables in PageViewer Component in SecondPage.js | PH  
 - [x] Add Multiselect dropdown for labels and have the PageViewer call the API with more than one label | PH  
 - [x] Fix label default value on update and empty dropdown width | PH  
-### Start Page Functionality
+### Start Page Functionality *(Discontinued implementation after receiving midterm feedback)*
 - [x] Fix Import Button's Modal submit button | AM  
-[comment]: <> Have the imported files show in the Component and Layout Panel | AM - not continuing this implementation   
+- [ ] Have the imported files show in the Component and Layout Panel | AM  
 ### Fragment Settings Modal Functionality
 - [x] Fix html for post and put methods, save and lift state of code editor code | PH  
 - [x] Have the code in the editor appear when the modal opens, right now it appears when you click on the editor | PH  
@@ -30,7 +30,7 @@
 - [x] Add default input into Create a Component & Create a Layout in FragmentSettingsModal code editor | PH  
 - [x] Convert Joint Input to html code | PH  
 - [x] Add input validation in each input field in FragmentSettingsModal | AI  
-- [ ] Create new settings for specialized components | PH  
+- [x] Create new settings for specialized components | PH  
 ### Fragment Popover Functionality
 - [x] Create modal to prompt user if they are sure they want to delete a fragment - modal connected to the trash button | PH  
 - [x] Setup the view button on Template PopOver, eyeball button, so the page viewer inputs(dropdowns) update with the current template's data-page and data-label variables | PH
@@ -62,6 +62,6 @@
 ### Project Management Functionality
 - [ ] Add a dashboard for multiple started projects on the Start Page  
 ### Stylying Functionality
-- [ ] Add css styling options (width, height, background color, font)  
+- [x] Add css styling options (width, height, background color, font)  
 ### Finishing the Website Design
 - [ ] Figure out how the user will deploy the website. Will they download the layout html onto their computer?
