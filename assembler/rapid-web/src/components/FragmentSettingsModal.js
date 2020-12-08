@@ -5,9 +5,10 @@ import "react-web-tabs/dist/react-web-tabs.css";
 import Select from "react-select";
 import JointInput from "./JointInput";
 import Toast from 'light-toast';
-import axios from "axios";
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
+import {createFragment, editFragment} from "./APIMiddleLayer";
+//Code Mirror Imports
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/monokai.css";
 import "codemirror/addon/display/autorefresh";
@@ -204,80 +205,35 @@ class FragmentModal extends Component {
     }
   };
 
-  createTemplateStart = () => {
-    var html =`<div class="initizalingTemplateComponent" data-label="start" data-page="${this.state.pages}" data-template="${this.state.name}"></div>`;
-    var file_name = "initializingTempComponent.html";
-    const url = `http://localhost:5000/fragments`;
-    let data = JSON.stringify({
-      html: html,
-      file: file_name
-    });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios.post(url, data, axiosConfig).then((result) => {
-        console.log(result);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
-  }
-
   createFrag = () => {
-    if (this.state.id < 0){
-      this.createTemplateStart()
-    }
-    var html = this.changeHTMLJoints()
-    const url = `http://localhost:5000/fragments`;
+    var html = this.changeHTMLJoints();
     let data = JSON.stringify({
       html: html,
       file: this.state.name + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-    .post(url, data, axiosConfig)
-    .then((result) => {
+    createFragment(data).then((result) => {
       console.log(result);
       this.props.toggleModal();
-      this.props.currentFragment.id >= 0 ? console.log() : this.props.updateList()
-    })
-    .catch(function (error) {
-      Toast.fail(
-        "Invalid HTML. \nPlease check code editor for syntax errors."
-      );
+      this.props.updateList();
+    }).catch(function(error) {
+      Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
       console.log(error);
     });
   };
 
   editFrag = () => {
-    var html = this.changeHTMLJoints()
-    const url = `http://localhost:5000/fragments/` + this.state.id;
+    var html = this.changeHTMLJoints();
     let data = JSON.stringify({
       html: html,
       file: this.state.file_name + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-    .put(url, data, axiosConfig)
-    .then((result) => {
+    editFragment(this.state.id,data).then((result) => {
       console.log(result);
-      this.props.toggleModal();
       this.props.updateList();
+      this.props.toggleModal();
     })
     .catch(function (error) {
-      Toast.fail(
-        "Invalid HTML. \nPlease check code editor for syntax errors."
-      );
+      Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
       console.log(error);
     });
   };
@@ -291,7 +247,6 @@ class FragmentModal extends Component {
     );
     this.state.templates.map((d) => selectedTemps.push({ label: d, value: d }));
 
-    
 
     return (
       <Modal
@@ -315,9 +270,9 @@ class FragmentModal extends Component {
             style={{height: "100%"}}
             onChange={(tabId) => {
               if (tabId === "vertical-tab-one") {
-                this.setState({html: str}) 
+                this.setState({html: str}); 
               } else if (tabId === "vertical-tab-three"){
-                this.updateHtml()
+                this.updateHtml();
               }
             }}
           >

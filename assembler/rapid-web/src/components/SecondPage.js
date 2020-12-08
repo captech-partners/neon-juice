@@ -6,7 +6,7 @@ import FragmentModal from "./FragmentSettingsModal";
 import FragmentPopover from "./FragmentPopOver";
 import FragmentPanel from "./FragmentPanel";
 import CreateLayoutModal from "./CreateLayoutModal";
-import axios from "axios";
+import { getFragmentById, getFragments} from "./APIMiddleLayer";
 
 var fragmentList;
 var templateList;
@@ -40,7 +40,6 @@ export class SecondPage extends Component {
       currentLabel: "clear",
       default: [{label: "clear", value: "clear"}],
       key: 0,
-      tutorialEnabled: false,
       
       showModal: false,
       showPop: false,
@@ -55,11 +54,8 @@ export class SecondPage extends Component {
   }
 
   componentWillMount () {
-    axios.get(`http://localhost:5000/fragments`).then((result) => {
-      result.data.sort(function (a, b) {
-        return a.id - b.id || a.class_attr.localeCompare(b.class_attr);
-      });
-      
+    getFragments().then((result) => {
+      console.log({result});
       fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
       templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
 
@@ -98,28 +94,25 @@ export class SecondPage extends Component {
   }
 
   getById = (id) => {
-    const url = `http://localhost:5000/fragments/` + id;
-    axios.get(url).then((result) => {
+    getFragmentById(id).then((response) => {
       this.setState({
-        currentFrag: result.data,
-        currentJoints: result.data.joints.map(d => d.child_types)
+        currentFrag: response.data,
+        currentJoints: response.data.joints.map(d => d.child_types)
       });
+    }).catch((err) => {
+      console.log(err);
     });
   };
 
   updateList = () => {
-    axios.get(`http://localhost:5000/fragments`).then((result) => {
-      result.data.sort(function (a, b) {
-        return a.id - b.id || a.class_attr.localeCompare(b.class_attr);
-      });
+    getFragments().then((result) => {
       fragmentList = result.data.filter((obj) => obj.id >= 0).map((obj) => obj);
       templateList = result.data.filter((obj) => obj.id < 0).map((obj) => obj);
-
       this.setState({
         fragList: fragmentList,
         tempList: templateList
       }, () => {this.refreshIframe()})
-    });
+    })
   };
 
   handleFragmentButtons = (event) => {
@@ -217,7 +210,7 @@ export class SecondPage extends Component {
     return (
       <div style={{height: "100%", width: "100%"}}>
         
-        <NavBar back={this.back} toggleTutorial={() => this.setState({tutorialEnabled: ! this.state.tutorialEnabled})} tutorialEnabled={this.state.tutorialEnabled}/>
+        <NavBar back={this.back}/>
 
         <CreateLayoutModal
           show={this.state.showCreate}
@@ -247,7 +240,6 @@ export class SecondPage extends Component {
             pages={this.state.viewPages}
             labels={this.state.viewLabels}
             default={this.state.default}
-            tutorialEnabled={this.state.tutorialEnabled}
           />
 
           <div style={{ width: "25%" }} ref={this.popRef}>

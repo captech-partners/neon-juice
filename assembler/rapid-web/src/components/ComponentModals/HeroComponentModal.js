@@ -3,7 +3,7 @@ import { Modal, Col, Row, Form, Button, Card } from "react-bootstrap";
 import { Tab, TabPanel, Tabs, TabList } from "react-web-tabs";
 import "react-web-tabs/dist/react-web-tabs.css";
 import Select from "react-select";
-import axios from "axios";
+import { createFragment, editFragment } from "../APIMiddleLayer";
 
 
 class HeroModal extends Component {
@@ -101,26 +101,20 @@ class HeroModal extends Component {
         </div>
       </section>
     </div>`;
-    const url = `http://localhost:5000/fragments`;
+    
     let data = JSON.stringify({
       html: html,
       file: this.state.name + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-      .post(url, data, axiosConfig)
-      .then((result) => {
-        this.props.hideModal();
-        console.log(result);
-        this.addToLayouts(currLayout);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+    createFragment(data).then((result) => {
+      this.props.hideModal();
+      console.log(result);
+      this.addToLayouts(currLayout);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
 
   addToLayouts = (templates) => {
@@ -138,19 +132,12 @@ class HeroModal extends Component {
   }
 
   quickChange = (id, html, filename, isLast) => {
-    const url = `http://localhost:5000/fragments/` + id;
     let data = JSON.stringify({
       html: html,
       file: filename + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-    .put(url, data, axiosConfig)
-    .then((result) => {
+    
+    editFragment(id,data).then((result) => {
       console.log(result);
       isLast ? this.props.updateList() : console.log()
     })

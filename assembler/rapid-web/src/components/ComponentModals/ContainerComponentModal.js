@@ -5,7 +5,7 @@ import "react-web-tabs/dist/react-web-tabs.css";
 import Select from "react-select";
 import JointInput from "../JointInput";
 import Toast from 'light-toast';
-import axios from "axios";
+import { createFragment, editFragment } from "../APIMiddleLayer";
 import { sortableContainer, sortableElement } from 'react-sortable-hoc';
 import arrayMove from 'array-move';
 
@@ -143,27 +143,17 @@ class ContainerModal extends Component {
     var html = `<div class="${this.state.name}" data-label="${this.state.labels}" data-page="${this.state.pages}" data-template="${currLayout === [] ? "" : currLayout.join()}" data-id="${this.state.id}" >\n<div class="container" style="width: ${this.state.width}%">`
     var innerHtml = this.changeHTMLJoints();
     html = html + `${innerHtml}</div>\n</div>`;
-    const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
       html: html,
       file: this.state.name + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-    .post(url, data, axiosConfig)
-    .then((result) => {
-      console.log(result);
+    
+    createFragment(data).then((result) => {
       this.props.hideModal();
+      console.log(result);
       this.addToLayouts(currLayout);
     })
     .catch(function (error) {
-      Toast.fail(
-        "Invalid HTML. \nPlease check code editor for syntax errors."
-      );
       console.log(error);
     });
   };
@@ -183,19 +173,12 @@ class ContainerModal extends Component {
   }
 
   quickChange = (id, html, filename, isLast) => {
-    const url = `http://localhost:5000/fragments/` + id;
     let data = JSON.stringify({
       html: html,
       file: filename + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-    .put(url, data, axiosConfig)
-    .then((result) => {
+
+    editFragment(id,data).then((result) => {
       console.log(result);
       isLast ? this.props.updateList() : console.log()
     })

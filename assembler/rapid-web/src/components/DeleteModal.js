@@ -2,13 +2,12 @@ import React, { Component } from "react";
 import { Modal, Button, Row, Col } from "react-bootstrap";
 import { faExclamationTriangle } from "@fortawesome/free-solid-svg-icons";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import axios from "axios";
+import { deleteFragment } from "./APIMiddleLayer";
 
 class DeleteModal extends Component {
   deleteFrag = () => {
     this.props.toggle();
-    const url = `http://localhost:5000/fragments/` + this.props.fragment.id;
-    axios.delete(url).then((result) => {
+    deleteFragment(this.props.fragment.id).then((result) => {
       console.log(result);
       this.props.updateList();
     })
@@ -23,7 +22,6 @@ class DeleteModal extends Component {
         show={this.props.show}
         aria-labelledby="contained-modal-title-vcenter"
         centered
-        //style={{width: ""}}
       >
         <Modal.Header style={{ border: "none" }}>
           <Modal.Title>

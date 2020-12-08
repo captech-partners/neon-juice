@@ -2,7 +2,9 @@ import React, { Component } from "react";
 import { Modal, Col, Row, Form, Button } from "react-bootstrap";
 import { Tab, TabPanel, Tabs, TabList } from "react-web-tabs";
 import "react-web-tabs/dist/react-web-tabs.css";
-import axios from "axios";
+import {createFragment} from "./APIMiddleLayer";
+import Toast from 'light-toast';
+//Code Mirror Imports
 import "codemirror/lib/codemirror.css";
 import "codemirror/theme/monokai.css";
 import "codemirror/addon/display/autorefresh";
@@ -53,22 +55,16 @@ class CreateLayoutModal extends Component {
   createTemplateStart = () => {
     var html =`<div class="initizalingTemplateComponent" data-label="start" data-page="${this.state.pages}" data-template="${this.state.name}"></div>`;
     var file_name = "initializingTempComponent.html";
-    const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
       html: html,
       file: file_name
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios.post(url, data, axiosConfig).then((result) => {
-        console.log(result);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+    createFragment(data).then((result) => {
+      console.log(result);
+    }).catch(function(error) {
+      console.log(error);
+    });
   }
 
   createFrag = () => {
@@ -102,26 +98,19 @@ class CreateLayoutModal extends Component {
             ${this.state.html}
         </body>
     </html>`
-    const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
       html: html,
       file: this.state.name + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-      .post(url, data, axiosConfig)
-      .then((result) => {
-        this.props.updateList();
-        this.props.onHide();
-        console.log(result);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+
+    createFragment(data).then((result) => {
+      console.log(result);
+      this.props.updateList();
+      this.props.onHide();
+    }).catch(function(error) {
+      Toast.fail('Invalid HTML. \nPlease check code editor for syntax errors.')
+      console.log(error);
+    });
   };
 
   checkFont = (value) => {
@@ -136,7 +125,6 @@ class CreateLayoutModal extends Component {
         this.setState({font: "Lucida Console, Courier, monospace"})
         return;
     }
-
   }
 
   render() {

@@ -5,8 +5,7 @@ import "react-web-tabs/dist/react-web-tabs.css";
 import Select from "react-select";
 import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
-import axios from "axios";
-
+import { createFragment, editFragment } from "../APIMiddleLayer";
 
 class TextModal extends Component {
   constructor(props) {
@@ -39,26 +38,19 @@ class TextModal extends Component {
   createFrag = () => {
     var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value) : []
     var html = `<div class="${this.state.name}" data-label="${this.state.labels}" data-page="${this.state.pages}" data-template="${currLayout === [] ? "" : currLayout.join()}" data-id="${this.state.id}">\n${this.state.textValue}\n</div>`
-    const url = `http://localhost:5000/fragments`;
     let data = JSON.stringify({
       html: html,
       file: this.state.name + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-      .post(url, data, axiosConfig)
-      .then((result) => {
-        this.props.hideModal();
-        console.log(result);
-        this.addToLayouts(currLayout);
-      })
-      .catch(function (error) {
-        console.log(error);
-      });
+    
+    createFragment(data).then((result) => {
+      this.props.hideModal();
+      console.log(result);
+      this.addToLayouts(currLayout);
+    })
+    .catch(function (error) {
+      console.log(error);
+    });
   };
 
   addToLayouts = (templates) => {
@@ -76,19 +68,12 @@ class TextModal extends Component {
   }
 
   quickChange = (id, html, filename, isLast) => {
-    const url = `http://localhost:5000/fragments/` + id;
     let data = JSON.stringify({
       html: html,
       file: filename + ".html",
     });
-    let axiosConfig = {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    };
-    axios
-    .put(url, data, axiosConfig)
-    .then((result) => {
+
+    editFragment(id,data).then((result) => {
       console.log(result);
       isLast ? this.props.updateList() : console.log()
     })
