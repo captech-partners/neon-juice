@@ -51,6 +51,14 @@ Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 The page will reload if you make edits.<br />
 You will also see any lint errors in the console.
 
+#### See Information about Final Version
+[Final Rapid Website Creation Studio Workflow](https://drive.google.com/file/d/16TIf79D3qMiGCvASWvPWvvitoRII10UE/view?usp=sharing)
+Merge Request (Newest to Oldest)
+[#18](https://github.com/captech-partners/neon-juice/pull/18)
+[#17](https://github.com/captech-partners/neon-juice/pull/17)
+[#16](https://github.com/captech-partners/neon-juice/pull/16)
+[#15](https://github.com/captech-partners/neon-juice/pull/15)
+
 #### Learn More
 
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
