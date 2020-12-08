@@ -11,7 +11,8 @@ Rapid Website Creation Studio is an interactive web application that provides a 
 
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
-<br />
+
+
 
 ## Prerequisites
 
@@ -26,7 +27,9 @@ Complete Instructions under `Running the app on your local computer` in neon-jui
 ```
 $ python assembler.py start fragments/ -p 5000 --local
 ```
-<br />
+
+
+
 ## Start the React Application
 
 Start another terminal session and change directory to rapid-web folder  
@@ -56,7 +59,8 @@ You will also see any lint errors in the console.
 You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
 
 To learn React, check out the [React documentation](https://reactjs.org/).
-<br />
+
+
 
 ## See Information about Final Version
 [Final Rapid Website Creation Studio Workflow](https://drive.google.com/file/d/16TIf79D3qMiGCvASWvPWvvitoRII10UE/view?usp=sharing)  
