@@ -33,12 +33,12 @@ export class SecondPage extends Component {
     this.handlePage = this.handlePage.bind(this)
     this.handleLabels = this.handleLabels.bind(this)
     this.state = {
-      viewTemplate: "StartPage",
-      viewPages: ["newpage"],
-      viewLabels: ["default"],
-      currentPage: "newpage",
-      currentLabel: "default",
-      default: [{label: "default", value: "default"}],
+      viewTemplate: "tp1",
+      viewPages: ["back-to-school", "long-live-the-summer"],
+      viewLabels: ["clear"],
+      currentPage: "back-to-school",
+      currentLabel: "clear",
+      default: [{label: "clear", value: "clear"}],
       key: 0,
       tutorialEnabled: false,
       
@@ -76,7 +76,7 @@ export class SecondPage extends Component {
   };
 
   refreshIframe = () => {
-    if (this.state.currentFrag.class_attr === this.state.viewTemplate){
+    if ((this.state.currentFrag.id < 0 && this.state.currentFrag.class_attr === this.state.viewTemplate) || (this.state.currentFrag.id >=0 && this.state.currentFrag.templates.includes(this.state.viewTemplate))){
       this.setState({
         key: this.state.key + 1
       })

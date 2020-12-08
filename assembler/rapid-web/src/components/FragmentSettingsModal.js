@@ -68,6 +68,13 @@ class FragmentModal extends Component {
         file_name: newProps.currentFragment.file_name,
       });
     }
+
+    if (newProps.title.includes("Edit")) {
+      this.setState({
+        html: newProps.currentFragment.html 
+      }, () => this.updateHtml())
+    }
+
     if (newProps.componentOptions !== this.props.componentOptions || newProps.currentFragment !== this.props.currentFragment) {
       var filtered = newProps.componentOptions.filter((d) => {
         return newProps.currentFragment.id >= 0
@@ -87,6 +94,7 @@ class FragmentModal extends Component {
         })) : [],
       });
     }
+
     if (!newProps.currentJoints.length) {
       this.setState({
         joints: [],
@@ -161,17 +169,17 @@ class FragmentModal extends Component {
         newJoints.push(this[refname].state.value.map(d => d.value))
       }
     })
-    var innerHtml = this.state.html
-    var str = ``;
+    var innerHtml = str;
+    var string = ``;
     if (JSON.stringify(previous) !== JSON.stringify(newJoints)){
       previous.forEach((joint) => {
         innerHtml = innerHtml.replace(`<div data-child-limit="${joint.length}" data-child-type="${joint.join(", ")}"></div>`, ``)
       })
       newJoints.forEach((newJoint) => {
-        str = str + `<div data-child-limit="${newJoint.length}" data-child-type="${newJoint.join(", ")}"></div>\n`
+        string = string + `<div data-child-limit="${newJoint.length}" data-child-type="${newJoint.join(", ")}"></div>\n`
       })
       var index = this.state.id >= 0 ? innerHtml.lastIndexOf(`</div>`) : innerHtml.lastIndexOf(`</body>`);
-      innerHtml = innerHtml.substring(0, index) + str + innerHtml.substring(index);
+      innerHtml = innerHtml.substring(0, index) + string + innerHtml.substring(index);
     }
     return innerHtml;
   }
@@ -183,23 +191,12 @@ class FragmentModal extends Component {
   };
 
   updateHtml = () => {
-    if (this.state.name !== this.props.currentFragment.class_attr){
-      str = str.replace(/class="(.*?)"/, `class="` + this.state.name + `"`);
-    }
-    
-    if (JSON.stringify(this.state.labels) !== JSON.stringify(this.props.currentFragment.labels)){
-      str = str.replace(/data-label="(.*?)"/, `data-label="` + this.state.labels + `"`);
-    }
-    
-    if (JSON.stringify(this.state.pages) !== JSON.stringify(this.props.currentFragment.pages)){
-      str = str.replace(/data-page="(.*?)"/, `data-page="` + this.state.pages + `"`);
-    }
-  
+    str = str.replace(/class="(.*?)"/, `class="` + this.state.name + `"`);
+    str = str.replace(/data-label="(.*?)"/, `data-label="` + this.state.labels + `"`);
+    str = str.replace(/data-page="(.*?)"/, `data-page="` + this.state.pages + `"`);
     var currLayout = this.layoutValues && this.layoutValues.state.value ? this.layoutValues.state.value.map(d => d.value).join() : ""
-    if (currLayout !== this.props.currentFragment.templates.join()) {
-      str = str.replace(/data-template="(.*?)"/, `data-template="` + currLayout + `"`)
-    }
-     
+    str = str.replace(/data-template="(.*?)"/, `data-template="` + currLayout + `"`)
+  
     if (str !== this.state.html) {
       this.setState({ 
         html: str
@@ -294,6 +291,8 @@ class FragmentModal extends Component {
     );
     this.state.templates.map((d) => selectedTemps.push({ label: d, value: d }));
 
+    
+
     return (
       <Modal
         show={this.props.show}
@@ -315,8 +314,10 @@ class FragmentModal extends Component {
             className="vertical-tabs"
             style={{height: "100%"}}
             onChange={(tabId) => {
-              if (tabId === "vertical-tab-three") {
-                this.updateHtml();
+              if (tabId === "vertical-tab-one") {
+                this.setState({html: str}) 
+              } else if (tabId === "vertical-tab-three"){
+                this.updateHtml()
               }
             }}
           >
@@ -344,7 +345,7 @@ class FragmentModal extends Component {
                       :
                       <Form.Control
                         defaultValue={this.state.name}
-                        onChange={(e)=>{this.setState({name: e.target.value}, () => this.updateHtml)}}
+                        onChange={(e)=>{this.setState({name: e.target.value}, () => this.updateHtml())}}
                       />}
                     </Col>
                   </Form.Group>
@@ -354,7 +355,7 @@ class FragmentModal extends Component {
                     <Col>
                       <Form.Control
                         defaultValue={this.state.labels}
-                        onChange={(e)=>{this.setState({labels: e.target.value}, () => this.updateHtml)}}
+                        onChange={(e)=>{this.setState({labels: e.target.value}, () => this.updateHtml())}}
                       />
                     </Col>
                   </Form.Group>
@@ -364,7 +365,7 @@ class FragmentModal extends Component {
                     <Col>
                       <Form.Control
                         defaultValue={this.state.pages}
-                        onChange={(e)=>{this.setState({pages: e.target.value}, () => this.updateHtml)} }
+                        onChange={(e)=>{this.setState({pages: e.target.value}, () => this.updateHtml())} }
                       />
                     </Col>
                   </Form.Group>
@@ -378,7 +379,7 @@ class FragmentModal extends Component {
                           isClearable={false}
                           defaultValue={selectedTemps}
                           options={optionsTemp}
-                          onChange={this.updateHtml}
+                          onChange={this.updateHtml()}
                           ref={input => this.layoutValues = input}
                         />
                       </Col>
@@ -446,7 +447,7 @@ class FragmentModal extends Component {
                       autoRefresh: true,
                   }}
                   onChange={(editor, data, value) => {
-                      this.setState({html: value})
+                      str = value;
                   }}
                   />
                 </div>
