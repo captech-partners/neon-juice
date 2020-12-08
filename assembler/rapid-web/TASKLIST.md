@@ -14,7 +14,7 @@
 - [x] Remove harded variables in PageViewer Component in SecondPage.js | PH  
 - [x] Add Multiselect dropdown for labels and have the PageViewer call the API with more than one label | PH  
 - [x] Fix label default value on update and empty dropdown width | PH  
-### Start Page Functionality *(DIscontinued implementation after receiving midterm feedback)*
+### Start Page Functionality *(Discontinued implementation after receiving midterm feedback)*
 - [x] Fix Import Button's Modal submit button | AM  
 - [ ] Have the imported files show in the Component and Layout Panel | AM  
 ### Fragment Settings Modal Functionality
